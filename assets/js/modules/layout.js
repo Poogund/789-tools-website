@@ -17,12 +17,14 @@ const initializeMobileMenu = () => {
     navLinks.classList.remove("active");
     body.classList.remove("menu-open");
     hamburger.setAttribute("aria-expanded", "false");
+    hamburger.innerHTML = '<i class="fa-solid fa-bars"></i>';
   };
 
   const openMenu = () => {
     navLinks.classList.add("active");
     body.classList.add("menu-open");
     hamburger.setAttribute("aria-expanded", "true");
+    hamburger.innerHTML = '<i class="fa-solid fa-times"></i>';
   };
 
   const toggleMenu = () => {

@@ -74,14 +74,12 @@ ul {
   margin-right: 4px;
 }
 
-/* --- Main Header (CORRECTED SECTION) --- */
+/* --- Main Header --- */
 .main-header {
-  background-color: var(--dark-color); /* UPDATED: Changed to dark color */
-  /* border-bottom has been removed to merge with navbar */
+  background-color: var(--dark-color);
 }
 .main-header .container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   padding: 8px 0;
   gap: 16px;
@@ -89,8 +87,8 @@ ul {
 
 /* --- Logo --- */
 .logo img {
-  max-width: 130px; /* กำหนดขนาดความกว้างสูงสุดของโลโก้ */
-  height: auto; /* ความสูงจะปรับตามอัตโนมัติ */
+  max-width: 130px;
+  height: auto;
 }
 
 /* --- Search Bar --- */
@@ -123,7 +121,7 @@ ul {
   color: #555;
 }
 
-/* --- Contact Info --- */
+/* --- Contact & Nav Icons --- */
 .contact-info {
   display: flex;
   align-items: center;
@@ -145,22 +143,6 @@ ul {
   font-weight: 700;
   font-size: 0.9rem;
   text-align: center;
-}
-
-/* --- Navigation Bar --- */
-.navbar {
-  background-color: var(--dark-color);
-  color: var(--light-color);
-}
-.navbar .container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 60px;
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
-}
-.nav-links {
-  display: none;
 }
 .nav-icons {
   display: flex;
@@ -187,147 +169,123 @@ ul {
   cursor: pointer;
 }
 
-/* ===== 3. Mobile-First Responsive Styles ===== */
+/* --- Navigation Bar & Links --- */
+.navbar {
+  background-color: var(--dark-color);
+  color: var(--light-color);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
 
-/* --- Styles for mobile devices (up to 767px) --- */
+/* ===== START: Mobile-First Overrides & Hamburger Menu ===== */
+
+/* Hide elements on mobile by default */
+.top-bar { display: none; }
+.navbar { display: none; } 
+.main-header .contact-info { display: none; }
+.top-bar-login { display: none; }
+
+/* Full-screen Hamburger Overlay */
+.nav-links {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  background-color: var(--dark-color);
+  display: flex; flex-direction: column;
+  width: 100%;
+  padding: 60px 0 20px 0;
+  border-top: 1px solid var(--primary-color);
+  overflow-y: auto;
+  opacity: 0;
+  transform: scale(1.05);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.nav-links.active {
+  opacity: 1; transform: scale(1); pointer-events: auto;
+}
+.nav-links a {
+  padding: 16px 30px;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 1.2rem;
+}
+
+/* ===== END: Mobile-First Overrides ===== */
+
+
+/* ===== 3. Responsive Styles ===== */
+
+/* --- Mobile Header Layout (up to 767px) --- */
 @media (max-width: 767px) {
   .main-header .container {
-    flex-direction: column;
-    gap: 16px;
+    display: flex; flex-direction: row;
+    justify-content: space-between; align-items: center;
+    flex-wrap: nowrap;
+    padding: 8px 0;
   }
-
-  .search-bar {
-    width: 100%;
-    max-width: none;
+  .main-header .logo img {
+    max-width: 100px; /* ลดขนาดโลโก้ */
   }
-
-  .contact-info {
-    justify-content: center;
-    width: 100%;
-    display: none; /* Simplify header on small screens */
+  .main-header .search-bar {
+    display: flex; flex-grow: 1; margin: 0 12px;
   }
-
-  .navbar .container {
-    justify-content: space-between; /* Space between hamburger and cart */
+  .main-header .nav-icons {
+    display: flex; /* แสดง Cart/Hamburger */
   }
-
-  /* Full-screen overlay menu for mobile */
-  .nav-links {
-    position: fixed;
-    top: 50px; /* below navbar height */
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 999;
-    background-color: var(--dark-color);
-    display: flex; /* ready for animation without layout shift */
-    flex-direction: column;
-    width: 100%;
-    text-align: left;
-    padding: 12px 0;
-    border-top: 1px solid var(--primary-color);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    /* animate in/out */
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
-  }
-
-  .nav-links.active {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .nav-links a {
-    padding: 14px 24px;
-    width: 100%;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 1.05rem;
-  }
-
-  .nav-links a:last-child {
-    border-bottom: none;
-  }
-
   .hamburger-menu {
-    display: block; /* Show hamburger on mobile */
-    width: 44px;
-    height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .cart-icon {
-    width: 44px;
-    height: 44px;
+    display: block;
   }
 }
 
-/* ===== 4. Tablet & Desktop Styles ===== */
+/* --- Tablet & Desktop Header Restoration (768px and up) --- */
 @media (min-width: 768px) {
-  .top-bar {
-    text-align: left;
-  }
-  .top-bar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  /* Restore hidden elements */
+  .top-bar { display: block; }
+  .navbar { display: block; }
+  .main-header .contact-info { display: flex; }
+  .top-bar-login { display: inline-block; }
+  .nav-menu-login { display: none; }
+
+  /* Restore layouts */
   .main-header .container {
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
   }
-  .logo {
-    flex-shrink: 0;
-  }
-  .search-bar {
+   .main-header .search-bar {
+    display: flex;
     width: auto;
     flex-grow: 1;
     margin: 0 20px;
   }
-}
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-  .main-header .container {
-    flex-wrap: nowrap;
+  .main-header .logo img {
+    max-width: 130px;
+  }
+  .logo {
+    flex-shrink: 0;
   }
 
-  /* ===== THIS IS THE CORRECTED PART ===== */
-  .navbar .container {
-    display: flex;
-    align-items: center;
-    height: 50px;
-    /* Removed justify-content to allow .nav-links to center itself */
-  }
-  /* We remove 'justify-content' from the parent */
-}
-
-/* Tablet & up: show centered nav links on one line */
-@media (min-width: 768px) {
+  /* Restore nav-links to be a bar */
   .nav-links {
-    display: flex;
+    position: static;
+    flex-direction: row;
     align-items: center;
     gap: 25px;
     font-weight: 700;
-    flex-grow: 1; /* menu takes middle space */
-    justify-content: center; /* center items */
-    position: static;
+    flex-grow: 1;
+    justify-content: center;
+    width: auto;
+    padding: 0;
+    border-top: 0;
     opacity: 1;
     transform: none;
     pointer-events: auto;
-    border-top: 0;
-    padding: 0;
+    display: flex;
   }
   .nav-links a {
     padding: 20px 0;
+    border-bottom: none;
+    font-size: 1rem;
     transition: color 0.3s ease;
   }
   .nav-links a:hover {
@@ -338,9 +296,23 @@ ul {
     margin-left: 4px;
   }
   .hamburger-menu {
-    display: none; /* Hide hamburger on tablet/desktop */
+    display: none;
   }
 }
+
+/* --- Desktop Large Header (992px and up) --- */
+@media (min-width: 992px) {
+  .main-header .container {
+    flex-wrap: nowrap;
+  }
+  .navbar .container {
+    display: flex;
+    align-items: center;
+    height: 50px;
+  }
+}
+
+
 /* ===== 5. Hero Section Styles ===== */
 
 .hero-section {
@@ -494,7 +466,7 @@ ul {
   display: grid;
   gap: 24px;
   /* Mobile-first: 1 column by default */
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .category-card {
@@ -538,16 +510,19 @@ ul {
 
 /* --- Responsive Grid Layouts --- */
 
-/* Tablet: 2 columns */
-@media (min-width: 576px) {
-  .category-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Desktop: 4 columns */
-@media (min-width: 992px) {
-  .category-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+@media (max-width: 991px) { 
+  .category-grid { 
+    gap: 12px; 
+  } 
+  .card-name-overlay { 
+    padding: 12px 8px 8px 8px; 
+  } 
+  .card-name-overlay h3 { 
+    font-size: 0.8rem; 
+    line-height: 1.3; 
+  } 
+  .categories-header .btn { 
+    padding: 10px 24px; 
+    font-size: 0.9rem; 
+  } 
 }
