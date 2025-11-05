@@ -1,0 +1,240 @@
+/* assets/css/styles.css */
+
+/* ===== 1. General Setup & Variables ===== */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+:root {
+  --primary-color: #fdd835;
+  --dark-color: #2c2c2c;
+  --light-color: #ffffff;
+  --text-color: #333333;
+  --accent-color: #0d6efd;
+  --facebook-color: #1877f2;
+  --line-color: #06c755;
+  --font-main: "Montserrat", sans-serif;
+}
+
+/* Basic Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: var(--font-main);
+  color: var(--text-color);
+  line-height: 1.6;
+  background-color: var(--light-color);
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+ul {
+  list-style: none;
+}
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== 2. Header Styles ===== */
+
+/* --- Top Bar --- */
+.top-bar {
+  background-color: var(--primary-color);
+  padding: 8px 0;
+  font-size: 0.8rem;
+  text-align: center;
+}
+.top-bar-links a {
+  margin: 0 8px;
+  font-weight: 700;
+}
+.top-bar-links i {
+  margin-right: 4px;
+}
+
+/* --- Main Header (CORRECTED SECTION) --- */
+.main-header {
+  background-color: var(--dark-color); /* UPDATED: Changed to dark color */
+  /* border-bottom has been removed to merge with navbar */
+}
+.main-header .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  gap: 16px;
+}
+
+/* --- Logo --- */
+.logo svg {
+  display: block;
+}
+
+/* --- Search Bar --- */
+.search-bar {
+  display: flex;
+  width: 100%;
+  max-width: 500px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  overflow: hidden;
+  background-color: var(--light-color);
+}
+.search-bar input {
+  flex-grow: 1;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-family: var(--font-main);
+  background: transparent;
+}
+.search-bar input:focus {
+  outline: none;
+}
+.search-bar button {
+  border: none;
+  background: transparent;
+  padding: 0 20px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+/* --- Contact Info --- */
+.contact-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.social-icon {
+  font-size: 1.8rem;
+}
+.social-icon.facebook-icon {
+  color: var(--facebook-color);
+}
+.social-icon.line-icon {
+  color: var(--line-color);
+}
+.phone-number {
+  background-color: var(--primary-color);
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* --- Navigation Bar --- */
+.navbar {
+  background-color: var(--dark-color);
+  color: var(--light-color);
+}
+.navbar .container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 60px;
+}
+.nav-links {
+  display: none;
+}
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.cart-icon {
+  position: relative;
+  font-size: 1.5rem;
+  background-color: var(--accent-color);
+  color: var(--light-color);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+.hamburger-menu {
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: var(--light-color);
+  cursor: pointer;
+}
+
+/* ===== 3. Desktop Styles ===== */
+@media (min-width: 768px) {
+  .top-bar {
+    text-align: left;
+  }
+  .top-bar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .main-header .container {
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .logo {
+    flex-shrink: 0;
+  }
+  .search-bar {
+    width: auto;
+    flex-grow: 1;
+    margin: 0 20px;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .main-header .container {
+    flex-wrap: nowrap;
+  }
+
+  /* ===== THIS IS THE CORRECTED PART ===== */
+  .navbar .container {
+    /* We remove 'justify-content' from the parent */
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    font-weight: 700;
+
+    /* ADDED: Make the menu container grow */
+    flex-grow: 1;
+    /* ADDED: Center the links within the grown container */
+    justify-content: center;
+  }
+  /* ======================================= */
+
+  .nav-links a {
+    padding: 20px 0;
+    transition: color 0.3s ease;
+  }
+  .nav-links a:hover {
+    color: var(--primary-color);
+  }
+  .nav-links i {
+    font-size: 0.8em;
+    margin-left: 4px;
+  }
+  .hamburger-menu {
+    display: none; /* Hide hamburger on desktop */
+  }
+}
