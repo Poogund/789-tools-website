@@ -232,11 +232,11 @@ ul {
   /* Full-screen overlay menu for mobile */
   .nav-links {
     position: fixed;
-    top: 50px; /* below navbar height */
+    top: 100px; /* below navbar height */
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 999;
+    z-index: 900;
     background-color: var(--dark-color);
     display: flex; /* ready for animation without layout shift */
     flex-direction: column;
