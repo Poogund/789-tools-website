@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cat-001",
+    "name": "เครื่องจักรงานคอนกรีต",
+    "image_url": "assets/img/category-concrete-cutter.jpg"
+  },
+  {
+    "id": "cat-002",
+    "name": "เครื่องขัดมันพื้นปูน",
+    "image_url": "assets/img/category-power-trowel.jpg"
+  },
+  {
+    "id": "cat-003",
+    "name": "ใบและถาดขัดมัน",
+    "image_url": "assets/img/category-blades-pans.jpg"
+  },
+  {
+    "id": "cat-004",
+    "name": "เครื่องปาดปูน",
+    "image_url": "assets/img/category-screed.jpg"
+  },
+  {
+    "id": "cat-005",
+    "name": "เครื่องตบดิน",
+    "image_url": "assets/img/category-compactor.jpg"
+  },
+  {
+    "id": "cat-006",
+    "name": "เครื่องผสมและผลิต",
+    "image_url": "assets/img/category-concrete-mixer.jpg"
+  },
+  {
+    "id": "cat-007",
+    "name": "เครื่องปั่นไฟ",
+    "image_url": "assets/img/category-power-generator.jpg"
+  },
+  {
+    "id": "cat-008",
+    "name": "เครื่องดูดฝุ่นอุตสาหกรรม",
+    "image_url": "assets/img/category-industrial-vacuum.jpg"
+  }
+]
