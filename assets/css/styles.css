@@ -8,7 +8,7 @@
   --dark-color: #2c2c2c;
   --light-color: #ffffff;
   --text-color: #333333;
-  --accent-color: #0d6efd;
+  --accent-color: #000aff;
   --facebook-color: #1877f2;
   --line-color: #06c755;
   --font-main: "Montserrat", sans-serif;
@@ -25,6 +25,11 @@ body {
   color: var(--text-color);
   line-height: 1.6;
   background-color: var(--light-color);
+}
+
+/* Prevent background scroll when mobile menu is open */
+body.menu-open {
+  overflow: hidden;
 }
 a {
   text-decoration: none;
@@ -47,12 +52,19 @@ ul {
 
 /* ===== 2. Header Styles ===== */
 
+#header-placeholder {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
 /* --- Top Bar --- */
 .top-bar {
   background-color: var(--primary-color);
-  padding: 8px 0;
+  padding: 4px 0;
   font-size: 0.8rem;
   text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .top-bar-links a {
   margin: 0 8px;
@@ -71,13 +83,14 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px 0;
+  padding: 8px 0;
   gap: 16px;
 }
 
 /* --- Logo --- */
-.logo svg {
-  display: block;
+.logo img {
+  max-width: 130px; /* กำหนดขนาดความกว้างสูงสุดของโลโก้ */
+  height: auto; /* ความสูงจะปรับตามอัตโนมัติ */
 }
 
 /* --- Search Bar --- */
@@ -93,7 +106,7 @@ ul {
 .search-bar input {
   flex-grow: 1;
   border: none;
-  padding: 12px 20px;
+  padding: 8px 15px;
   font-size: 1rem;
   font-family: var(--font-main);
   background: transparent;
@@ -144,6 +157,7 @@ ul {
   justify-content: flex-end;
   align-items: center;
   height: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
 }
 .nav-links {
   display: none;
@@ -173,7 +187,88 @@ ul {
   cursor: pointer;
 }
 
-/* ===== 3. Desktop Styles ===== */
+/* ===== 3. Mobile-First Responsive Styles ===== */
+
+/* --- Styles for mobile devices (up to 767px) --- */
+@media (max-width: 767px) {
+  .main-header .container {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .search-bar {
+    width: 100%;
+    max-width: none;
+  }
+
+  .contact-info {
+    justify-content: center;
+    width: 100%;
+    display: none; /* Simplify header on small screens */
+  }
+
+  .navbar .container {
+    justify-content: space-between; /* Space between hamburger and cart */
+  }
+
+  /* Full-screen overlay menu for mobile */
+  .nav-links {
+    position: fixed;
+    top: 50px; /* below navbar height */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: var(--dark-color);
+    display: flex; /* ready for animation without layout shift */
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+    padding: 12px 0;
+    border-top: 1px solid var(--primary-color);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* animate in/out */
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+  }
+
+  .nav-links.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .nav-links a {
+    padding: 14px 24px;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.05rem;
+  }
+
+  .nav-links a:last-child {
+    border-bottom: none;
+  }
+
+  .hamburger-menu {
+    display: block; /* Show hamburger on mobile */
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cart-icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ===== 4. Tablet & Desktop Styles ===== */
 @media (min-width: 768px) {
   .top-bar {
     text-align: left;
@@ -207,22 +302,30 @@ ul {
 
   /* ===== THIS IS THE CORRECTED PART ===== */
   .navbar .container {
-    /* We remove 'justify-content' from the parent */
+    display: flex;
+    align-items: center;
+    height: 50px;
+    /* Removed justify-content to allow .nav-links to center itself */
   }
+  /* We remove 'justify-content' from the parent */
+}
 
+/* Tablet & up: show centered nav links on one line */
+@media (min-width: 768px) {
   .nav-links {
     display: flex;
     align-items: center;
     gap: 25px;
     font-weight: 700;
-
-    /* ADDED: Make the menu container grow */
-    flex-grow: 1;
-    /* ADDED: Center the links within the grown container */
-    justify-content: center;
+    flex-grow: 1; /* menu takes middle space */
+    justify-content: center; /* center items */
+    position: static;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    border-top: 0;
+    padding: 0;
   }
-  /* ======================================= */
-
   .nav-links a {
     padding: 20px 0;
     transition: color 0.3s ease;
@@ -235,6 +338,110 @@ ul {
     margin-left: 4px;
   }
   .hamburger-menu {
-    display: none; /* Hide hamburger on desktop */
+    display: none; /* Hide hamburger on tablet/desktop */
+  }
+}
+/* ===== 5. Hero Section Styles ===== */
+
+.hero-section {
+  position: relative; /* Needed for the ::before overlay */
+  min-height: 85vh; /* Sets a minimum height relative to viewport */
+  display: flex;
+  align-items: center; /* Vertical alignment */
+  justify-content: center; /* Horizontal alignment for mobile */
+  padding: 60px 0;
+  text-align: center; /* Center text for mobile */
+  color: var(--light-color);
+
+  /* Unsplash background image with parallax effect */
+  background-image: url("../img/hero-background.jpg");
+  background-position: center center;
+  background-size: cover;
+  background-attachment: scroll; /* This creates the simple parallax effect */
+}
+
+/* Dark overlay */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  z-index: 1;
+}
+
+/* Container for hero content to place it above the overlay */
+.hero-content-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Align items center for mobile */
+}
+
+.hero-section h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem); /* Responsive font size */
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 1.5em;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-direction: column; /* Stack buttons on mobile */
+  gap: 1rem;
+  width: 100%;
+  max-width: 300px; /* Constrain button width on mobile */
+}
+
+/* General button styles */
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+}
+
+.btn-secondary {
+  background-color: var(--accent-color);
+  color: var(--light-color);
+}
+
+/* --- Desktop Styles for Hero Section --- */
+@media (min-width: 768px) {
+  .hero-section {
+    justify-content: flex-start; /* Align content to the left */
+    text-align: left;
+  }
+
+  .hero-content-container {
+    align-items: flex-start; /* Align items left for desktop */
+  }
+
+  .hero-buttons {
+    flex-direction: row; /* Side-by-side buttons on desktop */
+    width: auto;
+    max-width: none;
   }
 }
