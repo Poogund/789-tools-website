@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>รายละเอียดสินค้า - 789 TOOLS</title>
+
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+
+    <main class="product-detail-page">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <a href="index.html">หน้าแรก</a>
+          <i class="fa-solid fa-chevron-right"></i>
+          <a href="products.html">สินค้าทั้งหมด</a>
+          <i class="fa-solid fa-chevron-right"></i>
+          <span>สว่านกระแทกไร้สาย BOSCH</span>
+        </nav>
+
+        <div class="product-detail-container">
+          <section class="product-gallery">
+            <div class="main-image-wrapper">
+              <img
+                id="main-image"
+                src="https://placehold.co/600x600/FBBF24/333?text=BOSCH+Drill"
+                alt="สว่านกระแทกไร้สาย BOSCH"
+              />
+            </div>
+            <div class="thumbnail-list">
+              <img
+                src="https://placehold.co/100x100/FBBF24/333?text=BOSCH+1"
+                alt="มุมมองที่ 1"
+                class="thumbnail-item active"
+                data-src="https://placehold.co/600x600/FBBF24/333?text=BOSCH+Drill"
+              />
+              <img
+                src="https://placehold.co/100x100/e0e0e0/555?text=BOSCH+2"
+                alt="มุมมองที่ 2"
+                class="thumbnail-item"
+                data-src="https://placehold.co/600x600/e0e0e0/555?text=Side+View"
+              />
+              <img
+                src="https://placehold.co/100x100/e0e0e0/555?text=BOSCH+3"
+                alt="อุปกรณ์ในกล่อง"
+                class="thumbnail-item"
+                data-src="https://placehold.co/600x600/e0e0e0/555?text=In+The+Box"
+              />
+              <div
+                class="thumbnail-item video-thumbnail"
+                data-src="https://placehold.co/600x600/333/FFF?text=Video+Player"
+              >
+                <img
+                  src="https://placehold.co/100x100/333/FFF?text=VIDEO"
+                  alt="วิดีโอสาธิต"
+                />
+                <div class="video-play-icon">
+                  <i class="fa-solid fa-circle-play"></i>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="product-info">
+            <h1 class="product-title">
+              สว่านกระแทกไร้สาย BOSCH GSB 18V-50 (18V, แบต 2 ก้อน)
+            </h1>
+
+            <div class="product-meta-links">
+              <div class="product-rating">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+                <span>(4.8)</span>
+              </div>
+              <a href="#reviews" class="reviews-link">12 รีวิว</a>
+              <span>|</span>
+              <a href="#qa" class="qa-link">ถาม-ตอบ (3)</a>
+            </div>
+
+            <hr />
+
+            <div class="product-price">
+              <span class="price-sale">฿3,990</span>
+              <div class="price-original-wrapper">
+                <span class="price-original">฿4,500</span>
+                <span class="sale-tag">-11%</span>
+              </div>
+            </div>
+
+            <div class="product-status">
+              <span class="status-label">สถานะ:</span>
+              <span class="status-value in-stock"
+                ><i class="fa-solid fa-check-circle"></i> มีสินค้า
+                (พร้อมจัดส่ง)</span
+              >
+            </div>
+
+            <div class="product-features-box">
+              <h3>คุณสมบัติเด่น:</h3>
+              <ul>
+                <li>มอเตอร์ไร้แปรงถ่าน (Brushless) ทนทาน</li>
+                <li>แบตเตอรี่ 18V 2.0Ah จำนวน 2 ก้อน</li>
+                <li>ระบบกระแทกสำหรับเจาะปูนและผนังอิฐ</li>
+                <li>ตัวเครื่องกะทัดรัด น้ำหนักเบา</li>
+              </ul>
+            </div>
+
+            <div class="quantity-wrapper">
+              <label for="quantity-input" class="quantity-label">จำนวน:</label>
+              <div class="quantity-selector">
+                <button id="btn-minus">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+                <input id="quantity-input" type="text" value="1" readonly />
+                <button id="btn-plus">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button class="btn btn-primary btn-add-to-cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                เพิ่มลงรถเข็น
+              </button>
+              <button class="btn btn-wishlist">
+                <i class="fa-solid fa-heart"></i>
+              </button>
+            </div>
+
+            <hr />
+
+            <div class="product-assurances">
+              <div class="assurance-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span><b>รับประกัน:</b> รับประกันศูนย์ BOSCH 1 ปีเต็ม</span>
+              </div>
+              <div class="assurance-item">
+                <i class="fa-solid fa-truck-fast"></i>
+                <span><b>จัดส่ง:</b> ส่งด่วนฟรี ทั่วประเทศ (1-3 วันทำการ)</span>
+              </div>
+              <div class="assurance-item">
+                <i class="fa-solid fa-credit-card"></i>
+                <span
+                  ><b>การชำระเงิน:</b> เก็บเงินปลายทาง, บัตรเครดิต,
+                  โอนเงิน</span
+                >
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="product-tabs-section">
+          <nav id="tabs-nav" class="tabs-nav">
+            <button data-tab="description" class="tab-button active">
+              รายละเอียดสินค้า
+            </button>
+            <button data-tab="specs" class="tab-button">
+              คุณสมบัติ (Specifications)
+            </button>
+            <button data-tab="reviews" id="reviews-tab" class="tab-button">
+              รีวิว (12)
+            </button>
+          </nav>
+
+          <div id="tab-content" class="tab-content-wrapper">
+            <div id="tab-description" class="tab-panel active">
+              <h3>ทรงพลังและทนทานในเครื่องเดียว</h3>
+              <p>
+                สว่านกระแทกไร้สาย GSB 18V-50 Professional จาก BOSCH
+                มาพร้อมมอเตอร์ไร้แปรงถ่าน (Brushless) อัจฉริยะ
+                ที่ให้ทั้งประสิทธิภาพ ความทนทาน และขนาดที่กะทัดรัด
+                เหมาะสำหรับงานหนัก ทั้งงานเจาะไม้ เหล็ก และงานกระแทกเจาะปูน
+                หัวจับดอกสว่านโลหะทนทานและการออกแบบตามหลักสรีรศาสตร์
+                ทำให้เป็นเครื่องมือที่สมบูรณ์แบบสำหรับมืออาชีพ
+              </p>
+              <img
+                src="https://placehold.co/800x400/e0e0e0/555?text=Product+In+Action"
+                alt="การใช้งาน"
+                class="tab-content-image"
+              />
+              <ul>
+                <li><b>มอเตอร์ไร้แปรงถ่าน:</b> ยืดอายุการใช้งาน</li>
+                <li><b>หัวจับโลหะ:</b> ทนทาน รองรับงานหนัก</li>
+                <li><b>ระบบ ECP:</b> ปกป้องแบตเตอรี่จากโอเวอร์โหลด</li>
+              </ul>
+            </div>
+
+            <div id="tab-specs" class="tab-panel">
+              <h3>ข้อมูลทางเทคนิค</h3>
+              <table class="specs-table">
+                <tbody>
+                  <tr>
+                    <td>แรงดันไฟฟ้าแบตเตอรี่</td>
+                    <td>18.0 V</td>
+                  </tr>
+                  <tr>
+                    <td>แรงบิด (เบา/หนัก/สูงสุด)</td>
+                    <td>28/50/50 Nm</td>
+                  </tr>
+                  <tr>
+                    <td>ความเร็วรอบ (เกียร์ 1 / เกียร์ 2)</td>
+                    <td>0 – 460 / 0 – 1,800 รอบ/นาที</td>
+                  </tr>
+                  <tr>
+                    <td>อัตรากระแทกสูงสุด</td>
+                    <td>27,000 ครั้ง/นาที</td>
+                  </tr>
+                  <tr>
+                    <td>น้ำหนักไม่รวมแบตเตอรี่</td>
+                    <td>1.1 กก.</td>
+                  </tr>
+                  <tr>
+                    <td>สิ่งที่อยู่ในกล่อง</td>
+                    <td>
+                      <ul>
+                        <li>ตัวเครื่อง GSB 18V-50</li>
+                        <li>แบตเตอรี่ 2.0Ah (2 ก้อน)</li>
+                        <li>แท่นชาร์จ GAL 18V-20</li>
+                        <li>กล่องเครื่องมือ L-Case</li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div id="tab-reviews" class="tab-panel">
+              <h3>รีวิวจากลูกค้า</h3>
+              <div class="reviews-list">
+                <div class="review-item">
+                  <div class="review-header">
+                    <span class="review-author">สมชาย ใจดี</span>
+                    <div class="review-rating">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                    </div>
+                  </div>
+                  <p class="review-body">
+                    "ของดีมากครับ มอเตอร์แรงดี แบตอึด ส่งไวมาก แพ็คของมาดีครับ"
+                  </p>
+                  <span class="review-date">ซื้อเมื่อ 15 ต.ค. 2024</span>
+                </div>
+                <div class="review-item">
+                  <div class="review-header">
+                    <span class="review-author">ช่างเอก</span>
+                    <div class="review-rating">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-regular fa-star"></i>
+                    </div>
+                  </div>
+                  <p class="review-body">
+                    "ตัวเครื่องน้ำหนักเบาดีครับ เหมาะกับงานช่างทั่วไป
+                    แต่ถ้าเจาะปูนหนาๆ อาจจะต้องใช้รุ่นใหญ่กว่านี้
+                    โดยรวมคุ้มราคาครับ"
+                  </p>
+                  <span class="review-date">ซื้อเมื่อ 10 ต.ค. 2024</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="related-products-section">
+          <h2>สินค้าที่เกี่ยวข้อง</h2>
+          <div class="shopee-product-grid">
+            <div class="shopee-product-card">
+              <a href="#">
+                <div class="card-image-container">
+                  <img
+                    src="https://placehold.co/300x300/e0e0e0/555?text=Related+1"
+                    alt="สินค้า"
+                  />
+                </div>
+                <div class="card-info-container">
+                  <h3 class="card-title">ชุดดอกสว่าน BOSCH 10 ชิ้น</h3>
+                  <div class="card-price">
+                    <span class="sale-price">฿450</span>
+                  </div>
+                  <div class="card-review-sold">
+                    <span class="items-sold">ขายแล้ว 100+ ชิ้น</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="shopee-product-card">
+              <a href="#">
+                <div class="card-image-container">
+                  <img
+                    src="https://placehold.co/300x300/e0e0e0/555?text=Related+2"
+                    alt="สินค้า"
+                  />
+                </div>
+                <div class="card-info-container">
+                  <h3 class="card-title">เครื่องเจียร 4" MAKITA</h3>
+                  <div class="card-price">
+                    <span class="sale-price">฿1,890</span>
+                  </div>
+                  <div class="card-review-sold">
+                    <span class="items-sold">ขายแล้ว 50 ชิ้น</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="shopee-product-card">
+              <a href="#">
+                <div class="card-image-container">
+                  <img
+                    src="https://placehold.co/300x300/e0e0e0/555?text=Related+3"
+                    alt="สินค้า"
+                  />
+                </div>
+                <div class="card-info-container">
+                  <h3 class="card-title">แบตเตอรี่ 18V 4.0Ah</h3>
+                  <div class="card-price">
+                    <span class="sale-price">฿2,200</span>
+                  </div>
+                  <div class="card-review-sold">
+                    <span class="items-sold">ขายแล้ว 25 ชิ้น</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="shopee-product-card">
+              <a href="#">
+                <div class="card-image-container">
+                  <img
+                    src="https://placehold.co/300x300/e0e0e0/555?text=Related+4"
+                    alt="สินค้า"
+                  />
+                </div>
+                <div class="card-info-container">
+                  <h3 class="card-title">ตลับเมตร 5 ม.</h3>
+                  <div class="card-price">
+                    <span class="sale-price">฿120</span>
+                  </div>
+                  <div class="card-review-sold">
+                    <span class="items-sold">ขายแล้ว 80 ชิ้น</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <div id="footer-placeholder"></div>
+
+    <script src="assets/js/app.js" type="module"></script>
+
+    <script>
+      // --- JavaScript สำหรับควบคุมหน้า ---
+      document.addEventListener("DOMContentLoaded", () => {
+        // 1. ระบบเปลี่ยนรูปภาพ (Image Gallery)
+        const mainImage = document.getElementById("main-image");
+        const thumbnailItems = document.querySelectorAll(".thumbnail-item");
+
+        if (mainImage && thumbnailItems.length > 0) {
+          thumbnailItems.forEach((thumb) => {
+            thumb.addEventListener("click", () => {
+              // เปลี่ยนรูปภาพหลัก
+              mainImage.src = thumb.dataset.src;
+
+              // อัปเดตสไตล์ของ Thumbnails
+              thumbnailItems.forEach((item) => item.classList.remove("active"));
+              thumb.classList.add("active");
+            });
+          });
+        }
+
+        // 2. ระบบควบคุมจำนวน (Quantity Selector)
+        const qtyInput = document.getElementById("quantity-input");
+        const btnPlus = document.getElementById("btn-plus");
+        const btnMinus = document.getElementById("btn-minus");
+
+        if (qtyInput && btnPlus && btnMinus) {
+          btnPlus.addEventListener("click", () => {
+            let currentQty = parseInt(qtyInput.value);
+            qtyInput.value = currentQty + 1;
+          });
+
+          btnMinus.addEventListener("click", () => {
+            let currentQty = parseInt(qtyInput.value);
+            if (currentQty > 1) {
+              qtyInput.value = currentQty - 1;
+            }
+          });
+        }
+
+        // 3. ระบบแท็บ (Tabs)
+        const tabButtons = document.querySelectorAll(".tab-button");
+        const tabPanels = document.querySelectorAll(".tab-panel");
+        const tabsNav = document.getElementById("tabs-nav");
+
+        if (tabsNav && tabButtons.length > 0 && tabPanels.length > 0) {
+          tabsNav.addEventListener("click", (e) => {
+            if (e.target.classList.contains("tab-button")) {
+              const targetTab = e.target.getAttribute("data-tab");
+
+              // ซ่อนทุก Panel
+              tabPanels.forEach((panel) => {
+                panel.classList.remove("active");
+              });
+
+              // ลบสไตล์ Active ออกจากทุกปุ่ม
+              tabButtons.forEach((btn) => {
+                btn.classList.remove("active");
+              });
+
+              // แสดง Panel ที่เลือก
+              document
+                .getElementById(`tab-${targetTab}`)
+                .classList.add("active");
+
+              // เพิ่มสไตล์ Active ให้ปุ่มที่เลือก
+              e.target.classList.add("active");
+            }
+          });
+        }
+
+        // 4. ลิงก์ไปยังแท็บรีวิว
+        const reviewsLink = document.querySelector(".reviews-link");
+        const reviewsTabButton = document.getElementById("reviews-tab");
+        if (reviewsLink && reviewsTabButton) {
+          reviewsLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            reviewsTabButton.click();
+            reviewsTabButton.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
