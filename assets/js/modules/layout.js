@@ -88,5 +88,5 @@ const loadComponent = (url, targetId) => {
 // Load Header and Footer into their placeholders
 document.addEventListener("DOMContentLoaded", () => {
   loadComponent("components/header.html", "header-placeholder");
-  // loadComponent('components/footer.html', 'footer-placeholder'); // We will use this later
+  loadComponent("components/footer.html", "footer-placeholder");
 });

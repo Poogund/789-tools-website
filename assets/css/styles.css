@@ -28,6 +28,12 @@ body {
   color: var(--text-color);
   line-height: 1.6;
   background-color: var(--light-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ทำให้ body สูงเต็มจอเสมอ */
+}
+main {
+  flex-grow: 1;
 }
 
 /* Prevent background scroll when mobile menu is open */
@@ -962,5 +968,321 @@ ul {
   .cod-badge {
     font-size: 10px; /* Smaller badge text on mobile */
     padding: 1px 3px;
+  }
+}
+/* ===== 10. Customer Reviews Section Styles ===== */
+
+.reviews-section {
+  background-color: #ffffff;
+  padding: 60px 0;
+  text-align: center;
+}
+
+.reviews-section h2 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 0.5em;
+}
+
+.reviews-section > .container > p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 40px;
+}
+
+.reviews-grid {
+  display: grid;
+  gap: 24px;
+  /* Mobile-first: 2 columns */
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 40px;
+}
+
+.review-card {
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  background-color: var(--light-gray-bg);
+  text-align: center;
+}
+
+.review-image-wrapper {
+  border-radius: 20px 20px 0 0;
+  overflow: hidden; /* Crucial for the zoom effect */
+}
+
+.review-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5; /* Portrait aspect ratio */
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.review-card:hover img {
+  transform: scale(1.05); /* Zoom in effect */
+}
+
+.review-card p {
+  padding: 16px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: 500;
+  color: var(--dark-color);
+}
+
+.reviews-footer {
+  text-align: center;
+}
+
+/* --- Responsive Grid for Desktop --- */
+@media (min-width: 992px) {
+  .reviews-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+/* ===== 11. FAQ Section Styles ===== */
+
+.faq-section {
+  background-color: var(--light-gray-bg);
+  padding: 60px 0;
+}
+
+.faq-section h2 {
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 40px;
+}
+
+.faq-accordion {
+  max-width: 800px; /* Constrain width for better readability */
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden; /* Clips the inner items to the border-radius */
+  background-color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.faq-item {
+  border-bottom: 1px solid #ddd;
+}
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  color: var(--dark-color);
+}
+
+/* Pure CSS Plus/Minus Icon */
+.faq-icon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0; /* Prevents icon from shrinking */
+  margin-left: 20px;
+}
+.faq-icon::before,
+.faq-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 2px;
+  background-color: var(--dark-color);
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s ease;
+}
+.faq-icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.faq-answer {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+}
+
+.faq-answer p {
+  padding: 0 24px;
+  font-size: clamp(0.9rem, 2.2vw, 1rem);
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Active State for Accordion */
+.faq-item.active .faq-question {
+  color: var(--secondary-color); /* Blue text when active */
+}
+
+.faq-item.active .faq-answer {
+  max-height: 200px; /* Adjust if answers are very long */
+  padding-top: 0;
+  padding-bottom: 20px;
+  transition: max-height 0.4s ease-in, padding 0.4s ease-in;
+}
+
+/* Rotate the vertical bar to form a minus sign */
+.faq-item.active .faq-icon::after {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.faq-item.active .faq-icon::before,
+.faq-item.active .faq-icon::after {
+  background-color: var(--secondary-color); /* Blue icon when active */
+}
+/* ===== 12. Footer Styles ===== */
+
+.site-footer a {
+  text-decoration: none;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.site-footer a:hover {
+  color: var(--primary-color); /* Yellow on hover */
+}
+
+/* --- Main Footer --- */
+.footer-main {
+  background-color: var(--dark-color);
+  color: #ccc;
+  padding: 60px 0;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.footer-grid {
+  display: grid;
+  /* 4-column layout that stays fixed */
+  grid-template-columns: 2fr 1.5fr 1.5fr 1.5fr;
+  gap: 30px;
+}
+
+.footer-column h4 {
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.footer-column.brand-info h4 {
+  margin-top: 16px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 12px;
+}
+
+.footer-column p {
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.footer-logo {
+  max-width: 180px;
+  height: auto;
+}
+
+.social-title {
+  margin-top: 24px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+  color: #ffffff; /* Keep color white on hover */
+}
+
+/* Social media brand colors */
+.social-icon.facebook {
+  background-color: #1877f2;
+}
+.social-icon.line {
+  background-color: #06c755;
+}
+.social-icon.tiktok {
+  background-color: #000000;
+}
+.social-icon.email {
+  background-color: var(--secondary-color);
+}
+
+/* --- Sub Footer --- */
+.sub-footer {
+  background-color: #000000;
+  color: #aaa;
+  padding: 20px 0;
+  font-size: 0.85rem;
+}
+
+.sub-footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  gap: 10px;
+}
+
+.sub-footer-links a {
+  margin-left: 20px;
+}
+
+/* --- Responsive Adjustments for VERY small screens --- */
+/* This does NOT change the 4-column layout, just the content inside */
+@media (max-width: 767px) {
+  .footer-grid {
+    grid-template-columns: 1fr; /* On second thought, stacking on mobile is necessary for readability */
+    gap: 40px; /* Increase gap when stacked */
+  }
+  .sub-footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .sub-footer-links {
+    margin-top: 10px;
+  }
+  .sub-footer-links a {
+    display: block;
+    margin: 5px 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+    gap: 40px;
   }
 }

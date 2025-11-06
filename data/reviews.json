@@ -1,0 +1,22 @@
+[
+  {
+    "id": "rev-001",
+    "image_url": "assets/img/review-01.png",
+    "caption": "บริการไว ส่งถึงหน้างานจริง เครื่องพร้อมใช้งาน"
+  },
+  {
+    "id": "rev-002",
+    "image_url": "assets/img/review-02.png",
+    "caption": "ประทับใจสุดๆเป็นกันเองมาก"
+  },
+  {
+    "id": "rev-003",
+    "image_url": "assets/img/review-03.png",
+    "caption": "ทีมงานให้คำแนะนำดีมาก"
+  },
+  {
+    "id": "rev-004",
+    "image_url": "assets/img/review-04.png",
+    "caption": "มั่นใจในบริการส่งจริง ได้รับของไวมาก"
+  }
+]
