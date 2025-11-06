@@ -851,3 +851,116 @@ ul {
   padding-top: 12px;
   padding-bottom: 12px;
 }
+/* ===== 9. Why Us Section Styles ===== */
+
+.why-us-section {
+  background-color: #ffffff; /* Pure white background */
+  padding: 60px 0;
+  text-align: center;
+}
+
+.why-us-section h2 {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 40px;
+}
+
+/* Fixed Layout Container: Always 5 columns horizontally */
+.features-container {
+  display: flex;
+  justify-content: space-between; /* Distribute items evenly */
+  align-items: flex-start;
+  gap: 10px; /* Small gap between items */
+  overflow-x: auto; /* Ensures scroll on very small screens if needed without breaking layout */
+  padding-bottom: 10px; /* For scrollbar spacing if it appears */
+}
+
+/* Hide scrollbar for cleaner look */
+.features-container::-webkit-scrollbar {
+  display: none;
+}
+.features-container {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1; /* Make all items equal width */
+  min-width: 80px; /* Prevent items from shrinking too much */
+  cursor: pointer; /* Shows it's interactive */
+  transition: transform 0.3s ease;
+}
+
+.feature-item i {
+  font-size: clamp(2.5rem, 5vw, 3.5rem); /* Responsive icon size */
+  color: var(--primary-color); /* Yellow */
+  margin-bottom: 16px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.feature-item p {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--dark-color);
+  transition: color 0.3s ease;
+}
+
+/* --- Special COD Truck Styling --- */
+.cod-icon-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.cod-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  font-size: 12px;
+  font-weight: 900;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 2px solid var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+/* --- Interactive Hover Effects --- */
+.feature-item:hover i {
+  color: var(--secondary-color); /* Change to Blue on hover */
+  transform: translateY(-10px); /* Float up effect */
+}
+
+.feature-item:hover p {
+  color: var(--secondary-color); /* Text changes to Blue as well */
+}
+
+/* Change COD badge style on hover */
+.feature-item:hover .cod-badge {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+/* Responsive Adjustments for smaller screens */
+@media (max-width: 767px) {
+  .features-container {
+    gap: 5px;
+  }
+  .feature-item p {
+    font-size: 0.85rem; /* Smaller text on mobile */
+  }
+  .feature-item i {
+    margin-bottom: 12px;
+  }
+  .cod-badge {
+    font-size: 10px; /* Smaller badge text on mobile */
+    padding: 1px 3px;
+  }
+}
