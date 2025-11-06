@@ -515,6 +515,8 @@ ul {
   font-size: 1.1rem;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: none; /* เพิ่ม: đảm bảo không cóขอบ */
+  cursor: pointer; /* เพิ่ม: เปลี่ยนเมาส์ */
 }
 .btn:hover {
   transform: translateY(-3px);
@@ -608,6 +610,7 @@ ul {
   text-decoration: none;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--light-color); /* เพิ่มพื้นหลังสีขาว */
 }
 
 .category-card:hover {
@@ -620,6 +623,15 @@ ul {
   height: 100%;
   object-fit: cover;
   aspect-ratio: 1 / 1; /* Ensures all images are square */
+}
+
+/* สไตล์สำหรับการ์ดที่ไม่มี overlay (เช่นในหน้า services) */
+.category-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 16px;
+  text-align: center;
+  color: var(--dark-color);
 }
 
 .card-name-overlay {
@@ -637,6 +649,8 @@ ul {
 .card-name-overlay h3 {
   font-size: 1.1rem;
   font-weight: 700;
+  color: var(--light-color); /* ตรวจสอบว่าสีข้อความเป็นสีขาว */
+  padding: 0; /* ล้าง padding เดิม */
 }
 
 /* --- Responsive Grid Layouts --- */
@@ -644,6 +658,7 @@ ul {
 @media (max-width: 991px) {
   .category-grid {
     gap: 12px;
+    grid-template-columns: repeat(2, 1fr); /* 2 คอลัมน์บนมือถือ */
   }
   .card-name-overlay {
     padding: 12px 8px 8px 8px;
@@ -904,6 +919,7 @@ ul {
   min-width: 80px; /* Prevent items from shrinking too much */
   cursor: pointer; /* Shows it's interactive */
   transition: transform 0.3s ease;
+  padding: 10px; /* เพิ่ม padding */
 }
 
 .feature-item i {
@@ -2103,4 +2119,413 @@ ul.tab-description-bullets {
 .product-features-box ul {
   padding-left: 0;
   list-style-position: inside;
+}
+
+/*
+======================================================================
+===== 16. STATIC PAGE STYLES (About, Services, Contact, etc.) =====
+======================================================================
+*/
+
+/* --- 16.1 Utility Classes --- */
+.text-center {
+  text-align: center;
+}
+.mt-3 {
+  margin-top: 1rem; /* 16px */
+}
+
+/* --- 16.2 Internal Page Hero --- */
+/* เราจะใช้ .hero-section ที่มีอยู่ แต่จะ override บางส่วนสำหรับหน้าย่อย */
+.hero-section.about-hero,
+.hero-section.services-hero,
+.hero-section.parts-hero,
+.hero-section.contact-hero,
+.hero-section.reviews-hero {
+  min-height: 40vh; /* ลดความสูงลง */
+  background-attachment: scroll; /* ปิด parallax */
+  display: flex;
+  align-items: center; /* จัดกลาง */
+  justify-content: center; /* จัดกลาง */
+  text-align: center; /* ข้อความกลาง */
+}
+
+/* ปรับแต่ง h1 และ p สำหรับ Hero หน้าย่อย */
+.hero-section.about-hero h1,
+.hero-section.services-hero h1,
+.hero-section.parts-hero h1,
+.hero-section.contact-hero h1,
+.hero-section.reviews-hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  margin-bottom: 0.5em;
+}
+
+.hero-section.about-hero p,
+.hero-section.services-hero p,
+.hero-section.parts-hero p,
+.hero-section.contact-hero p,
+.hero-section.reviews-hero p {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: var(--light-color);
+  font-weight: 400;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ทำให้ปุ่มใน Hero (หน้า Services) อยู่ตรงกลาง */
+.hero-section.services-hero .hero-buttons {
+  flex-direction: row;
+  justify-content: center;
+  max-width: none;
+  margin-top: 1.5rem;
+}
+
+/* --- 16.3 About Page (about.html) --- */
+.about-story-section {
+  padding: 60px 0;
+  background-color: var(--light-color);
+  text-align: center;
+}
+.about-story-section h2,
+.mission-values-section h2,
+.team-section h2 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 0.5em;
+}
+.about-story-section p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.mission-values-section {
+  padding: 60px 0;
+  background-color: var(--section-bg-gray);
+  text-align: center;
+}
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 40px;
+}
+.value-item {
+  background-color: var(--light-color);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+.value-item i {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 16px;
+}
+.value-item h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.value-item p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.team-section {
+  padding: 60px 0;
+  background-color: var(--light-color);
+  text-align: center;
+}
+.team-section > .container > p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+}
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+.team-member {
+  text-align: center;
+}
+.team-member img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  background-color: #eee; /* สี placeholder */
+  border: 1px solid #ddd;
+}
+.team-member h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.team-member p {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* --- 16.4 Services & Parts-Services Pages --- */
+.rental-process-section,
+.repair-service-section {
+  padding: 60px 0;
+  background-color: var(--light-color);
+  text-align: center;
+}
+.rental-process-section h2,
+.rental-categories-section h2,
+.service-features-section h2,
+.parts-categories-section h2,
+.repair-service-section h2,
+.parts-features-section h2 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  text-align: left;
+}
+.step {
+  background-color: var(--section-bg-gray);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+}
+.step h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin-bottom: 12px;
+}
+.step p {
+  font-size: 0.95rem;
+  color: #555;
+}
+.step p a {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.rental-categories-section,
+.parts-categories-section {
+  padding: 60px 0;
+  background-color: var(--section-bg-gray);
+}
+/* .category-grid ถูกใช้ซ้ำ */
+.rental-categories-section .text-center {
+  margin-top: 40px;
+}
+.parts-categories-section .category-card img {
+  object-fit: contain; /* ให้อะไหล่เห็นเต็ม */
+  padding: 16px;
+}
+.parts-categories-section p.mt-3 {
+  text-align: center;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.service-features-section,
+.parts-features-section {
+  padding: 60px 0;
+  background-color: var(--light-color);
+}
+/* .features-container ถูกใช้ซ้ำ */
+.service-features-section .features-container,
+.parts-features-section .features-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+.service-features-section .feature-item,
+.parts-features-section .feature-item {
+  background-color: var(--section-bg-gray);
+  padding: 30px;
+  border-radius: 12px;
+  min-width: unset;
+  text-align: center;
+}
+
+/* --- 16.5 CTA Section (Reusable) --- */
+.cta-section {
+  padding: 60px 0;
+  background-color: var(--dark-color);
+  color: var(--light-color);
+  text-align: center;
+}
+.cta-section h2 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+.cta-section p {
+  font-size: 1.1rem;
+  color: #ccc;
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+}
+.cta-section p a {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+/* --- 16.6 Contact Page --- */
+.contact-info-section {
+  padding: 60px 0;
+  background-color: var(--section-bg-gray);
+}
+.contact-info-section h1 {
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+.contact-info-section p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 700px;
+  margin-bottom: 1.5rem;
+}
+.contact-details {
+  font-size: 1.1rem;
+}
+.contact-details p {
+  margin-bottom: 0.5rem;
+}
+.contact-details a {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.map-section {
+  padding: 60px 0;
+}
+.map-section h2 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.map-section iframe {
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form-section {
+  padding: 60px 0;
+  background-color: var(--section-bg-gray);
+}
+.contact-form-section h2 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.contact-form {
+  max-width: 700px;
+  margin: 0 auto;
+  background-color: var(--light-color);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(253, 216, 53, 0.4);
+}
+.contact-form button {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 16px;
+}
+
+/* --- 16.7 Reviews Page (reviews.html) --- */
+.reviews-page-main {
+  padding: 60px 0;
+  background-color: var(--section-bg-gray);
+}
+.reviews-page-main h1 {
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+.reviews-page-main > .container > p {
+  font-size: 1.1rem;
+  color: #555;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 40px auto;
+}
+/* ใช้ .reviews-grid จาก .reviews-section */
+.reviews-page-main .reviews-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* --- 16.8 Responsive for Static Pages --- */
+
+@media (max-width: 991px) {
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+  .team-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .process-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .service-features-section .features-container,
+  .parts-features-section .features-container {
+    grid-template-columns: 1fr;
+  }
+  .reviews-page-main .reviews-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .process-steps {
+    grid-template-columns: 1fr;
+  }
+  .reviews-page-main .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+  /* ปรับ category grid ในหน้า services/parts */
+  .rental-categories-section .category-grid,
+  .parts-categories-section .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

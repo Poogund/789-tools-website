@@ -182,8 +182,26 @@ async function loadProductDetails() {
 
     // 4. อัปเดตข้อมูลในหน้า (ใช้ ID ที่เรากำหนดไว้ใน HTML)
 
-    // ตั้งค่า Title ของหน้าเว็บ
-    document.title = `${product.name} - 789 TOOLS`;
+    // ⚔️ ⚔️ ⚔️ ส่วนแก้ไข SEO: Title และ Meta Description ⚔️ ⚔️ ⚔️
+    const newTitle = `${product.name} - 789 TOOLS`;
+    const newDescription = `${product.description} สเปก: ${product.specs
+      .map((s) => s.name)
+      .join(", ")}. ราคา ฿${product.price} พร้อมบริการจัดส่ง.`;
+
+    document.title = newTitle;
+
+    // อัปเดต Meta Description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute("content", newDescription);
+    } else {
+      // กรณีที่ไม่มี tag description (ซึ่งไม่ควรเกิด เพราะเราเพิ่ม Fallback แล้ว)
+      metaDescription = document.createElement("meta");
+      metaDescription.name = "description";
+      metaDescription.content = newDescription;
+      document.head.appendChild(metaDescription);
+    }
+    // ⚔️ ⚔️ ⚔️ สิ้นสุดส่วนแก้ไข SEO ⚔️ ⚔️ ⚔️
 
     // Breadcrumbs
     const breadcrumbName = document.querySelector(".breadcrumbs span");
