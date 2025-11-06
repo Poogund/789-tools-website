@@ -1840,7 +1840,7 @@ main.product-detail-page {
   display: flex;
   gap: 16px; /* ⚔️ (ภารกิจข้อ 2) ⚔️: เพิ่มระยะห่างระหว่างกลุ่ม */
   /* ⚔️ (ภารกิจข้อ 2) ⚔️: เพิ่ม 3 บรรทัดนี้ */
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-end;
   flex-wrap: wrap;
 }
@@ -2086,18 +2086,14 @@ ul.tab-description-bullets {
 /* ===== 15. Custom Button and Feature Adjustments ===== */
 
 /* Wishlist Button */
-.btn-wishlist {
-  width: 40px;
-  height: 40px;
-  padding: 8px;
+.product-detail-page .btn-wishlist {
+  padding: 12px; /* Adjust padding for size */
   min-width: unset;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 
-/* Add to Cart Button */
-.btn-add-to-cart {
-  width: 100%;
-  min-width: 250px;
-}
+/* Add to Cart Button is adjusted via flexbox alignment, no extra rule needed here */
 
 /* Product Features List */
 .product-features-box {
