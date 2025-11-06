@@ -13,6 +13,8 @@
   --line-color: #06c755;
   --font-main: "Montserrat", sans-serif;
   --light-gray-bg: #f0f0f0;
+  --danger-color: #d32f2f; /* Red color for badges & prices */
+  --section-bg-gray: #f4f7f6; /* Light gray for gradient background */
 }
 
 /* Basic Reset */
@@ -696,10 +698,16 @@ ul {
   opacity: 1;
   transform: scale(1.1);
 }
-/* ===== 8. Featured Products Section Styles ===== */
+/* ===== 8. Featured Products Section Styles (REVISED) ===== */
 
 .featured-products-section {
-  background-color: #ffffff;
+  /* --- CHANGED V2 --- */
+  /* background-color: #ffffff; (Original) */
+  background: linear-gradient(
+    180deg,
+    var(--section-bg-gray) 0%,
+    #ffffff 100%
+  ); /* Gray Gradient BG */
   padding: 60px 0;
 }
 
@@ -734,12 +742,18 @@ ul {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  /* --- ADDED V2 --- */
+  max-width: 1000px; /* Constrain grid width to make cards smaller */
+  margin: 0 auto; /* Center the constrained grid */
 }
 
 .product-card {
-  background-color: var(--light-gray-bg);
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  /* --- CHANGED V2 --- */
+  /* background-color: var(--light-gray-bg); (Original) */
+  background-color: var(--light-color); /* Card is now white */
+  border-radius: 12px; /* Soften edges */
+  /* box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); (Original) */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* New subtle shadow */
   overflow: hidden;
   position: relative;
   display: flex;
@@ -748,19 +762,25 @@ ul {
 }
 
 .product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  /* --- CHANGED V2 --- */
+  /* transform: translateY(-8px); (Original) */
+  transform: translateY(-5px); /* Less aggressive hover */
+  /* box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12); (Original) */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); /* Adjusted hover shadow */
 }
 
 .discount-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background-color: var(--primary-color);
-  color: var(--dark-color);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+  /* --- CHANGED V2 --- */
+  top: 16px; /* More space */
+  right: 16px; /* More space */
+  /* background-color: var(--primary-color); (Original) */
+  background-color: var(--danger-color); /* RED */
+  /* color: var(--dark-color); (Original) */
+  color: var(--light-color); /* White text */
+  padding: 6px 12px; /* Bigger badge */
+  border-radius: 8px;
+  font-size: clamp(0.8rem, 2vw, 0.95rem); /* Bigger font */
   font-weight: 700;
   z-index: 2;
 }
@@ -773,7 +793,7 @@ ul {
 .product-image-container img {
   width: 100%;
   height: auto;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1.2 / 1;
   object-fit: contain;
 }
 
@@ -782,7 +802,7 @@ ul {
   text-align: center;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Allows button to align to bottom */
+  flex-grow: 1;
 }
 
 .product-name {
@@ -799,7 +819,8 @@ ul {
 .current-price {
   font-size: clamp(1.1rem, 3vw, 1.4rem);
   font-weight: 700;
-  color: #d32f2f; /* A strong red for sale price */
+  /* --- CHANGED V2 --- */
+  color: var(--danger-color); /* Use consistent red */
   margin-right: 8px;
 }
 
@@ -811,9 +832,8 @@ ul {
 
 .product-info .btn {
   width: 100%;
-  margin-top: auto; /* Pushes button to the bottom */
+  margin-top: auto;
 }
-
 /* --- Responsive Adjustments --- */
 /* For very small screens, the 3-column grid can be too tight. */
 /* We'll adjust the gap and padding to give it more space. */
@@ -824,4 +844,10 @@ ul {
   .product-info {
     padding: 12px;
   }
+}
+/* --- ADDED V2: Mobile Button Font Size Fix --- */
+.product-info .btn {
+  font-size: 0.9rem; /* Smaller font for "ดูรายละเอียด" button */
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
