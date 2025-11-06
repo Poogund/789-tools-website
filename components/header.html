@@ -1,4 +1,11 @@
-<!-- components/header.html -->
+<!-- components/header.html (updated navigation) -->
+<!--
+  This header component is shared across all pages. It contains a top bar with a
+  brief message and login links, a main header with the logo, search bar and
+  contact icons, and a navigation bar.  Navigation links have been updated to
+  point to the correct pages (products, services, spare parts & service,
+  about, contact).  The mobile menu is handled via JS in assets/js/modules/layout.js.
+-->
 <header class="site-header">
   <div class="top-bar">
     <div class="container">
@@ -7,7 +14,9 @@
       </p>
       <div class="top-bar-links">
         <a href="#">ไทย / อังกฤษ</a>
-        <a href="#" class="top-bar-login"><i class="fa-solid fa-user"></i> Login / Register</a>
+        <a href="#" class="top-bar-login"
+          ><i class="fa-solid fa-user"></i> Login / Register</a
+        >
       </div>
     </div>
   </div>
@@ -18,7 +27,7 @@
         <img src="assets/img/logo.png" alt="โลโก้ 789 TOOLS" />
       </a>
 
-      <form class="search-bar">
+      <form class="search-bar" role="search">
         <input
           type="text"
           placeholder="ค้นหาสินค้าที่คุณต้องการ..."
@@ -61,18 +70,28 @@
           ></a>
         </li>
         <li>
-          <a href="#">บริการให้เช่า <i class="fa-solid fa-caret-down"></i></a>
+          <!-- link to the services page (rental & repair) -->
+          <a href="services.html"
+            >บริการให้เช่า <i class="fa-solid fa-caret-down"></i
+          ></a>
         </li>
         <li>
-          <a href="#">อะไหล่ & บริการ <i class="fa-solid fa-caret-down"></i></a>
+          <!-- link to the spare parts & service page -->
+          <a href="parts-services.html"
+            >อะไหล่ &amp; บริการ <i class="fa-solid fa-caret-down"></i
+          ></a>
         </li>
         <li><a href="#">รีวิวหน้างาน</a></li>
         <li><a href="about.html">เกี่ยวกับเรา</a></li>
         <li><a href="contact.html">ติดต่อเรา</a></li>
-        <li class="nav-menu-login"><a href="#"><i class="fa-solid fa-user"></i> Login / Register</a></li>
+        <li class="nav-menu-login">
+          <a href="#"><i class="fa-solid fa-user"></i> Login / Register</a>
+        </li>
       </ul>
       <div class="nav-icons desktop-nav-icons">
-        <a href="#" class="cart-icon" aria-label="Shopping Cart"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a href="#" class="cart-icon" aria-label="Shopping Cart"
+          ><i class="fa-solid fa-cart-shopping"></i
+        ></a>
       </div>
     </div>
   </nav>
