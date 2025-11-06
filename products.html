@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>สินค้าทั้งหมด - 789 TOOLS</title>
 
+    <!-- ใช้ CSS ไฟล์เดิมของท่าน -->
     <link rel="stylesheet" href="assets/css/styles.css" />
 
+    <!-- ใช้ Font Awesome (เหมือนเดิม) -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
   </head>
   <body>
+    <!-- Header ของท่านจะถูกโหลดมาที่นี่ -->
     <div id="header-placeholder"></div>
 
+    <!-- ===== เนื้อหาหน้าร้านค้า (สไตล์ Shopee) ===== -->
     <main class="shop-page-main">
       <div class="container">
+        <!-- Breadcrumbs (เส้นทาง) -->
         <nav class="breadcrumbs">
           <a href="index.html">หน้าแรก</a>
           <i class="fa-solid fa-chevron-right"></i>
@@ -24,6 +29,7 @@
         </nav>
 
         <div class="shop-layout">
+          <!-- 1. Sidebar (ตัวกรอง) -->
           <aside class="shop-sidebar">
             <div class="filter-group">
               <h3 class="filter-title">
@@ -72,7 +78,9 @@
             </div>
           </aside>
 
+          <!-- 2. Main Product Grid (ตารางสินค้า) -->
           <main class="shop-content">
+            <!-- แถบเรียงลำดับ -->
             <div class="sort-bar">
               <span class="product-count">กำลังแสดง 1–8 จาก 30 รายการ</span>
               <div class="sort-select">
@@ -86,9 +94,11 @@
               </div>
             </div>
 
+            <!-- ตารางสินค้า (4 คอลัมน์) -->
             <div class="shopee-product-grid">
+              <!-- ตัวอย่าง Product Card 1 (*** อัปเดตลิงก์แล้ว ***) -->
               <div class="shopee-product-card">
-                <a href="#">
+                <a href="product-detail.html">
                   <div class="card-image-container">
                     <img
                       src="assets/img/รถตัดพื้นคอนกรีต.png"
@@ -117,8 +127,9 @@
                   </div>
                 </a>
               </div>
+              <!-- Product Card 2 (*** อัปเดตลิงก์แล้ว ***) -->
               <div class="shopee-product-card">
-                <a href="#">
+                <a href="product-detail.html">
                   <div class="card-image-container">
                     <img
                       src="assets/img/แมงปอขัดหน้าปูน.png"
@@ -147,8 +158,9 @@
                   </div>
                 </a>
               </div>
+              <!-- Product Card 3 (*** อัปเดตลิงก์แล้ว ***) -->
               <div class="shopee-product-card">
-                <a href="#">
+                <a href="product-detail.html">
                   <div class="card-image-container">
                     <img src="assets/img/เครื่องตบดิน.png" alt="เครื่องตบดิน" />
                     <span class="card-sale-badge">SALE</span>
@@ -172,8 +184,9 @@
                   </div>
                 </a>
               </div>
+              <!-- Product Card 4 (*** อัปเดตลิงก์แล้ว ***) -->
               <div class="shopee-product-card">
-                <a href="#">
+                <a href="product-detail.html">
                   <div class="card-image-container">
                     <img
                       src="assets/img/เครื่องปั่นไฟ.png"
@@ -200,8 +213,9 @@
                   </div>
                 </a>
               </div>
+              <!-- Product Card 5 (*** อัปเดตลิงก์แล้ว ***) -->
               <div class="shopee-product-card">
-                <a href="#">
+                <a href="product-detail.html">
                   <div class="card-image-container">
                     <img src="assets/img/โม่ผสมปูนฉาบ.png" alt="โม่ผสมปูนฉาบ" />
                   </div>
@@ -224,8 +238,9 @@
                   </div>
                 </a>
               </div>
+              <!-- Product Card 6 (*** อัปเดตลิงก์แล้ว ***) -->
               <div class="shopee-product-card">
-                <a href="#">
+                <a href="product-detail.html">
                   <div class="card-image-container">
                     <img
                       src="assets/img/เครื่องดูดฝุ่น.png"
@@ -253,9 +268,11 @@
                   </div>
                 </a>
               </div>
+              <!-- Product Card 7 (*** อัปเดตลิงก์แล้ว ***) -->
               <div class="shopee-product-card">
-                <a href="#">
+                <a href="product-detail.html">
                   <div class="card-image-container">
+                    <!-- อาจจะต้องเพิ่มรูป category-power-trowel.jpg เข้าไปใน assets/img/ ก่อน -->
                     <img
                       src="assets/img/category-power-trowel.jpg"
                       alt="เครื่องขัดมัน SATER"
@@ -279,8 +296,9 @@
                   </div>
                 </a>
               </div>
+              <!-- Product Card 8 (*** อัปเดตลิงก์แล้ว ***) -->
               <div class="shopee-product-card">
-                <a href="#">
+                <a href="product-detail.html">
                   <div class="card-image-container">
                     <img
                       src="assets/img/category-compactor.jpg"
@@ -307,6 +325,7 @@
               </div>
             </div>
 
+            <!-- Pagination (ตัวแบ่งหน้า) -->
             <nav class="pagination">
               <a href="#" class="page-arrow disabled"
                 ><i class="fa-solid fa-chevron-left"></i
@@ -322,8 +341,12 @@
         </div>
       </div>
     </main>
+    <!-- ===== เนื้อหาหน้าร้านค้า สิ้นสุดที่นี่ ===== -->
+
+    <!-- Footer ของท่านจะถูกโหลดมาที่นี่ -->
     <div id="footer-placeholder"></div>
 
+    <!-- ใช้ JS ไฟล์เดิมของท่าน (ซึ่งจะโหลด layout.js ให้อัตโนมัติ) -->
     <script src="assets/js/app.js" type="module"></script>
   </body>
 </html>
