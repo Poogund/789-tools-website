@@ -1778,16 +1778,24 @@ main.product-detail-page {
   font-weight: 700;
   margin-bottom: 8px;
 }
+
+/* ⚔️ ⚔️ ⚔️ ภารกิจข้อ 3: แก้ไข ⚔️ ⚔️ ⚔️ */
 .product-features-box ul {
   list-style: disc;
-  list-style-position: outside;
+  list-style-position: outside; /* (ถูกต้อง) */
   margin-left: 20px;
   font-size: 0.9rem;
   color: #555;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  /* display: flex; <--- ลบออก */
+  /* flex-direction: column; <--- ลบออก */
+  gap: 4px; /* (อันนี้จะใช้ไม่ได้แล้ว) */
 }
+/* ⚔️ (เพิ่ม) ⚔️: เพิ่มระยะห่างระหว่าง li แทน gap */
+.product-features-box ul li {
+  margin-bottom: 4px;
+}
+/* ⚔️ ⚔️ ⚔️ สิ้นสุดการแก้ไข ⚔️ ⚔️ ⚔️ */
+
 .quantity-wrapper {
   /* ⚔️ (ภารกิจข้อ 2) ⚔️: แก้ไข */
   margin-bottom: 0;
@@ -1836,8 +1844,10 @@ main.product-detail-page {
   align-items: flex-end;
   flex-wrap: wrap;
 }
+
+/* ⚔️ ⚔️ ⚔️ ภารกิจข้อ 1: แก้ไข ⚔️ ⚔️ ⚔️ */
 .btn-add-to-cart {
-  flex-grow: 1; /* ⚔️ (ภารกิจข้อ 2) ⚔️: แก้ไข (เดิมคือ 1) */
+  flex-grow: 1; /* ⚔️ แก้ไข: (จาก 0 เป็น 1) เพื่อให้ปุ่มนี้ "ยาว" ⚔️ */
   font-size: 1.1rem;
   padding: 14px 20px;
   gap: 8px;
@@ -1848,9 +1858,10 @@ main.product-detail-page {
   display: flex;
   gap: 12px;
 }
+/* ⚔️ ⚔️ ⚔️ ภารกิจข้อ 2: แก้ไข ⚔️ ⚔️ ⚔️ */
 .btn-wishlist {
   flex-shrink: 0;
-  flex-grow: 0; /* ⚔️ เพิ่ม: เพื่อ "ห้าม" ปุ่มนี้ยืด ⚔️ */
+  flex-grow: 0; /* ⚔️ แก้ไข: (จาก 1 เป็น 0) เพื่อ "ห้าม" ปุ่มนี้ยืด ⚔️ */
   padding: 14px;
   font-size: 1.2rem;
   background-color: #eee;
@@ -2070,4 +2081,30 @@ ul.tab-description-bullets {
     grid-template-columns: repeat(2, 1fr); /* 2 คอลัมน์บนมือถือ */
     gap: 12px;
   }
+}
+
+/* ===== 15. Custom Button and Feature Adjustments ===== */
+
+/* Wishlist Button */
+.btn-wishlist {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  min-width: unset;
+}
+
+/* Add to Cart Button */
+.btn-add-to-cart {
+  width: 100%;
+  min-width: 250px;
+}
+
+/* Product Features List */
+.product-features-box {
+  text-align: left;
+}
+
+.product-features-box ul {
+  padding-left: 0;
+  list-style-position: inside;
 }
