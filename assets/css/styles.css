@@ -1777,7 +1777,8 @@ main.product-detail-page {
 }
 .product-features-box ul {
   list-style: disc;
-  list-style-position: inside;
+  list-style-position: outside;
+  margin-left: 20px;
   font-size: 0.9rem;
   color: #555;
   display: flex;
@@ -1786,6 +1787,7 @@ main.product-detail-page {
 }
 .quantity-wrapper {
   margin-bottom: 20px;
+  text-align: center;
 }
 .quantity-label {
   font-weight: 700;
@@ -1793,7 +1795,7 @@ main.product-detail-page {
   margin-bottom: 8px;
 }
 .quantity-selector {
-  display: flex;
+  display: inline-flex;
   width: 120px;
   border: 1px solid #ccc;
   border-radius: 4px;
