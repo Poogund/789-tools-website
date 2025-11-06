@@ -9,3 +9,9 @@ import "./modules/layout.js";
 import "./modules/category-loader.js"; // <-- ADD THIS LINE
 
 console.log("Main app script loaded.");
+
+import "./modules/layout.js";
+import "./modules/category-loader.js";
+import "./modules/featured-product-loader.js"; // <-- ADD THIS LINE
+
+console.log("Main app script loaded.");

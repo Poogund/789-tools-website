@@ -1,0 +1,50 @@
+[
+  {
+    "id": "prod-001",
+    "name": "รถตัดพื้นคอนกรีต",
+    "image_path": "assets/img/รถตัดพื้นคอนกรีต.png",
+    "price": "21,900",
+    "original_price": "25,900",
+    "discount_percentage": "-16%"
+  },
+  {
+    "id": "prod-002",
+    "name": "แมงปอขัดหน้าปูน",
+    "image_path": "assets/img/แมงปอขัดหน้าปูน.png",
+    "price": "17,900",
+    "original_price": "23,000",
+    "discount_percentage": "-23%"
+  },
+  {
+    "id": "prod-003",
+    "name": "เครื่องตบดิน",
+    "image_path": "assets/img/เครื่องตบดิน.png",
+    "price": "18,000",
+    "original_price": "22,900",
+    "discount_percentage": "-22%"
+  },
+  {
+    "id": "prod-004",
+    "name": "เครื่องปั่นไฟ",
+    "image_path": "assets/img/เครื่องปั่นไฟ.png",
+    "price": "27,900",
+    "original_price": "32,000",
+    "discount_percentage": "-13%"
+  },
+  {
+    "id": "prod-005",
+    "name": "โม่ผสมปูนฉาบ",
+    "image_path": "assets/img/โม่ผสมปูนฉาบ.png",
+    "price": "10,900",
+    "original_price": "12,500",
+    "discount_percentage": "-14%"
+  },
+  {
+    "id": "prod-006",
+    "name": "เครื่องดูดฝุ่นอุตสาหกรรม",
+    "image_path": "assets/img/เครื่องดูดฝุ่น.png",
+    "price": "8,200",
+    "original_price": "9,900",
+    "discount_percentage": "-18%"
+  }
+]

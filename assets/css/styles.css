@@ -12,6 +12,7 @@
   --facebook-color: #1877f2;
   --line-color: #06c755;
   --font-main: "Montserrat", sans-serif;
+  --light-gray-bg: #f0f0f0;
 }
 
 /* Basic Reset */
@@ -232,32 +233,83 @@ ul {
   /* Full-screen overlay menu for mobile */
   .nav-links {
     position: fixed;
-    top: 100px; /* below navbar height */
-    left: 0;
+    top: 100px; /* 1. เริ่มใต้ Header ตามที่ท่านสั่ง */
     right: 0;
-    bottom: 0;
+    bottom: auto; /* 2. ความสูงพอดีเนื้อหา */
+    width: 85%;
+    max-width: 350px;
     z-index: 900;
     background-color: var(--dark-color);
-    display: flex; /* ready for animation without layout shift */
+    display: flex;
     flex-direction: column;
-    width: 100%;
     text-align: left;
-    padding: 12px 0;
-    border-top: 1px solid var(--primary-color);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    /* animate in/out */
-    opacity: 0;
-    transform: translateY(8px);
+    padding: 0; /* (ใช้ padding ที่ 'li a' แทน) */
+    border-left: 1px solid var(--primary-color);
+    border-bottom-left-radius: 10px; /* (เพิ่มความมนด้านล่างซ้าย) */
+
+    /* 3. (สำคัญ) เราต้องซ่อนส่วนที่ล้นเนื่องจากขอบมน */
+    overflow: hidden;
+
+    /* --- Animation --- */
+    transform: translateX(100%);
     pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    transition: transform 0.3s ease-in-out;
   }
 
   .nav-links.active {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
     pointer-events: auto;
+    box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  /* 4. สไตล์ของ "ลิงก์เมนู" แต่ละตัว (ยังคงสวยงาม) */
+  .nav-links li a {
+    display: block;
+    padding: 18px 24px;
+    font-size: 1.05rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease;
+  }
+
+  .nav-links li a:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* 5. (ข้อจำกัด) Login จะอยู่ต่อท้าย แต่เรายังแยกมันด้วยเส้นขอบบนได้ */
+  .nav-links li.nav-menu-login {
+    margin-top: 0; /* (ยกเลิก margin-top: auto) */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* 6. (สำคัญ) ลบเส้นขอบล่างของลิงก์สุดท้าย (Login) */
+  .nav-links li:last-child a {
+    border-bottom: none;
+  }
+
+  /* 5. นี่คือสไตล์ของ "ลิงก์เมนู" แต่ละตัว */
+  .nav-links li a {
+    display: block;
+    padding: 18px 24px; /* 6. เพิ่มช่องไฟ (Padding) ที่นี่! */
+    font-size: 1.05rem;
+    /* 7. เพิ่มเส้นแบ่ง (Divider) ที่นี่! */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease;
+  }
+
+  /* 8. ทำให้ลิงก์สุดท้าย (Login) ไม่มีเส้นขอบล่าง */
+  .nav-links li:last-child a {
+    border-bottom: none;
+  }
+
+  /* 9. เมื่อ hover ให้เปลี่ยนสีพื้นหลัง */
+  .nav-links li a:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* 10. นี่คือเทคนิค "ถีบ" Login ไปล่างสุด */
+  .nav-links li.nav-menu-login {
+    margin-top: auto; /* ดันตัวเองไปอยู่ล่างสุดของ Flexbox */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* เพิ่มเส้นแบ่งด้านบน */
   }
 
   .nav-links a {
@@ -591,5 +643,185 @@ ul {
   .categories-header .btn {
     padding: 10px 24px;
     font-size: 0.9rem;
+  }
+}
+/* ===== 7. Brand Partners Section Styles ===== */
+
+.partners-section {
+  background-color: #ffffff; /* Pure white background */
+  padding: 60px 0;
+  text-align: center;
+}
+
+.partners-section h2 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 0.5em;
+}
+
+.partners-section p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 600px; /* Constrain line width for readability */
+  margin: 0 auto 40px auto; /* Center the paragraph */
+}
+
+.logos-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* Essential for responsiveness */
+  gap: 3rem 4rem; /* Vertical and horizontal gap */
+}
+
+.logos-container img {
+  max-height: 45px; /* Control the vertical size */
+  max-width: 150px; /* Prevent any single logo from being too wide */
+  width: auto;
+
+  /* Default state: grayscale */
+  filter: grayscale(
+    0%
+  ); /*
+  opacity: 0.8; /*
+
+  /* Smooth transition for hover effects */
+  transition: filter 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+.logos-container img:hover {
+  /* Hover state: full color and slightly larger */
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1);
+}
+/* ===== 8. Featured Products Section Styles ===== */
+
+.featured-products-section {
+  background-color: #ffffff;
+  padding: 60px 0;
+}
+
+/* Reusable Section Header Style */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.section-title h2 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 0.2em;
+}
+
+.section-title p {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.section-header .btn i {
+  margin-left: 8px;
+}
+
+/* Fixed 3-Column Grid */
+.product-grid-fixed {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.product-card {
+  background-color: var(--light-gray-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.discount-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+  font-weight: 700;
+  z-index: 2;
+}
+
+.product-image-container {
+  background-color: #ffffff;
+  padding: 16px;
+}
+
+.product-image-container img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
+.product-info {
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows button to align to bottom */
+}
+
+.product-name {
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--dark-color);
+}
+
+.product-pricing {
+  margin-bottom: 16px;
+}
+
+.current-price {
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  color: #d32f2f; /* A strong red for sale price */
+  margin-right: 8px;
+}
+
+.original-price {
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  color: #757575;
+  text-decoration: line-through;
+}
+
+.product-info .btn {
+  width: 100%;
+  margin-top: auto; /* Pushes button to the bottom */
+}
+
+/* --- Responsive Adjustments --- */
+/* For very small screens, the 3-column grid can be too tight. */
+/* We'll adjust the gap and padding to give it more space. */
+@media (max-width: 576px) {
+  .product-grid-fixed {
+    gap: 12px;
+  }
+  .product-info {
+    padding: 12px;
   }
 }
