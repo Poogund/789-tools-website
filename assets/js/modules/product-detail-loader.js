@@ -1,5 +1,56 @@
 // assets/js/modules/product-detail-loader.js
 
+// ⚔️ (ภารกิจข้อ 1) ⚔️: ฟังก์ชันสร้างดาวเรตติ้ง
+function createStarRating(rating) {
+  let starsHtml = "";
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+
+  for (let i = 0; i < fullStars; i++) {
+    starsHtml += '<i class="fa-solid fa-star"></i>';
+  }
+  if (halfStar) {
+    starsHtml += '<i class="fa-solid fa-star-half-stroke"></i>';
+  }
+  for (let i = 0; i < emptyStars; i++) {
+    starsHtml += '<i class="fa-regular fa-star"></i>';
+  }
+  return starsHtml;
+}
+
+// ⚔️ (ภารกิจข้อ 3) ⚔️: ฟังก์ชันสร้างเนื้อหาแท็บรายละเอียด
+function createDescriptionContent(product) {
+  // สร้าง HTML ของ bullet points
+  const bulletsHtml = product.description_bullets
+    .map((bullet) => `<li>${bullet}</li>`)
+    .join("");
+
+  // คืนค่า HTML ทั้งหมดของแท็บ
+  return `
+    <h3>${product.name}</h3>
+    <p>${product.description_long}</p>
+    <img src="${product.description_image}" alt="Product in action" class="tab-content-image" />
+    <ul class="tab-description-bullets">
+      ${bulletsHtml}
+    </ul>
+  `;
+}
+
+// ⚔️ (ภารกิจข้อ 5) ⚔️: ฟังก์ชันสร้างรายการรีวิว
+function createReviewItem(review) {
+  return `
+    <div class="review-item">
+      <div class="review-header">
+        <span class="review-author">${review.author}</span>
+        <div class="review-rating">${createStarRating(review.rating)}</div>
+      </div>
+      <p class="review-body">"${review.comment}"</p>
+      <span class="review-date">ซื้อเมื่อ: ${review.date}</span>
+    </div>
+  `;
+}
+
 // ฟังก์ชันสำหรับสร้าง HTML ของตาราง Specs
 function createSpecsTable(specs) {
   return specs
@@ -52,13 +103,49 @@ function createRelatedProductCard(product) {
             }
           </div>
           <div class="card-review-sold">
-            <span class="items-sold">คลิกดูรายละเอียด</span>
+             <!-- ⚔️ อัปเดตส่วนรีวิวการ์ดย่อ (ถ้ามี) ⚔️ -->
+             ${
+               product.rating && product.review_count
+                 ? `<div class="star-rating">${createStarRating(
+                     product.rating
+                   )}</div>
+                    <span class="items-sold">ขายแล้ว ${
+                      product.review_count
+                    } ชิ้น</span>`
+                 : `<span class="items-sold">คลิกดูรายละเอียด</span>`
+             }
           </div>
         </div>
       </a>
     </div>
   `;
 }
+
+// --- (เพิ่ม) ฟังก์ชันควบคุมแท็บ ---
+function initializeTabs() {
+  const tabButtons = document.querySelectorAll(".tab-button");
+  const tabPanels = document.querySelectorAll(".tab-panel");
+
+  tabButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const tabTarget = button.dataset.tab;
+
+      // 1. อัปเดตปุ่ม
+      tabButtons.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      // 2. อัปเดตเนื้อหา
+      tabPanels.forEach((panel) => {
+        if (panel.id === `tab-${tabTarget}`) {
+          panel.classList.add("active");
+        } else {
+          panel.classList.remove("active");
+        }
+      });
+    });
+  });
+}
+// --- (สิ้นสุด) ฟังก์ชันควบคุมแท็บ ---
 
 // ฟังก์ชันหลักในการโหลดข้อมูลสินค้า
 async function loadProductDetails() {
@@ -102,7 +189,7 @@ async function loadProductDetails() {
     const breadcrumbName = document.querySelector(".breadcrumbs span");
     if (breadcrumbName) breadcrumbName.textContent = product.name;
 
-    // Gallery (แก้ข้อ 5)
+    // Gallery
     const mainImage = document.getElementById("main-image");
     if (mainImage) mainImage.src = product.image;
     const thumbnailList = document.querySelector(".thumbnail-list");
@@ -114,6 +201,17 @@ async function loadProductDetails() {
 
     // Product Info
     document.getElementById("product-title").textContent = product.name;
+
+    // ⚔️ (ภารกิจข้อ 1) ⚔️: อัปเดตดาวและรีวิว
+    document.getElementById("product-rating-stars").innerHTML =
+      createStarRating(product.rating);
+    document.getElementById(
+      "product-rating-value"
+    ).textContent = `(${product.rating})`;
+    document.getElementById(
+      "reviews-link"
+    ).textContent = `${product.review_count} รีวิว`;
+
     document.getElementById("price-sale").textContent = `฿${product.price}`;
 
     const priceOriginalEl = document.getElementById("price-original");
@@ -137,8 +235,11 @@ async function loadProductDetails() {
       product.features.map((feature) => `<li>${feature}</li>`).join("");
 
     // Tabs
-    document.getElementById("tab-description-content").textContent =
-      product.description;
+    // ⚔️ (ภารกิจข้อ 3) ⚔️: อัปเดตแท็บรายละเอียด
+    document.getElementById("tab-description").innerHTML =
+      createDescriptionContent(product);
+
+    // ⚔️ (ภารกิจข้อ 4) ⚔️: (ตรวจสอบแล้ว - โค้ดเดิมทำงานถูกต้อง)
     document.getElementById("specs-table-body").innerHTML = createSpecsTable(
       product.specs
     );
@@ -146,7 +247,18 @@ async function loadProductDetails() {
       .map((item) => `<li>${item}</li>`)
       .join("");
 
-    // Related Products (แก้ข้อ 4)
+    // ⚔️ (ภารกิจข้อ 5) ⚔️: อัปเดตแท็บรีวิว
+    document.getElementById(
+      "reviews-tab"
+    ).textContent = `รีวิว (${product.review_count})`;
+    const reviewsListEl = document.getElementById("reviews-list");
+    if (product.reviews && product.reviews.length > 0) {
+      reviewsListEl.innerHTML = product.reviews.map(createReviewItem).join("");
+    } else {
+      reviewsListEl.innerHTML = "<p>ยังไม่มีรีวิวสำหรับสินค้านี้</p>";
+    }
+
+    // Related Products
     const relatedGrid = document.getElementById("related-products-grid");
     if (relatedGrid) {
       const relatedProductsHtml = product.related_ids
@@ -158,7 +270,7 @@ async function loadProductDetails() {
       relatedGrid.innerHTML = relatedProductsHtml;
     }
 
-    // 5. เพิ่ม Event Listeners ให้กับ Thumbnail ที่สร้างใหม่
+    // 5. เพิ่ม Event Listeners (หลังสร้าง HTML เสร็จ)
     const thumbnailItems = document.querySelectorAll(".thumbnail-item");
     thumbnailItems.forEach((thumb) => {
       thumb.addEventListener("click", () => {
@@ -167,6 +279,9 @@ async function loadProductDetails() {
         thumb.classList.add("active");
       });
     });
+
+    // ⚔️ (เพิ่ม) ⚔️: สั่งให้ระบบแท็บทำงาน
+    initializeTabs();
   } catch (error) {
     console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า:", error);
     mainElement.innerHTML =

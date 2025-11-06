@@ -1712,11 +1712,14 @@ main.product-detail-page {
 }
 .product-rating {
   color: var(--primary-color, #fdd835);
+  display: flex; /* ⚔️ (ภารกิจข้อ 1) ⚔️: เพิ่ม */
+  align-items: center; /* ⚔️ (ภารกิจข้อ 1) ⚔️: เพิ่ม */
+  gap: 2px; /* ⚔️ (ภารกิจข้อ 1) ⚔️: เพิ่ม */
 }
 .product-rating span {
   color: #666;
   font-weight: 700;
-  margin-left: 4px;
+  margin-left: 8px; /* ⚔️ (ภารกิจข้อ 1) ⚔️: เพิ่ม */
 }
 .product-meta-links a {
   color: var(--accent-color, #000aff);
@@ -1786,8 +1789,9 @@ main.product-detail-page {
   gap: 4px;
 }
 .quantity-wrapper {
-  margin-bottom: 20px;
-  text-align: center;
+  /* ⚔️ (ภารกิจข้อ 2) ⚔️: แก้ไข */
+  margin-bottom: 0;
+  text-align: left;
 }
 .quantity-label {
   font-weight: 700;
@@ -1826,28 +1830,40 @@ main.product-detail-page {
 }
 .product-actions {
   display: flex;
-  gap: 12px;
+  gap: 16px; /* ⚔️ (ภารกิจข้อ 2) ⚔️: เพิ่มระยะห่างระหว่างกลุ่ม */
+  /* ⚔️ (ภารกิจข้อ 2) ⚔️: เพิ่ม 3 บรรทัดนี้ */
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
 }
 .btn-add-to-cart {
-  flex-grow: 1;
-  /* === ⚔️ แก้ไข (ข้อ 1, 6) ⚔️ === */
-  font-size: 1.1rem; /* ลบ !important */
-  padding: 14px 20px; /* ลบ !important */
-  /* display: flex; (ถูกลบ) */
+  flex-grow: 0; /* ⚔️ (ภารกิจข้อ 2) ⚔️: แก้ไข (เดิมคือ 1) */
+  font-size: 1.1rem;
+  padding: 14px 20px;
   gap: 8px;
+}
+
+/* ⚔️ (ภารกิจข้อ 2) ⚔️: เพิ่ม CSS ที่ขาดหายไป */
+.action-buttons-group {
+  display: flex;
+  gap: 12px;
 }
 .btn-wishlist {
   flex-shrink: 0;
-  /* === ⚔️ แก้ไข (ข้อ 1, 6) ⚔️ === */
-  padding: 14px 16px; /* ลบ !important */
-  font-size: 1.2rem; /* ลบ !important */
+  padding: 14px 16px;
+  font-size: 1.2rem;
   background-color: #eee;
   color: var(--dark-color);
   border: 1px solid #ddd;
+  border-radius: 8px; /* (เพิ่ม) ทำให้ขอบมนเหมือนปุ่มอื่น */
+  transition: background-color 0.2s ease;
+  cursor: pointer; /* (เพิ่ม) */
 }
 .btn-wishlist:hover {
   background-color: #ddd;
 }
+/* (สิ้นสุดส่วนที่เพิ่ม) */
+
 .product-assurances {
   display: flex;
   flex-direction: column;
@@ -1883,6 +1899,7 @@ main.product-detail-page {
   display: flex;
   border-bottom: 1px solid #eee;
   background-color: #fcfcfc;
+  flex-wrap: wrap; /* ⚔️ (ภารกิจข้อ 5) ⚔️: เพิ่มเผื่อมือถือ */
 }
 .tab-button {
   padding: 16px 24px;
@@ -1894,6 +1911,7 @@ main.product-detail-page {
   cursor: pointer;
   border-bottom: 3px solid transparent;
   margin-bottom: -1px; /* ดึงขอบล่างขึ้นมาทับ border-bottom ของ nav */
+  white-space: nowrap; /* ⚔️ (ภารกิจข้อ 5) ⚔️: เพิ่ม */
 }
 .tab-button.active {
   color: var(--primary-color, #fdd835);
@@ -1921,13 +1939,17 @@ main.product-detail-page {
   border-radius: 8px;
   margin: 16px 0;
 }
-.tab-panel ul {
+.tab-panel ul,
+ul.tab-description-bullets {
+  /* ⚔️ (ภารกิจข้อ 3) ⚔️: เพิ่ม .tab-description-bullets */
   list-style: disc;
-  list-style-position: inside;
+  list-style-position: inside; /* ⚔️ (ภารกิจข้อ 3) ⚔️: แก้ไข (เดิมคือ outside) */
   margin-left: 4px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 16px; /* ⚔️ (ภารกิจข้อ 3) ⚔️: เพิ่ม */
+  margin-bottom: 16px; /* ⚔️ (ภารกิจข้อ 3) ⚔️: เพิ่ม */
 }
 /* --- ตาราง Specs --- */
 .specs-table {
@@ -1964,6 +1986,7 @@ main.product-detail-page {
 .review-header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap; /* ⚔️ (ภารกิจข้อ 5) ⚔️: เพิ่ม */
   gap: 12px;
   margin-bottom: 8px;
 }
@@ -2018,10 +2041,24 @@ main.product-detail-page {
   }
   .product-actions {
     flex-direction: column; /* ปุ่มเรียงแนวตั้ง */
+    align-items: stretch; /* ⚔️ (ภารกิจข้อ 2) ⚔️: เพิ่ม (ให้ยืดเต็ม) */
   }
-  .btn-wishlist {
+
+  /* ⚔️ (ภารกิจข้อ 2) ⚔️: เพิ่ม CSS สำหรับมือถือ */
+  .quantity-wrapper {
+    margin-bottom: 16px; /* เพิ่มระยะห่างกลับมาในโหมดมือถือ */
+    text-align: left; /* ยืนยันว่าชิดซ้าย */
+  }
+  .action-buttons-group {
     width: 100%;
+    display: flex;
   }
+  .btn-add-to-cart {
+    flex-grow: 1; /* ทำให้ปุ่มรถเข็นขยายเต็ม */
+  }
+  /* (ลบ .btn-wishlist { width: 100%; } ของเก่าที่ขัดกัน) */
+  /* (สิ้นสุดส่วนที่เพิ่ม) */
+
   .tabs-nav {
     overflow-x: auto; /* ทำให้แท็บไถได้ */
   }

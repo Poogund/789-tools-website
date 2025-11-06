@@ -50,17 +50,20 @@
           <section class="product-info">
             <h1 id="product-title" class="product-title">กำลังโหลด...</h1>
 
-            <!-- เรตติ้งและรีวิว -->
+            <!-- ⚔️ (ภารกิจข้อ 1) ⚔️: แก้ไขส่วนเรตติ้ง (JS จะเติมดาวจริงที่นี่) -->
             <div class="product-meta-links">
-              <div class="product-rating">
+              <div id="product-rating-stars" class="product-rating">
                 <i class="fa-regular fa-star"></i>
                 <i class="fa-regular fa-star"></i>
                 <i class="fa-regular fa-star"></i>
                 <i class="fa-regular fa-star"></i>
                 <i class="fa-regular fa-star"></i>
-                <span>(0.0)</span>
               </div>
-              <a href="#reviews" class="reviews-link">0 รีวิว</a>
+              <span id="product-rating-value">(0.0)</span>
+              <a href="#reviews" id="reviews-link" class="reviews-link"
+                >0 รีวิว</a
+              >
+              <!-- (อนาคต) <a href="#qa" class="qa-link">ถาม-ตอบ (0)</a> -->
             </div>
 
             <hr />
@@ -97,26 +100,35 @@
               </ul>
             </div>
 
-            <!-- เลือกจำนวน -->
-            <div class="quantity-wrapper">
-              <label for="quantity-input" class="quantity-label">จำนวน:</label>
-              <div class="quantity-selector">
-                <button id="btn-minus">
-                  <i class="fa-solid fa-minus"></i>
+            <!-- ⚔️ (ภารกิจข้อ 2) ⚔️: ปรับโครงสร้างปุ่มกดทั้งหมด -->
+            <div class="product-actions">
+              <!-- ส่วนเลือกจำนวน (ย้ายเข้ามา) -->
+              <div class="quantity-wrapper">
+                <label for="quantity-input" class="quantity-label"
+                  >จำนวน:</label
+                >
+                <div class="quantity-selector">
+                  <button id="btn-minus">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  <input id="quantity-input" type="text" value="1" readonly />
+                  <button id="btn-plus">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- กลุ่มปุ่มกด (ใหม่) -->
+              <div class="action-buttons-group">
+                <button class="btn btn-primary btn-add-to-cart">
+                  <i class="fa-solid fa-cart-shopping"></i>
+                  เพิ่มลงรถเข็น
                 </button>
-                <input id="quantity-input" type="text" value="1" readonly />
-                <button id="btn-plus">
-                  <i class="fa-solid fa-plus"></i>
+                <!-- ปุ่มหัวใจ (เพิ่มกลับมา) -->
+                <button class="btn btn-wishlist">
+                  <i class="fa-regular fa-heart"></i>
                 </button>
               </div>
-            </div>
-
-            <!-- ปุ่มกด (Add to Cart / Wishlist) -->
-            <div class="product-actions">
-              <button class="btn btn-primary btn-add-to-cart">
-                <i class="fa-solid fa-cart-shopping"></i>
-                เพิ่มลงรถเข็น
-              </button>
             </div>
 
             <hr />
@@ -150,21 +162,20 @@
             <button data-tab="specs" class="tab-button">
               คุณสมบัติ (Specifications)
             </button>
-            <!-- เราจะซ่อนรีวิวไว้ก่อน จนกว่าจะมีระบบรีวิวจริง -->
-            <!-- <button data-tab="reviews" id="reviews-tab" class="tab-button">
+            <!-- ⚔️ (ภารกิจข้อ 5) ⚔️: เปิดใช้งานแท็บรีวิว -->
+            <button data-tab="reviews" id="reviews-tab" class="tab-button">
               รีวิว (0)
-            </button> -->
+            </button>
           </nav>
 
           <!-- เนื้อหาแท็บ -->
           <div id="tab-content" class="tab-content-wrapper">
-            <!-- Tab: รายละเอียดสินค้า -->
+            <!-- ⚔️ (ภารกิจข้อ 3) ⚔️: Tab: รายละเอียดสินค้า (JS จะสร้างเนื้อหาใหม่ที่นี่) -->
             <div id="tab-description" class="tab-panel active">
-              <h3>รายละเอียดสินค้า</h3>
-              <p id="tab-description-content">กำลังโหลด...</p>
+              <p>กำลังโหลด...</p>
             </div>
 
-            <!-- Tab: คุณสมบัติ -->
+            <!-- Tab: คุณสมบัติ (ภารกิจข้อ 4 - โครงสร้างถูกต้องแล้ว) -->
             <div id="tab-specs" class="tab-panel">
               <h3>ข้อมูลทางเทคนิค</h3>
               <table class="specs-table">
@@ -186,13 +197,14 @@
               </ul>
             </div>
 
-            <!-- Tab: รีวิว (ซ่อนไว้ก่อน) -->
-            <!-- <div id="tab-reviews" class="tab-panel">
+            <!-- ⚔️ (ภารกิจข้อ 5) ⚔️: Tab: รีวิว (เปิดใช้งาน) -->
+            <div id="tab-reviews" class="tab-panel">
               <h3>รีวิวจากลูกค้า</h3>
-              <div class="reviews-list">
-                 (ยังไม่มีข้อมูล) 
+              <div id="reviews-list" class="reviews-list">
+                <!-- JS จะสร้างรีวิวที่นี่ -->
+                <p>กำลังโหลดรีวิว...</p>
               </div>
-            </div> -->
+            </div>
           </div>
         </section>
 
