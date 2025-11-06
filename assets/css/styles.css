@@ -1286,3 +1286,319 @@ ul {
     gap: 40px;
   }
 }
+/* ===== 13. Shop Page (Shopee-Style) ===== */
+main.shop-page-main {
+  background-color: #f9fafb; /* พื้นหลังเทาอ่อน (Shopify/Shopee style) */
+  padding: 24px 0;
+}
+
+.breadcrumbs {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 24px;
+}
+.breadcrumbs a {
+  color: var(--accent-color); /* ใชสีน้ำเงินหลัก */
+}
+.breadcrumbs i {
+  font-size: 0.7rem;
+  margin: 0 8px;
+}
+
+.shop-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr; /* Sidebar 220px, เนื้อหาที่เหลือ */
+  gap: 24px;
+}
+
+/* --- 1. Sidebar --- */
+.shop-sidebar {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  /* ทำให้ sidebar ค้าง (ถ้าต้องการ) */
+  position: sticky;
+  top: 120px; /* (ต้องเว้นที่ให้ Header) */
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filter-title.border-top {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.filter-list li a {
+  font-size: 0.95rem;
+  color: #444;
+}
+.filter-list li a:hover {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.filter-list.checkbox-list li label {
+  font-size: 0.95rem;
+  color: #444;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.filter-list.checkbox-list input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  color: var(--primary-color); /* สีเหลือง */
+  accent-color: var(--primary-color);
+}
+
+.price-range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.price-range-inputs input {
+  width: 100%;
+  padding: 8px;
+  font-family: var(--font-main);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+/* ซ่อนลูกศรของ input number */
+.price-range-inputs input::-webkit-outer-spin-button,
+.price-range-inputs input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.price-range-inputs input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.filter-btn {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* --- 2. Shop Content --- */
+.shop-content {
+  min-width: 0; /* แก้ปัญหา grid-item ยืด */
+}
+
+.sort-bar {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+.sort-select select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  margin-left: 8px;
+}
+
+/* --- 3. Shopee Product Grid --- */
+.shopee-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.shopee-product-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.shopee-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color);
+}
+
+.shopee-product-card a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.card-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #f0f0f0;
+}
+.card-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* หรือ contain ถ้าต้องการเห็นเต็ม */
+}
+.card-sale-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: var(--danger-color);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.card-info-container {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* ทำให้เนื้อหาดันส่วนล่างสุด */
+}
+.card-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  /* จำกัดความสูง 2 บรรทัด */
+  height: 2.8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.card-price {
+  margin-bottom: 8px;
+  margin-top: auto; /* ดันตัวเองลงล่าง (ก่อน review) */
+}
+.sale-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--danger-color);
+  margin-right: 8px;
+}
+.original-price {
+  font-size: 0.8rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.card-review-sold {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #777;
+}
+.star-rating {
+  color: #fadb14; /* สีดาว (เหลืองเดียวกับแบรนด์) */
+}
+.star-rating .fa-regular {
+  color: #ccc; /* ดาวสีเทา */
+}
+
+/* --- 4. Pagination --- */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+.page-number,
+.page-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+.page-arrow.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+.page-number.active,
+.page-number:hover,
+.page-arrow:hover:not(.disabled) {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  border-color: var(--primary-color);
+}
+
+/* --- 5. Responsive (Mobile) --- */
+@media (max-width: 991px) {
+  .shop-layout {
+    grid-template-columns: 1fr; /* Sidebar และ Content กลายเป็น 1 คอลัมน์ */
+  }
+  .shop-sidebar {
+    position: static; /* ยกเลิกการ sticky */
+    margin-bottom: 24px;
+  }
+  .shopee-product-grid {
+    grid-template-columns: repeat(2, 1fr); /* มือถือ 2 คอลัมน์ */
+    gap: 12px;
+  }
+}
+
+@media (max-width: 767px) {
+  .sort-bar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 480px) {
+  .shopee-product-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 คอลัมน์ (หรือ 1 ถ้าต้องการ) */
+    gap: 8px;
+  }
+  .card-title {
+    font-size: 0.8rem;
+  }
+  .sale-price {
+    font-size: 1rem;
+  }
+  .card-review-sold {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .page-number,
+  .page-arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+}
