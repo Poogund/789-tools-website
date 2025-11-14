@@ -34,7 +34,7 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
     {
       id: "prod-004",
       name: "เครื่องขัดมันพื้นปูน",
-      image_path: "/เครื่องขัดมันพื้นปูน.png",
+      image_path: "/แมงปอขัดหน้าปูน.png",
       price: "15,900",
       original_price: "19,900",
       discount_percentage: "-20%"
@@ -42,7 +42,7 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
     {
       id: "prod-005",
       name: "โม่ผสมปูน",
-      image_path: "/โม่ผสมปูน.png",
+      image_path: "/โม่ผสมปูนฉาบ.png",
       price: "12,900",
       original_price: "16,900",
       discount_percentage: "-24%"
@@ -71,13 +71,7 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
             ดูสินค้าเพิ่มเติม <i className="fa-solid fa-play"></i>
           </a>
         </div>
-        <div className="product-grid-fixed" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '24px',
-          maxWidth: '1000px',
-          margin: '0 auto'
-        }}>
+        <div className="product-grid-fixed" style={{ maxWidth: '1000px', margin: '0 auto' }}>
           {displayProducts.map((product) => (
             <div key={product.id} className="product-card" style={{
               backgroundColor: '#ffffff',
@@ -114,7 +108,7 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover',
+                    objectFit: 'contain',
                     transition: 'transform 0.3s ease'
                   }}
                 />
@@ -135,7 +129,7 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
                 <div className="product-pricing" style={{
                   marginBottom: '16px',
                   display: 'flex',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'flex-start',
                   alignItems: 'center',
                   gap: '8px'
                 }}>
@@ -147,24 +141,21 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
                   <span className="current-price" style={{
                     fontSize: '1.2rem',
                     fontWeight: '700',
-                    color: '#d32f2f',
-                    border: '2px solid #d32f2f',
-                    borderRadius: '8px',
-                    padding: '4px 8px'
+                    color: '#d32f2f'
                   }}>฿ {product.price}</span>
                 </div>
-                <a href={`/products/${product.id}`} className="btn btn-secondary" style={{
+                <a href={`/products/${product.id}`} className="btn" style={{
                   width: '100%',
                   marginTop: 'auto',
                   padding: '10px 16px',
-                  fontSize: '0.9rem',
+                  fontSize: '0.95rem',
                   textAlign: 'center',
                   textDecoration: 'none',
-                  backgroundColor: '#f5f5f5',
-                  color: '#2c2c2c',
-                  border: '1px solid #ddd',
+                  backgroundColor: '#000aff',
+                  color: '#ffffff',
+                  border: 'none',
                   borderRadius: '8px',
-                  transition: 'background-color 0.3s ease'
+                  boxShadow: '0 2px 0 rgba(0,0,0,0.2)'
                 }}>ดูรายละเอียด</a>
               </div>
             </div>
