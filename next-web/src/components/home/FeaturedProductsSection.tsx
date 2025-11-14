@@ -64,10 +64,10 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
       <div className="container">
         <div className="section-header">
           <div className="section-title">
-            <h2>สินค้าแนะนำ</h2>
-            <p>เลือกซื้อสินค้าแนะนำ</p>
+            <h2 className="thai-text">สินค้าแนะนำ</h2>
+            <p className="thai-text">เลือกซื้อสินค้าแนะนำ</p>
           </div>
-          <a href="/products" className="btn btn-primary">
+          <a href="/products" className="btn btn-primary thai-text">
             ดูสินค้าเพิ่มเติม <i className="fa-solid fa-play"></i>
           </a>
         </div>
@@ -119,7 +119,7 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
                 flexDirection: 'column',
                 flexGrow: '1'
               }}>
-                <h3 className="product-name" style={{
+                <h3 className="product-name thai-text" style={{
                   fontSize: '1rem',
                   fontWeight: '700',
                   marginBottom: '12px',
@@ -144,7 +144,7 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
                     textDecoration: 'line-through'
                   }}>฿ {product.original_price}</span>
                 </div>
-                <a href={`/products/${product.id}`} className="btn" style={{
+                <a href={`/products/${product.id}`} className="btn thai-text" style={{
                   width: '100%',
                   marginTop: 'auto',
                   padding: '10px 16px',

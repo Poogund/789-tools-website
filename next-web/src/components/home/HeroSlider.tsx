@@ -37,7 +37,7 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
     // Fallback hero section if no slides
     return (
       <section className="min-h-[85vh] py-16 text-left hero-section">
-        <div className="hero-content-container container items-start">
+        <div className="hero-content-container container items-start justify-start">
           <h1 className="text-4xl md:text-6xl font-bold">ศูนย์รวมเครื่องมือช่าง<br />&amp; เครื่องจักรก่อสร้าง</h1>
           <p className="hero-subtitle text-2xl md:text-4xl font-bold text-brand-primary mb-6">ขาย-เช่า ครบ จบที่เดียว</p>
           <div className="hero-buttons flex gap-4">
@@ -61,7 +61,7 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
           backgroundPosition: 'left'
         }}>
           <div className="hero-overlay">
-            <div className="hero-content-container container items-start">
+            <div className="hero-content-container container items-start justify-start">
               <h1 className="text-4xl md:text-6xl font-bold">{slide.headline}</h1>
               {slide.subheadline && <p className="hero-subtitle text-2xl md:text-4xl font-bold text-brand-primary mb-6">{slide.subheadline}</p>}
               <div className="hero-buttons flex gap-4">

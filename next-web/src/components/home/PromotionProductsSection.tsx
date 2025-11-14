@@ -146,10 +146,10 @@ export default function PromotionProductsSection({ products }: PromotionProducts
       <div className="container">
         <div className="section-header">
           <div className="section-title">
-            <h2>สินค้าโปรโมชั่น</h2>
-            <p>สินค้าราคาพิเศษ</p>
+            <h2 className="thai-text">สินค้าโปรโมชั่น</h2>
+            <p className="thai-text">สินค้าราคาพิเศษ</p>
           </div>
-          <Link href="/promotions" className="btn btn-primary">
+          <Link href="/promotions" className="btn btn-primary thai-text">
             ดูสินค้าโปรเพิ่มเติม <i className="fa-solid fa-tag"></i>
           </Link>
         </div>
@@ -176,7 +176,7 @@ export default function PromotionProductsSection({ products }: PromotionProducts
                   <span className="product-badge promotion">โปร</span>
                 </div>
                 <div className="product-info">
-                  <h3>{product.name}</h3>
+                  <h3 className="thai-text">{product.name}</h3>
                   <div className="product-price">
                     <span className="current-price">฿ {formatPrice(product.price)}</span>
                     {product.originalPrice && (

@@ -58,7 +58,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main>
+      <main className="homepage">
       {/* Hero Slider Section */}
       <HeroSlider slides={heroSlides} />
 
@@ -68,8 +68,8 @@ export default async function HomePage() {
       {/* Partners Section - from legacy */}
       <section className="partners-section">
         <div className="container">
-          <h2>พาร์ทเนอร์แบรนด์ของเรา</h2>
-          <p>เราคัดสรรเฉพาะแบรนด์เครื่องมือคุณภาพที่ช่างทั่วประเทศไว้ใจ</p>
+          <h2 className="thai-text">พาร์ทเนอร์แบรนด์ของเรา</h2>
+          <p className="thai-text">เราคัดสรรเฉพาะแบรนด์เครื่องมือคุณภาพที่ช่างทั่วประเทศไว้ใจ</p>
           <div className="logos-container">
             <img src="/brand-bosch.svg" alt="Bosch Logo" />
             <img src="/brand-makita.svg" alt="Makita Logo" />
@@ -89,7 +89,7 @@ export default async function HomePage() {
       {/* Why Us Section - Static content from legacy */}
       <section className="why-us-section">
         <div className="container">
-          <h2>ทำไมลูกค้าต้องเลือก 789 Tools</h2>
+          <h2 className="thai-text">ทำไมลูกค้าต้องเลือก 789 Tools</h2>
           <div className="features-container" style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -110,9 +110,9 @@ export default async function HomePage() {
                 color: '#fdd835',
                 marginBottom: '12px'
               }}></i>
-              <p style={{
+              <p className="thai-text" style={{
                 fontSize: '0.9rem',
-                fontWeight: '700',
+                fontWeight: '600',
                 color: '#2c2c2c',
                 margin: '0',
                 lineHeight: '1.3'
@@ -148,9 +148,9 @@ export default async function HomePage() {
                   fontWeight: '700'
                 }}>COD</span>
               </div>
-              <p style={{
+              <p className="thai-text" style={{
                 fontSize: '0.9rem',
-                fontWeight: '700',
+                fontWeight: '600',
                 color: '#2c2c2c',
                 margin: '0',
                 lineHeight: '1.3'
@@ -169,9 +169,9 @@ export default async function HomePage() {
                 color: '#fdd835',
                 marginBottom: '12px'
               }}></i>
-              <p style={{
+              <p className="thai-text" style={{
                 fontSize: '0.9rem',
-                fontWeight: '700',
+                fontWeight: '600',
                 color: '#2c2c2c',
                 margin: '0',
                 lineHeight: '1.3'
@@ -190,9 +190,9 @@ export default async function HomePage() {
                 color: '#fdd835',
                 marginBottom: '12px'
               }}></i>
-              <p style={{
+              <p className="thai-text" style={{
                 fontSize: '0.9rem',
-                fontWeight: '700',
+                fontWeight: '600',
                 color: '#2c2c2c',
                 margin: '0',
                 lineHeight: '1.3'
@@ -211,9 +211,9 @@ export default async function HomePage() {
                 color: '#fdd835',
                 marginBottom: '12px'
               }}></i>
-              <p style={{
+              <p className="thai-text" style={{
                 fontSize: '0.9rem',
-                fontWeight: '700',
+                fontWeight: '600',
                 color: '#2c2c2c',
                 margin: '0',
                 lineHeight: '1.3'

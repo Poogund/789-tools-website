@@ -65,10 +65,10 @@ export default function CategoriesSection({ categories }: CategoriesSectionProps
       <div className="container">
         <div className="categories-header">
           <div className="categories-title">
-            <h2>หมวดหมู่สินค้า</h2>
-            <p>เลือกได้ตามใจต้องการ</p>
+            <h2 className="thai-text">หมวดหมู่สินค้า</h2>
+            <p className="thai-text">เลือกได้ตามใจต้องการ</p>
           </div>
-          <a href="/products" className="btn btn-primary">
+          <a href="/products" className="btn btn-primary thai-text">
             ดูสินค้าทั้งหมด <i className="fa-solid fa-arrow-right"></i>
           </a>
         </div>
@@ -117,7 +117,7 @@ export default function CategoriesSection({ categories }: CategoriesSectionProps
                   </div>
                 )}
               </div>
-              <div className="card-name-overlay" style={{
+              <div className="card-name-overlay thai-text" style={{
                 position: 'absolute',
                 bottom: '0',
                 left: '0',
@@ -130,7 +130,7 @@ export default function CategoriesSection({ categories }: CategoriesSectionProps
               }}>
                 <h3 style={{
                   fontSize: '1.1rem',
-                  fontWeight: '700',
+                  fontWeight: '600',
                   color: '#ffffff',
                   padding: '0',
                   margin: '0'
@@ -140,7 +140,8 @@ export default function CategoriesSection({ categories }: CategoriesSectionProps
                     fontSize: '0.9rem',
                     color: '#ffffff',
                     margin: '4px 0 0 0',
-                    opacity: '0.9'
+                    opacity: '0.9',
+                    fontWeight: '400'
                   }}>{category.description}</p>
                 )}
               </div>

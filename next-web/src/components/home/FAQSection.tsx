@@ -29,6 +29,16 @@ export default function FAQSection({ faqItems }: FAQSectionProps) {
       id: "faq-4",
       question: "ถ้าเครื่องมือมีปัญหาระหว่างใช้งานทำอย่างไร?",
       answer: "หากพบปัญหาการใช้งาน สามารถติดต่อทีมช่างเทคนิคของเราได้ทันที เรามีทีมผู้เชี่ยวชาญพร้อมให้คำปรึกษาและแก้ไขปัญหาเบื้องต้นทางโทรศัพท์ หรือนัดหมายเพื่อเข้าตรวจสอบตามความเหมาะสม"
+    },
+    {
+      id: "faq-5",
+      question: "จัดส่งสินค้าทั่วประเทศหรือไม่?",
+      answer: "ใช่ครับ เราจัดส่งสินค้าทั่วประเทศผ่านขนส่งเอกชนที่เชื่อถือได้ ระยะเวลาจัดส่งประมาณ 1-3 วันทำการสำหรับกรุงเทพฯ และ 3-5 วันทำการสำหรับต่างจังหวัด"
+    },
+    {
+      id: "faq-6",
+      question: "มีบริการสอนใช้เครื่องมือหรือไม่?",
+      answer: "มีครับ เรามีบริการให้คำแนะนำและสอนการใช้งานเครื่องมือทุกรุ่นที่จัดซื้อหรือเช่าจากเรา ทีมช่างผู้เชี่ยวชาญจะอธิบายวิธีการใช้งานและการดูแลรักษาอย่างละเอียด"
     }
   ];
 
@@ -36,7 +46,7 @@ export default function FAQSection({ faqItems }: FAQSectionProps) {
 
   useEffect(() => {
     // Add click event listeners for FAQ accordion (matching legacy behavior)
-    const questions = document.querySelectorAll(".faq-question");
+    const questions = document.querySelectorAll(".faq-section .faq-question");
     questions.forEach((question) => {
       question.addEventListener("click", () => {
         const faqItem = question.parentElement;
