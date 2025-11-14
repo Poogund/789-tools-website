@@ -90,29 +90,134 @@ export default async function HomePage() {
       <section className="why-us-section">
         <div className="container">
           <h2>ทำไมลูกค้าต้องเลือก 789 Tools</h2>
-          <div className="features-container">
-            <div className="feature-item">
-              <i className="fa-solid fa-shield"></i>
-              <p>รับประกัน<br />ในคุณภาพ</p>
+          <div className="features-container" style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '20px',
+            flexWrap: 'nowrap'
+          }}>
+            <div className="feature-item" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              flex: '1',
+              minWidth: '0'
+            }}>
+              <i className="fa-solid fa-shield" style={{
+                fontSize: '3rem',
+                color: '#fdd835',
+                marginBottom: '12px'
+              }}></i>
+              <p style={{
+                fontSize: '0.9rem',
+                fontWeight: '700',
+                color: '#2c2c2c',
+                margin: '0',
+                lineHeight: '1.3'
+              }}>รับประกัน<br />ในคุณภาพ</p>
             </div>
-            <div className="feature-item cod-item">
-              <div className="cod-icon-wrapper">
-                <i className="fa-solid fa-truck"></i>
-                <span className="cod-badge">COD</span>
+            <div className="feature-item cod-item" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              flex: '1',
+              minWidth: '0',
+              position: 'relative'
+            }}>
+              <div className="cod-icon-wrapper" style={{
+                position: 'relative',
+                display: 'inline-block'
+              }}>
+                <i className="fa-solid fa-truck" style={{
+                  fontSize: '3rem',
+                  color: '#fdd835',
+                  marginBottom: '12px'
+                }}></i>
+                <span className="cod-badge" style={{
+                  position: 'absolute',
+                  top: '-5px',
+                  right: '-15px',
+                  backgroundColor: '#06c755',
+                  color: '#ffffff',
+                  padding: '2px 6px',
+                  borderRadius: '4px',
+                  fontSize: '0.7rem',
+                  fontWeight: '700'
+                }}>COD</span>
               </div>
-              <p>เก็บเงิน<br />ปลายทางได้</p>
+              <p style={{
+                fontSize: '0.9rem',
+                fontWeight: '700',
+                color: '#2c2c2c',
+                margin: '0',
+                lineHeight: '1.3'
+              }}>เก็บเงิน<br />ปลายทางได้</p>
             </div>
-            <div className="feature-item">
-              <i className="fa-solid fa-gear"></i>
-              <p>อะไหล่แท้<br />ครบทุกชิ้น</p>
+            <div className="feature-item" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              flex: '1',
+              minWidth: '0'
+            }}>
+              <i className="fa-solid fa-gear" style={{
+                fontSize: '3rem',
+                color: '#fdd835',
+                marginBottom: '12px'
+              }}></i>
+              <p style={{
+                fontSize: '0.9rem',
+                fontWeight: '700',
+                color: '#2c2c2c',
+                margin: '0',
+                lineHeight: '1.3'
+              }}>อะไหล่แท้<br />ครบทุกชิ้น</p>
             </div>
-            <div className="feature-item">
-              <i className="fa-solid fa-screwdriver-wrench"></i>
-              <p>มีบริการให้เช่า<br />เครื่องมือครบวงจร</p>
+            <div className="feature-item" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              flex: '1',
+              minWidth: '0'
+            }}>
+              <i className="fa-solid fa-screwdriver-wrench" style={{
+                fontSize: '3rem',
+                color: '#fdd835',
+                marginBottom: '12px'
+              }}></i>
+              <p style={{
+                fontSize: '0.9rem',
+                fontWeight: '700',
+                color: '#2c2c2c',
+                margin: '0',
+                lineHeight: '1.3'
+              }}>มีบริการให้เช่า<br />เครื่องมือครบวงจร</p>
             </div>
-            <div className="feature-item">
-              <i className="fa-solid fa-users-gear"></i>
-              <p>ให้คำปรึกษาหน้างาน<br />โดยทีมงานช่าง</p>
+            <div className="feature-item" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              flex: '1',
+              minWidth: '0'
+            }}>
+              <i className="fa-solid fa-headset" style={{
+                fontSize: '3rem',
+                color: '#fdd835',
+                marginBottom: '12px'
+              }}></i>
+              <p style={{
+                fontSize: '0.9rem',
+                fontWeight: '700',
+                color: '#2c2c2c',
+                margin: '0',
+                lineHeight: '1.3'
+              }}>มีทีมงาน<br />คอยให้คำปรึกษา</p>
             </div>
           </div>
         </div>

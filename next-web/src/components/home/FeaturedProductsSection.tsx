@@ -5,7 +5,7 @@ interface FeaturedProductsSectionProps {
 }
 
 export default function FeaturedProductsSection({ products }: FeaturedProductsSectionProps) {
-  // Legacy fallback products if no data
+  // Legacy fallback products if no data - 6 products for 3x2 grid
   const fallbackProducts = [
     {
       id: "prod-001",
@@ -30,10 +30,34 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
       price: "18,000",
       original_price: "22,900",
       discount_percentage: "-22%"
+    },
+    {
+      id: "prod-004",
+      name: "เครื่องขัดมันพื้นปูน",
+      image_path: "/เครื่องขัดมันพื้นปูน.png",
+      price: "15,900",
+      original_price: "19,900",
+      discount_percentage: "-20%"
+    },
+    {
+      id: "prod-005",
+      name: "โม่ผสมปูน",
+      image_path: "/โม่ผสมปูน.png",
+      price: "12,900",
+      original_price: "16,900",
+      discount_percentage: "-24%"
+    },
+    {
+      id: "prod-006",
+      name: "เครื่องปั่นไฟ",
+      image_path: "/เครื่องปั่นไฟ.png",
+      price: "9,900",
+      original_price: "13,900",
+      discount_percentage: "-29%"
     }
   ];
 
-  const displayProducts = products.length > 0 ? products : fallbackProducts;
+  const displayProducts = products.length > 0 ? products.slice(0, 6) : fallbackProducts;
 
   return (
     <section className="featured-products-section">
@@ -47,20 +71,101 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
             ดูสินค้าเพิ่มเติม <i className="fa-solid fa-play"></i>
           </a>
         </div>
-        <div className="product-grid-fixed">
+        <div className="product-grid-fixed" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '24px',
+          maxWidth: '1000px',
+          margin: '0 auto'
+        }}>
           {displayProducts.map((product) => (
-            <div key={product.id} className="product-card">
-              <div className="discount-badge">{product.discount_percentage}</div>
-              <div className="product-image-container">
-                <img src={product.image_path} alt={product.name} loading="lazy" />
+            <div key={product.id} className="product-card" style={{
+              backgroundColor: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%'
+            }}>
+              <div className="discount-badge" style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                backgroundColor: '#d32f2f',
+                color: '#ffffff',
+                padding: '4px 8px',
+                borderRadius: '6px',
+                fontSize: '0.8rem',
+                fontWeight: '700',
+                zIndex: '1'
+              }}>{product.discount_percentage}</div>
+              <div className="product-image-container" style={{
+                position: 'relative',
+                width: '100%',
+                height: '180px', // Reduced height for smaller cards
+                overflow: 'hidden'
+              }}>
+                <img 
+                  src={product.image_path} 
+                  alt={product.name} 
+                  loading="lazy" 
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.3s ease'
+                  }}
+                />
               </div>
-              <div className="product-info">
-                <h3 className="product-name">{product.name}</h3>
-                <div className="product-pricing">
-                  <span className="current-price">฿ {product.price}</span>
-                  <span className="original-price">฿ {product.original_price}</span>
+              <div className="product-info" style={{
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: '1'
+              }}>
+                <h3 className="product-name" style={{
+                  fontSize: '1rem',
+                  fontWeight: '700',
+                  marginBottom: '12px',
+                  color: '#2c2c2c',
+                  lineHeight: '1.4'
+                }}>{product.name}</h3>
+                <div className="product-pricing" style={{
+                  marginBottom: '16px',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <span className="original-price" style={{
+                    fontSize: '0.8rem',
+                    color: '#757575',
+                    textDecoration: 'line-through'
+                  }}>฿ {product.original_price}</span>
+                  <span className="current-price" style={{
+                    fontSize: '1.2rem',
+                    fontWeight: '700',
+                    color: '#d32f2f',
+                    border: '2px solid #d32f2f',
+                    borderRadius: '8px',
+                    padding: '4px 8px'
+                  }}>฿ {product.price}</span>
                 </div>
-                <a href="#" className="btn btn-secondary">ดูรายละเอียด</a>
+                <a href={`/products/${product.id}`} className="btn btn-secondary" style={{
+                  width: '100%',
+                  marginTop: 'auto',
+                  padding: '10px 16px',
+                  fontSize: '0.9rem',
+                  textAlign: 'center',
+                  textDecoration: 'none',
+                  backgroundColor: '#f5f5f5',
+                  color: '#2c2c2c',
+                  border: '1px solid #ddd',
+                  borderRadius: '8px',
+                  transition: 'background-color 0.3s ease'
+                }}>ดูรายละเอียด</a>
               </div>
             </div>
           ))}
