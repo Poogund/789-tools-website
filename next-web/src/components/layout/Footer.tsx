@@ -1,133 +1,81 @@
-import Link from 'next/link';
-import { siteConfig } from '@/config/site';
-
 export default function Footer() {
   return (
-    <footer className="bg-dark-color text-gray-300">
-      {/* Main Footer Content */}
-      <div className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Column 1: Brand Info */}
-            <div className="space-y-4">
-              <img
-                src="/logo.png"
-                alt="789 Tools Logo"
-                className="h-12 w-auto"
-              />
-              <h4 className="text-light-color font-bold text-lg">ศูนย์รวมเครื่องมือช่างก่อสร้างครบวงจร</h4>
-              <p className="text-sm leading-relaxed">
-                ที่อยู่ : 7/307 ถ.เสมาฟ้าคราม ต.คูคต อ.ลำลูกกา, ปทุมธานี
-              </p>
-              <p className="text-sm">
-                เบอร์โทร : <a href="tel:0657898285" className="text-primary-color hover:text-yellow-300">065-789-8285</a>
-              </p>
-              <p className="text-sm">
-                Email : <a href="mailto:789Tools@gmail.com" className="text-primary-color hover:text-yellow-300">789Tools@gmail.com</a>
-              </p>
+    <footer className="site-footer">
+      <div className="footer-top">
+        <div className="container">
+          <div className="footer-grid">
+            <div className="footer-column">
+              <h3>789 TOOLS</h3>
+              <p>ศูนย์รวมเครื่องมือช่างก่อสร้างครบวงจร ขาย-เช่า รถตัดคอนกรีต เครื่องขัดมัน เครื่องตบดิน พร้อมบริการซ่อมโดยช่างผู้เชี่ยวชาญ</p>
+              <div className="social-links">
+                <a href="https://facebook.com/789tools" target="_blank" rel="noopener noreferrer" className="social-link facebook">
+                  <i className="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="https://line.me/ti/p/~@789tools" target="_blank" rel="noopener noreferrer" className="social-link line">
+                  <i className="fa-brands fa-line"></i>
+                </a>
+                <a href="https://m.me/789tools" target="_blank" rel="noopener noreferrer" className="social-link messenger">
+                  <i className="fa-brands fa-facebook-messenger"></i>
+                </a>
+              </div>
             </div>
-
-            {/* Column 2: Help Center */}
-            <div className="space-y-4">
-              <h4 className="text-light-color font-bold text-lg">ศูนย์ช่วยเหลือ</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">บริการหลังการขาย</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">วิธีสั่งซื้อสินค้า</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">วิธีการชำระเงิน</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">การบริการจัดส่งสินค้า</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">เงื่อนไขการเปลี่ยน-คืนสินค้า</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">นโยบายความเป็นส่วนตัว</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">คำถามที่พบบ่อย</a>
-                </li>
+            
+            <div className="footer-column">
+              <h4>ศูนย์ช่วยเหลือ</h4>
+              <ul>
+                <li><a href="#">บริการหลังการขาย</a></li>
+                <li><a href="#">วิธีสั่งซื้อสินค้า</a></li>
+                <li><a href="#">วิธีการชำระเงิน</a></li>
+                <li><a href="#">การบริการจัดส่งสินค้า</a></li>
+                <li><a href="#">เงื่อนไขการเปลี่ยน-คืนสินค้า</a></li>
+                <li><a href="#">นโยบายความเป็นส่วนตัว</a></li>
+                <li><a href="#">คำถามที่พบบ่อย</a></li>
               </ul>
             </div>
-
-            {/* Column 3: Popular Categories */}
-            <div className="space-y-4">
-              <h4 className="text-light-color font-bold text-lg">หมวดหมู่สินค้ายอดนิยม</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">เครื่องตัดถนน</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">เครื่องขัดมันพื้นปูน</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">เครื่องตบดิน</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">เครื่องปั่นไฟ</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary-color transition-colors">โม่ผสมปูน</a>
-                </li>
+            
+            <div className="footer-column">
+              <h4>หมวดหมู่สินค้ายอดนิยม</h4>
+              <ul>
+                <li><a href="#">เครื่องตัดถนน</a></li>
+                <li><a href="#">เครื่องขัดมันพื้นปูน</a></li>
+                <li><a href="#">เครื่องตบดิน</a></li>
+                <li><a href="#">เครื่องปั่นไฟ</a></li>
+                <li><a href="#">โม่ผสมปูน</a></li>
               </ul>
             </div>
-
-            {/* Column 4: Menu & Social */}
-            <div className="space-y-4">
-              <h4 className="text-light-color font-bold text-lg">เมนูทางลัด</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/" className="hover:text-primary-color transition-colors">หน้าแรก</Link>
-                </li>
-                <li>
-                  <Link href="/about" className="hover:text-primary-color transition-colors">เกี่ยวกับเรา</Link>
-                </li>
-                <li>
-                  <Link href="/products" className="hover:text-primary-color transition-colors">สินค้าทั้งหมด</Link>
-                </li>
-                <li>
-                  <Link href="/services" className="hover:text-primary-color transition-colors">บริการให้เช่า</Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="hover:text-primary-color transition-colors">ติดต่อเรา</Link>
-                </li>
-              </ul>
-              
-              <div className="space-y-4">
-                <h4 className="text-light-color font-bold text-lg">ติดตามเราได้ที่</h4>
-                <div className="flex space-x-3">
-                  <a href="#" className="w-10 h-10 bg-facebook-color text-light-color rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors" aria-label="Facebook">
-                    <i className="fab fa-facebook-f text-sm"></i>
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-line-color text-light-color rounded-full flex items-center justify-center hover:bg-green-600 transition-colors" aria-label="Line">
-                    <i className="fab fa-line text-lg"></i>
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-black text-light-color rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors" aria-label="TikTok">
-                    <i className="fab fa-tiktok text-sm"></i>
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-danger-color text-light-color rounded-full flex items-center justify-center hover:bg-red-700 transition-colors" aria-label="Email">
-                    <i className="fas fa-envelope text-sm"></i>
-                  </a>
+            
+            <div className="footer-column">
+              <h4>ติดต่อเรา</h4>
+              <div className="contact-info">
+                <div className="contact-item">
+                  <i className="fa-solid fa-phone"></i>
+                  <a href="tel:0657898285">065-789-8285</a>
+                </div>
+                <div className="contact-item">
+                  <i className="fa-solid fa-line"></i>
+                  <a href="https://line.me/ti/p/~@789tools" target="_blank" rel="noopener noreferrer">@789tools</a>
+                </div>
+                <div className="contact-item">
+                  <i className="fa-solid fa-envelope"></i>
+                  <a href="mailto:789Tools@gmail.com">789Tools@gmail.com</a>
+                </div>
+                <div className="contact-item">
+                  <i className="fa-solid fa-location-dot"></i>
+                  <span>7/307 ถ.เสมาฟ้าคราม ต.คูคต อ.ลำลูกกา, ปทุมธานี</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Sub-Footer (Copyright Bar) */}
-      <div className="bg-black py-6 border-t border-gray-800">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center text-sm">
+      
+      <div className="footer-bottom">
+        <div className="container">
+          <div className="footer-bottom-content">
             <p>&copy; 2025 789 Tools. All Rights Reserved.</p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-primary-color transition-colors">นโยบายความเป็นส่วนตัว</a>
-              <a href="#" className="hover:text-primary-color transition-colors">ข้อกำหนดการใช้งาน</a>
+            <div className="footer-links">
+              <a href="#">นโยบายความเป็นส่วนตัว</a>
+              <a href="#">ข้อกำหนดการใช้งาน</a>
             </div>
           </div>
         </div>

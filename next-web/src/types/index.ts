@@ -8,6 +8,8 @@ export interface Product {
   sale_price?: number;
   original_price?: number;
   rent_price?: number;
+  discount_percentage?: string;
+  image_path?: string;
   type: 'product' | 'service';
   category_id: string;
   is_featured: boolean;

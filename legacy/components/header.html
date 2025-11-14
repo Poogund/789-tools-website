@@ -1,0 +1,99 @@
+<!-- components/header.html (updated navigation) -->
+<!--
+  This header component is shared across all pages. It contains a top bar with a
+  brief message and login links, a main header with the logo, search bar and
+  contact icons, and a navigation bar.  Navigation links have been updated to
+  point to the correct pages (products, services, spare parts & service,
+  about, contact).  The mobile menu is handled via JS in assets/js/modules/layout.js.
+-->
+<header class="site-header">
+  <div class="top-bar">
+    <div class="container">
+      <p class="top-bar-message">
+        เรื่องเครื่องมือก่อสร้างมั่นใจในเรา มีบริการจัดเก็บปลายทางทั่วประเทศ
+      </p>
+      <div class="top-bar-links">
+        <a href="#">ไทย / อังกฤษ</a>
+        <a href="#" class="top-bar-login"
+          ><i class="fa-solid fa-user"></i> Login / Register</a
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="main-header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <img src="assets/img/logo.png" alt="โลโก้ 789 TOOLS" />
+      </a>
+
+      <form class="search-bar" role="search">
+        <input
+          type="text"
+          placeholder="ค้นหาสินค้าที่คุณต้องการ..."
+          aria-label="Search"
+        />
+        <button type="submit" aria-label="Search Button">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+
+      <div class="contact-info">
+        <a href="#" class="social-icon facebook-icon" aria-label="Facebook"
+          ><i class="fa-brands fa-facebook"></i
+        ></a>
+        <a href="#" class="social-icon line-icon" aria-label="LINE"
+          ><i class="fa-brands fa-line"></i
+        ></a>
+        <a href="tel:0657898285" class="phone-number">
+          <strong>โทร</strong> 065-789-8285
+        </a>
+      </div>
+      <div class="nav-icons mobile-nav-icons">
+        <a href="#" class="cart-icon" aria-label="Shopping Cart"
+          ><i class="fa-solid fa-cart-shopping"></i
+        ></a>
+        <button class="hamburger-menu" aria-label="Open Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar">
+    <div class="container">
+      <ul class="nav-links">
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li>
+          <a href="products.html"
+            >สินค้าทั้งหมด <i class="fa-solid fa-caret-down"></i
+          ></a>
+        </li>
+        <li>
+          <!-- link to the services page (rental & repair) -->
+          <a href="services.html"
+            >บริการให้เช่า <i class="fa-solid fa-caret-down"></i
+          ></a>
+        </li>
+        <li>
+          <!-- link to the spare parts & service page -->
+          <a href="parts-services.html"
+            >อะไหล่ &amp; บริการ <i class="fa-solid fa-caret-down"></i
+          ></a>
+        </li>
+        <!-- 🎯 แก้ไข: ยืนยันลิงก์ไป reviews.html -->
+        <li><a href="reviews.html">รีวิวหน้างาน</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="contact.html">ติดต่อเรา</a></li>
+        <li class="nav-menu-login">
+          <a href="#"><i class="fa-solid fa-user"></i> Login / Register</a>
+        </li>
+      </ul>
+      <div class="nav-icons desktop-nav-icons">
+        <a href="#" class="cart-icon" aria-label="Shopping Cart"
+          ><i class="fa-solid fa-cart-shopping"></i
+        ></a>
+      </div>
+    </div>
+  </nav>
+</header>

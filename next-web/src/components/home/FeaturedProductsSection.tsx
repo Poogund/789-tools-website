@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Product } from '@/types';
 
 interface FeaturedProductsSectionProps {
@@ -6,9 +5,35 @@ interface FeaturedProductsSectionProps {
 }
 
 export default function FeaturedProductsSection({ products }: FeaturedProductsSectionProps) {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('th-TH').format(price);
-  };
+  // Legacy fallback products if no data
+  const fallbackProducts = [
+    {
+      id: "prod-001",
+      name: "รถตัดพื้นคอนกรีต",
+      image_path: "/รถตัดพื้นคอนกรีต.png",
+      price: "21,900",
+      original_price: "25,900",
+      discount_percentage: "-16%"
+    },
+    {
+      id: "prod-002",
+      name: "แมงปอขัดหน้าปูน",
+      image_path: "/แมงปอขัดหน้าปูน.png",
+      price: "17,900",
+      original_price: "23,000",
+      discount_percentage: "-23%"
+    },
+    {
+      id: "prod-003",
+      name: "เครื่องตบดิน",
+      image_path: "/เครื่องตบดิน.png",
+      price: "18,000",
+      original_price: "22,900",
+      discount_percentage: "-22%"
+    }
+  ];
+
+  const displayProducts = products.length > 0 ? products : fallbackProducts;
 
   return (
     <section className="featured-products-section">
@@ -18,62 +43,27 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
             <h2>สินค้าแนะนำ</h2>
             <p>เลือกซื้อสินค้าแนะนำ</p>
           </div>
-          <Link href="/products" className="btn btn-primary">
+          <a href="/products" className="btn btn-primary">
             ดูสินค้าเพิ่มเติม <i className="fa-solid fa-play"></i>
-          </Link>
+          </a>
         </div>
         <div className="product-grid-fixed">
-          {products.length > 0 ? (
-            products.slice(0, 8).map((product) => (
-              <Link key={product.id} href={`/products/${product.slug}`} className="product-card">
-                <div className="product-image">
-                  <img 
-                    src={product.image_url || '/placeholder-product.jpg'} 
-                    alt={product.name}
-                  />
-                  {product.is_featured && (
-                    <span className="product-badge featured">แนะนำ</span>
-                  )}
+          {displayProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              <div className="discount-badge">{product.discount_percentage}</div>
+              <div className="product-image-container">
+                <img src={product.image_path} alt={product.name} loading="lazy" />
+              </div>
+              <div className="product-info">
+                <h3 className="product-name">{product.name}</h3>
+                <div className="product-pricing">
+                  <span className="current-price">฿ {product.price}</span>
+                  <span className="original-price">฿ {product.original_price}</span>
                 </div>
-                <div className="product-info">
-                  <h3>{product.name}</h3>
-                  <div className="product-price">
-                    {product.original_price ? (
-                      <>
-                        <span className="sale-price">฿{formatPrice(product.price)}</span>
-                        <span className="original-price">฿{formatPrice(product.original_price)}</span>
-                      </>
-                    ) : (
-                      <span className="current-price">฿{formatPrice(product.price)}</span>
-                    )}
-                  </div>
-                  {product.rent_price && (
-                    <div className="rent-price">เช่าเริ่มต้นที่ ฿{formatPrice(product.rent_price)}</div>
-                  )}
-                </div>
-              </Link>
-            ))
-          ) : (
-            // Fallback featured products if no data
-            <>
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="product-card">
-                  <div className="product-image">
-                    <div className="product-placeholder">
-                      <i className="fa-solid fa-tools"></i>
-                    </div>
-                    <span className="product-badge featured">แนะนำ</span>
-                  </div>
-                  <div className="product-info">
-                    <h3>สินค้าแนะนำ #{i}</h3>
-                    <div className="product-price">
-                      <span className="current-price">฿{(50000 * i).toLocaleString('th-TH')}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
+                <a href="#" className="btn btn-secondary">ดูรายละเอียด</a>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
