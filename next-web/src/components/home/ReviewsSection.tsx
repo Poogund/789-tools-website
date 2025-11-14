@@ -1,5 +1,5 @@
 export default function ReviewsSection() {
-  // Legacy fallback reviews - 8 reviews for 4x2 grid
+  // Legacy fallback reviews - 4 reviews for 4x1 grid
   const fallbackReviews = [
     {
       id: "rev-001",
@@ -20,26 +20,6 @@ export default function ReviewsSection() {
       id: "rev-004",
       image_url: "/review-04.png",
       caption: "มั่นใจในบริการส่งจริง ได้รับของไวมาก"
-    },
-    {
-      id: "rev-005",
-      image_url: "/review-05.png",
-      caption: "เครื่องสภาพดี ราคา worth มาก"
-    },
-    {
-      id: "rev-006",
-      image_url: "/review-06.png",
-      caption: "บริการประทับใจ แนะนำเลย"
-    },
-    {
-      id: "rev-007",
-      image_url: "/review-07.png",
-      caption: "ส่งเร็ว ของดี ใช้ได้เลย"
-    },
-    {
-      id: "rev-008",
-      image_url: "/review-08.png",
-      caption: "ทีมงานดูแลดีมาก ประทับใจ"
     }
   ];
 
@@ -51,7 +31,7 @@ export default function ReviewsSection() {
         <div className="reviews-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '16px',
+          gap: '24px',
           marginBottom: '32px'
         }}>
           {fallbackReviews.map((review) => (
@@ -66,7 +46,7 @@ export default function ReviewsSection() {
               <div className="review-image-wrapper" style={{
                 position: 'relative',
                 width: '100%',
-                height: '120px', // 50% smaller than before
+                height: '280px', // Much larger cards like in the image
                 overflow: 'hidden'
               }}>
                 <img 
@@ -82,11 +62,12 @@ export default function ReviewsSection() {
                 />
               </div>
               <p style={{
-                padding: '12px 8px',
+                padding: '20px 16px',
                 margin: '0',
-                fontSize: '0.8rem',
+                fontSize: '1rem',
                 color: '#2c2c2c',
-                lineHeight: '1.3'
+                lineHeight: '1.5',
+                fontWeight: '500'
               }}>{review.caption}</p>
             </div>
           ))}

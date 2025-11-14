@@ -36,11 +36,11 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
   if (slides.length === 0) {
     // Fallback hero section if no slides
     return (
-      <section className="min-h-[85vh] py-16 text-center md:text-left md:justify-start hero-section">
-        <div className="hero-content-container container items-center md:items-start">
+      <section className="min-h-[85vh] py-16 text-left hero-section">
+        <div className="hero-content-container container items-start">
           <h1 className="text-4xl md:text-6xl font-bold">ศูนย์รวมเครื่องมือช่าง<br />&amp; เครื่องจักรก่อสร้าง</h1>
           <p className="hero-subtitle text-2xl md:text-4xl font-bold text-brand-primary mb-6">ขาย-เช่า ครบ จบที่เดียว</p>
-          <div className="hero-buttons flex flex-col md:flex-row gap-4">
+          <div className="hero-buttons flex gap-4">
             <a href="tel:0657898285" className="btn btn-primary">โทรเลย</a>
             <a href="/products" className="btn btn-secondary">ดูสินค้า</a>
           </div>
@@ -52,19 +52,19 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
   const slide = slides[currentSlide];
 
   return (
-    <section className="min-h-[85vh] py-16 text-center md:text-left md:justify-start hero-section">
+    <section className="min-h-[85vh] py-16 text-left hero-section">
       <div className="hero-slider">
         {/* Slide Content */}
         <div className="hero-slide active" style={{ 
           backgroundImage: slide.image_url ? `url(${slide.image_url})` : 'none',
           backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundPosition: 'left'
         }}>
           <div className="hero-overlay">
-            <div className="hero-content-container container items-center md:items-start">
+            <div className="hero-content-container container items-start">
               <h1 className="text-4xl md:text-6xl font-bold">{slide.headline}</h1>
               {slide.subheadline && <p className="hero-subtitle text-2xl md:text-4xl font-bold text-brand-primary mb-6">{slide.subheadline}</p>}
-              <div className="hero-buttons flex flex-col md:flex-row gap-4">
+              <div className="hero-buttons flex gap-4">
                 <a href="tel:0657898285" className="btn btn-primary">โทรเลย</a>
                 {slide.button_text && slide.button_url && (
                   <a href={slide.button_url} className="btn btn-secondary">

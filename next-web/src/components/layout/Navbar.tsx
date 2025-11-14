@@ -77,9 +77,6 @@ export default function Navbar() {
             </a>
           </div>
           <div className="nav-icons mobile-nav-icons">
-            <a href="#" className="cart-icon" aria-label="Shopping Cart">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </a>
             <button className="hamburger-menu" aria-label="Open Menu" onClick={toggleMobileMenu}>
               <i className="fa-solid fa-bars"></i>
             </button>
@@ -115,9 +112,7 @@ export default function Navbar() {
             </li>
           </ul>
           <div className="nav-icons desktop-nav-icons">
-            <a href="#" className="cart-icon" aria-label="Shopping Cart">
-              <i className="fa-solid fa-cart-shopping"></i>
-            </a>
+            {/* Cart removed from desktop */}
           </div>
         </div>
       </nav>
