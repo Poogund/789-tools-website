@@ -69,6 +69,7 @@ const fallbackPromotions: PromotionCard[] = [
 ];
 
 const VISIBLE_COUNT = 3;
+const MOBILE_VISIBLE_COUNT = 2;
 const AUTOPLAY_DELAY = 5000;
 
 export default function PromotionProductsSection({ products }: PromotionProductsSectionProps) {
@@ -107,7 +108,10 @@ export default function PromotionProductsSection({ products }: PromotionProducts
   }, [cards.length]);
 
   useEffect(() => {
-    if (cards.length <= VISIBLE_COUNT) return;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 576;
+    const visibleCount = isMobile ? MOBILE_VISIBLE_COUNT : VISIBLE_COUNT;
+    
+    if (cards.length <= visibleCount) return;
 
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % cards.length);
@@ -127,11 +131,14 @@ export default function PromotionProductsSection({ products }: PromotionProducts
   };
 
   const visibleProducts = useMemo(() => {
-    if (cards.length <= VISIBLE_COUNT) {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 576;
+    const visibleCount = isMobile ? MOBILE_VISIBLE_COUNT : VISIBLE_COUNT;
+    
+    if (cards.length <= visibleCount) {
       return cards;
     }
 
-    return Array.from({ length: VISIBLE_COUNT }, (_, index) => {
+    return Array.from({ length: visibleCount }, (_, index) => {
       const cardIndex = (currentIndex + index) % cards.length;
       return cards[cardIndex];
     });

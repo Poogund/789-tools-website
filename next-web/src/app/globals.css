@@ -65,17 +65,32 @@ body {
   padding: 4px 0;
   font-size: 0.8rem;
   text-align: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(67, 67, 67, 0.187);
 }
 
 .top-bar-message {
   margin: 0;
+  color: #ffffff !important;
 }
 
 .top-bar-links a {
   margin: 0 8px;
   font-weight: 700;
+  color: #ffffff !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
+
+.top-bar-links a:hover {
+  color: var(--industrial-orange) !important;
+}
+
+.top-bar-links i {
+  margin-right: 4px;
+  color: #ffffff !important;
+}
+
+/* Top bar links handled above */
 
 .top-bar-links i {
   margin-right: 4px;
@@ -611,6 +626,107 @@ body {
   }
 }
 @media (max-width: 576px) {
+  .promotion-slider {
+    gap: 0px;
+    padding: 0 8px;
+  }
+  
+  /* Promotion products mobile - 2 columns full width */
+  .promotion-slider-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  
+  /* Promotion card mobile optimization */
+  .promotion-slider-grid .product-card {
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  
+  .promotion-slider-grid .product-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  .promotion-slider-grid .product-image {
+    height: 140px !important;
+    border-radius: 8px 8px 0 0 !important;
+    overflow: hidden !important;
+  }
+  
+  .promotion-slider-grid .product-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: transform 0.3s ease !important;
+  }
+  
+  .promotion-slider-grid .product-card:hover .product-image img {
+    transform: scale(1.05) !important;
+  }
+  
+  .promotion-slider-grid .product-info {
+    padding: 10px !important;
+    text-align: center !important;
+    background: #ffffff !important;
+  }
+  
+  .promotion-slider-grid .product-info h3 {
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    margin-bottom: 6px !important;
+    line-height: 1.2 !important;
+    min-height: 2.4em !important;
+    display: -webkit-box !important;
+    display: box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+  
+  .promotion-slider-grid .product-price {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2px !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .promotion-slider-grid .current-price {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: #d32f2f !important;
+  }
+  
+  .promotion-slider-grid .original-price {
+    font-size: 0.7rem !important;
+    color: #999 !important;
+    text-decoration: line-through !important;
+  }
+  
+  .promotion-slider-grid .product-badge.promotion {
+    position: absolute !important;
+    top: 4px !important;
+    left: 4px !important;
+    padding: 2px 6px !important;
+    border-radius: 8px !important;
+    font-size: 0.6rem !important;
+    font-weight: 600 !important;
+    background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%) !important;
+    color: white !important;
+    box-shadow: 0 1px 4px rgba(211, 47, 47, 0.3) !important;
+    z-index: 2 !important;
+  }
+  
   .product-grid-fixed {
     gap: 12px;
   }
@@ -3297,6 +3413,19 @@ body {
   color: var(--industrial-orange) !important;
 }
 
+/* Top header bar - make all text white */
+.homepage .top-header,
+.homepage .header-top,
+.homepage .contact-bar {
+  color: #ffffff !important;
+}
+
+.homepage .top-header a,
+.homepage .header-top a,
+.homepage .contact-bar a {
+  color: #ffffff !important;
+}
+
 /* Industrial Categories */
 .homepage .categories-section {
   background: var(--industrial-light-gray);
@@ -3324,7 +3453,7 @@ body {
 }
 
 .homepage .featured-products-section h2 {
-  color: var(--industrial-blue);
+  color: #1e293b !important;
 }
 
 .homepage .product-card {
@@ -3344,7 +3473,7 @@ body {
 }
 
 .homepage .product-price {
-  color: var(--industrial-blue);
+  color: var(--industrial-dark-gray);
 }
 
 /* Industrial Why Us Section */
@@ -3387,7 +3516,7 @@ body {
 }
 
 .homepage .reviews-section h2 {
-  color: var(--industrial-blue);
+  color: #1e293b !important;
 }
 
 .homepage .review-card {
@@ -3408,7 +3537,7 @@ body {
 }
 
 .homepage .faq-section h2 {
-  color: var(--industrial-blue);
+  color: #1e293b !important;
 }
 
 .homepage .faq-item {
@@ -3428,7 +3557,7 @@ body {
 }
 
 .homepage .faq-question:hover {
-  color: var(--industrial-blue);
+  color: #1e293b !important;
 }
 
 .homepage .faq-item.active .faq-question {
@@ -3510,14 +3639,106 @@ body {
 
 /* Industrial Text Colors */
 .homepage .text-primary {
-  color: var(--industrial-blue) !important;
+  color: #1e293b !important;
 }
 
 .homepage .text-accent {
   color: var(--industrial-orange) !important;
 }
 
-/* Industrial Gradients */
+/* Fix blue text colors based on user feedback */
+.homepage .nav-links a:hover {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .feature-item i {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .feature-item:hover i {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .site-footer .contact-item i {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .hero-subtitle {
+  color: #ffffff !important;
+}
+
+.homepage .hero-buttons .btn-primary {
+  background-color: var(--industrial-orange) !important;
+  color: #ffffff !important;
+}
+
+.homepage .indicator.active {
+  background: var(--industrial-orange) !important;
+}
+
+.homepage .btn-primary {
+  background-color: var(--industrial-orange) !important;
+  color: #ffffff !important;
+}
+
+.homepage .review-rating {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .cta-section p a {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .phone-btn {
+  background-color: var(--industrial-orange) !important;
+  color: #ffffff !important;
+}
+
+.homepage .star-rating {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .product-rating {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .reviews-footer .btn {
+  background: linear-gradient(135deg, var(--industrial-orange) 0%, #ea580c 100%) !important;
+  color: #ffffff !important;
+}
+
+.homepage .reviews-footer .btn:hover {
+  background: linear-gradient(135deg, #ea580c 0%, var(--industrial-orange) 100%) !important;
+}
+
+.homepage .footer-column a:hover {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .footer-column input:focus {
+  border-color: var(--industrial-orange) !important;
+}
+
+.homepage .footer-bottom-content a:hover {
+  color: var(--industrial-orange) !important;
+}
+
+.homepage .promotion-slider-grid .product-card {
+  border: 2px solid var(--industrial-orange) !important;
+}
+
+.homepage .promotion-slider-button {
+  background: linear-gradient(135deg, var(--industrial-orange) 0%, #ea580c 100%) !important;
+  color: #ffffff !important;
+}
+
+.homepage .promotion-slider-button:hover {
+  background: linear-gradient(135deg, #ea580c 0%, var(--industrial-orange) 100%) !important;
+}
+
+.homepage .assurance-item i {
+  color: var(--industrial-orange) !important;
+}
 .homepage .gradient-industrial {
   background: linear-gradient(135deg, var(--industrial-blue) 0%, var(--industrial-light-blue) 100%);
 }
@@ -3645,7 +3866,7 @@ body {
 }
 
 .promotion-products-section .section-title h2 {
-  color: var(--dark-color) !important;
+  color: #ffffff !important;
   font-weight: 800 !important;
   font-size: 2rem !important;
   margin-bottom: 8px !important;
@@ -3653,10 +3874,21 @@ body {
 }
 
 .promotion-products-section .section-title p {
-  color: var(--dark-color) !important;
+  color: #ffffff !important;
   font-weight: 600 !important;
   font-size: 1.1rem !important;
   opacity: 0.9 !important;
+}
+
+/* Override general section-title styles for promotion */
+.homepage .promotion-products-section .section-title h2,
+.promotion-products-section .section-title h2 {
+  color: #ffffff !important;
+}
+
+.homepage .promotion-products-section .section-title p,
+.promotion-products-section .section-title p {
+  color: #ffffff !important;
 }
 
 .promotion-products-section .btn-primary {
