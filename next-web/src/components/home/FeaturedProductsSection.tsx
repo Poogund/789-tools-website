@@ -129,20 +129,20 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
                 <div className="product-pricing" style={{
                   marginBottom: '16px',
                   display: 'flex',
-                  justifyContent: 'flex-start',
+                  justifyContent: 'center',
                   alignItems: 'center',
                   gap: '8px'
                 }}>
-                  <span className="original-price" style={{
-                    fontSize: '0.8rem',
-                    color: '#757575',
-                    textDecoration: 'line-through'
-                  }}>฿ {product.original_price}</span>
                   <span className="current-price" style={{
                     fontSize: '1.2rem',
                     fontWeight: '700',
                     color: '#d32f2f'
                   }}>฿ {product.price}</span>
+                  <span className="original-price" style={{
+                    fontSize: '0.8rem',
+                    color: '#757575',
+                    textDecoration: 'line-through'
+                  }}>฿ {product.original_price}</span>
                 </div>
                 <a href={`/products/${product.id}`} className="btn" style={{
                   width: '100%',

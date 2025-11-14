@@ -559,6 +559,12 @@ body {
   .product-info {
     padding: 12px;
   }
+  .current-price {
+    font-size: 1rem !important;
+  }
+  .original-price {
+    font-size: 0.7rem !important;
+  }
 }
 
 .product-info .btn {
