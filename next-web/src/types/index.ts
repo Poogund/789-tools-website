@@ -6,6 +6,7 @@ export interface Product {
   description?: string;
   price: number;
   sale_price?: number;
+  original_price?: number;
   rent_price?: number;
   type: 'product' | 'service';
   category_id: string;
@@ -37,6 +38,8 @@ export interface Category {
   image_url?: string;
   sort_order: number;
   is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 // Cart Types
@@ -127,6 +130,8 @@ export interface HeroSlide {
   image_url?: string;
   is_active: boolean;
   sort_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
 // Lead Types

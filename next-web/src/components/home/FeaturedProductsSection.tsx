@@ -38,10 +38,10 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <div className="product-price">
-                    {product.sale_price ? (
+                    {product.original_price ? (
                       <>
-                        <span className="sale-price">฿{formatPrice(product.sale_price)}</span>
-                        <span className="original-price">฿{formatPrice(product.price)}</span>
+                        <span className="sale-price">฿{formatPrice(product.price)}</span>
+                        <span className="original-price">฿{formatPrice(product.original_price)}</span>
                       </>
                     ) : (
                       <span className="current-price">฿{formatPrice(product.price)}</span>
