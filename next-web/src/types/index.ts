@@ -14,6 +14,9 @@ export interface Product {
   is_active: boolean;
   image_url?: string;
   specs?: Record<string, any>;
+  features?: string[];
+  specifications?: Record<string, any>;
+  included_items?: string[];
   created_at: string;
   updated_at: string;
 }

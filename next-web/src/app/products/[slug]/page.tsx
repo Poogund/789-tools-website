@@ -47,18 +47,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // Fetch product images
   const productImages: ProductImage[] = await getProductImages(product.id);
   
-  // Fetch related products (same category, excluding current product)
-  let relatedProducts: Product[] = [];
-  if (product.category_id) {
-    const categoryProducts = await getProductsByCategory(product.category_id);
-    relatedProducts = categoryProducts.filter(p => p.id !== product.id).slice(0, 4);
-  }
-
-  // Fetch category for breadcrumbs
+  // Fetch category for breadcrumbs and related products
   let category: Category | null = null;
   if (product.category_id) {
     const categories = await getCategories();
     category = categories.find(c => c.id === product.category_id) || null;
+  }
+  
+  // Fetch related products (same category, excluding current product)
+  let relatedProducts: Product[] = [];
+  if (category && category.slug) {
+    const categoryProducts = await getProductsByCategory(category.slug);
+    relatedProducts = categoryProducts.filter(p => p.id !== product.id).slice(0, 4);
   }
 
   return (

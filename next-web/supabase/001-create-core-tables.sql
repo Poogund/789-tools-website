@@ -29,7 +29,11 @@ CREATE TABLE products (
     is_featured BOOLEAN DEFAULT false,
     is_promotion BOOLEAN DEFAULT false,
     is_active BOOLEAN DEFAULT true,
+    image_url TEXT,
     specs JSONB,
+    features JSONB,
+    specifications JSONB,
+    included_items JSONB,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
