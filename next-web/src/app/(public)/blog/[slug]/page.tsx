@@ -4,15 +4,17 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
+import SafeImage from '@/components/common/SafeImage';
 
 type Props = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getBlogPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(slug);
   
   if (!post) {
     return {
@@ -67,7 +69,8 @@ function generateBlogPostingJsonLd(post: BlogPost) {
 }
 
 export default async function BlogDetailPage({ params }: Props) {
-  const post: BlogPost | null = await getBlogPostBySlug(params.slug);
+  const { slug } = await params;
+  const post: BlogPost | null = await getBlogPostBySlug(slug);
 
   if (!post) {
     notFound();

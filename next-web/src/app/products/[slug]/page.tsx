@@ -7,7 +7,7 @@ import ProductDetailClient from './ProductDetailClient';
 import ProductActions from './ProductActions';
 
 interface ProductPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // Generate static params for all products (optional, for static generation)
@@ -31,15 +31,18 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   try {
-    // Ensure params.slug exists
-    if (!params || !params.slug) {
+    // Await params since it's a Promise in Next.js 15+
+    const { slug } = await params;
+    
+    // Ensure slug exists
+    if (!slug) {
       return {
         title: 'สินค้าไม่พบ - 789 TOOLS',
         description: 'ไม่พบสินค้าที่คุณกำลังมองหา',
       };
     }
 
-    const product = await getProductBySlug(params.slug);
+    const product = await getProductBySlug(slug);
     
     if (!product) {
       return {
@@ -62,22 +65,25 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  console.log('[ProductPage] Received params:', params);
+  // Await params since it's a Promise in Next.js 15+
+  const { slug } = await params;
   
-  // Ensure params.slug exists
-  if (!params || !params.slug) {
-    console.error('[ProductPage] No params or slug provided');
+  console.log('[ProductPage] Received slug:', slug);
+  
+  // Ensure slug exists
+  if (!slug) {
+    console.error('[ProductPage] No slug provided');
     notFound();
   }
 
-  console.log('[ProductPage] Fetching product for slug:', params.slug);
+  console.log('[ProductPage] Fetching product for slug:', slug);
 
   // Fetch product data
-  const product = await getProductBySlug(params.slug);
+  const product = await getProductBySlug(slug);
   
   // Handle not found - log for debugging
   if (!product) {
-    console.error(`[ProductPage] Product not found for slug: ${params.slug}`);
+    console.error(`[ProductPage] Product not found for slug: ${slug}`);
     notFound();
   }
 
@@ -99,6 +105,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
     const categoryProducts = await getProductsByCategory(category.slug);
     relatedProducts = categoryProducts.filter(p => p.id !== product.id).slice(0, 4);
   }
+  
+  // If we don't have enough related products, fetch more from all products
+  if (relatedProducts.length < 4) {
+    const { getProducts } = await import('@/lib/catalog-repository');
+    const allProducts = await getProducts();
+    const additionalProducts = allProducts
+      .filter((p: Product) => p.id !== product.id && !relatedProducts.some((rp: Product) => rp.id === p.id))
+      .slice(0, 4 - relatedProducts.length);
+    relatedProducts = [...relatedProducts, ...additionalProducts];
+  }
+  
+  // Ensure we have exactly 4 products (or as many as available)
+  relatedProducts = relatedProducts.slice(0, 4);
 
   // Fetch reviews for this product (using all reviews for now, can filter by product_id later)
   const allReviews: Review[] = await getReviews();

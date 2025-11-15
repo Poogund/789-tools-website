@@ -6,7 +6,7 @@ import Link from 'next/link';
 import ProductsClient from '../../products/ProductsClient';
 
 interface CategoryPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // Generate static params for all categories (optional, for static generation)
@@ -21,7 +21,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const category = await getCategoryBySlug(params.slug);
+  const { slug } = await params;
+  const category = await getCategoryBySlug(slug);
   
   if (!category) {
     return {
@@ -36,8 +37,10 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { slug } = await params;
+  
   // Fetch category data
-  const category = await getCategoryBySlug(params.slug);
+  const category = await getCategoryBySlug(slug);
   
   // Handle not found
   if (!category) {
@@ -45,7 +48,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   // Fetch products in this category
-  const products: Product[] = await getProductsByCategory(params.slug);
+  const products: Product[] = await getProductsByCategory(slug);
 
   return (
     <div className="shop-page-main">
