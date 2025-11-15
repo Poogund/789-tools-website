@@ -30,9 +30,12 @@ export default function ProductsClient({ products }: ProductsClientProps) {
   return (
     <>
       <div className="shopee-product-grid">
-        {products.map((product) => (
+        {products.map((product) => {
+          // Ensure slug exists, fallback to id if not
+          const productSlug = product.slug || product.id;
+          return (
           <div key={product.id} className="shopee-product-card">
-            <Link href={`/products/${product.slug}`}>
+            <Link href={`/products/${productSlug}`}>
               <div className="card-image-container">
                 <img 
                   src={product.image_url || '/placeholder-product.jpg'} 
@@ -75,7 +78,8 @@ export default function ProductsClient({ products }: ProductsClientProps) {
               </div>
             </Link>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Pagination - static for now */}

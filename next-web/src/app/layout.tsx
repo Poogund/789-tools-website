@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import "./globals.css";
+import "./force-navbar.css";
 import { siteConfig } from "@/config/site";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: siteConfig.title,
@@ -25,9 +24,7 @@ export default function RootLayout({
       </head>
       <body className="font-main antialiased">
         <GoogleAnalytics />
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );

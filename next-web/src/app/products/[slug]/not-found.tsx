@@ -14,75 +14,98 @@ export default function ProductNotFound() {
         </nav>
 
         {/* Not Found Content */}
-        <div className="product-detail-container">
+        <div className="product-detail-container" style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          padding: '80px 20px',
+          minHeight: '500px'
+        }}>
+          {/* Icon */}
+          <div style={{ 
+            fontSize: '6rem', 
+            color: '#e0e0e0', 
+            marginBottom: '32px',
+            lineHeight: '1'
+          }}>
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </div>
+          
+          {/* Title */}
+          <h1 style={{ 
+            fontSize: '2rem', 
+            fontWeight: '700', 
+            color: '#212121', 
+            marginBottom: '16px',
+            marginTop: '0'
+          }}>
+            ไม่พบสินค้าที่คุณค้นหา
+          </h1>
+          
+          {/* Description */}
+          <p style={{ 
+            fontSize: '1rem', 
+            color: '#424242', 
+            marginBottom: '40px',
+            maxWidth: '600px',
+            lineHeight: '1.6',
+            marginTop: '0'
+          }}>
+            ขออภัย สินค้าที่คุณกำลังมองหาอาจถูกลบไปแล้ว หรือ URL ไม่ถูกต้อง
+            <br />
+            ลองค้นหาสินค้าอื่น ๆ ของเราหรือกลับไปยังหน้าสินค้าทั้งหมด
+          </p>
+          
+          {/* Action Buttons */}
           <div style={{ 
             display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            textAlign: 'center',
-            padding: '60px 20px',
-            minHeight: '400px'
+            gap: '16px', 
+            flexWrap: 'wrap', 
+            justifyContent: 'center',
+            width: '100%',
+            maxWidth: '600px'
           }}>
-            <div style={{ 
-              fontSize: '4rem', 
-              color: '#ccc', 
-              marginBottom: '24px' 
-            }}>
-              <i className="fa-solid fa-search"></i>
-            </div>
+            <Link 
+              href="/products" 
+              className="btn btn-primary"
+              style={{ 
+                padding: '14px 28px', 
+                fontSize: '1rem',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                borderRadius: '8px',
+                fontWeight: '500',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              <i className="fa-solid fa-arrow-left"></i>
+              กลับไปหน้าสินค้าทั้งหมด
+            </Link>
             
-            <h1 style={{ 
-              fontSize: '2rem', 
-              fontWeight: '700', 
-              color: 'var(--dark-color)', 
-              marginBottom: '16px' 
-            }}>
-              ไม่พบสินค้าที่คุณค้นหา
-            </h1>
-            
-            <p style={{ 
-              fontSize: '1.1rem', 
-              color: '#666', 
-              marginBottom: '32px',
-              maxWidth: '500px',
-              lineHeight: '1.6'
-            }}>
-              ขออภัย สินค้าที่คุณกำลังมองหาอาจถูกลบไปแล้ว หรือ URL ไม่ถูกต้อง
-              ลองค้นหาสินค้าอื่น ๆ ของเราหรือกลับไปยังหน้าสินค้าทั้งหมด
-            </p>
-            
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Link 
-                href="/products" 
-                className="btn btn-primary"
-                style={{ 
-                  padding: '14px 24px', 
-                  fontSize: '1rem',
-                  textDecoration: 'none'
-                }}
-              >
-                <i className="fa-solid fa-arrow-left" style={{ marginRight: '8px' }}></i>
-                กลับไปหน้าสินค้าทั้งหมด
-              </Link>
-              
-              <Link 
-                href="/" 
-                className="btn"
-                style={{ 
-                  padding: '14px 24px', 
-                  fontSize: '1rem',
-                  backgroundColor: '#f5f5f5',
-                  color: 'var(--dark-color)',
-                  border: '1px solid #ddd',
-                  textDecoration: 'none',
-                  borderRadius: '8px'
-                }}
-              >
-                <i className="fa-solid fa-home" style={{ marginRight: '8px' }}></i>
-                กลับไปหน้าแรก
-              </Link>
-            </div>
+            <Link 
+              href="/" 
+              className="btn btn-primary"
+              style={{ 
+                padding: '14px 28px', 
+                fontSize: '1rem',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                borderRadius: '8px',
+                fontWeight: '500',
+                backgroundColor: '#1976d2',
+                color: '#ffffff',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              <i className="fa-solid fa-house"></i>
+              กลับไปหน้าแรก
+            </Link>
           </div>
         </div>
       </div>

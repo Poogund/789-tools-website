@@ -11,5 +11,6 @@ export const siteConfig = {
     tel: "tel:0657898285",
     line: "https://line.me/ti/p/@789tools",
     messenger: "https://m.me/789tools",
+    
   },
 };

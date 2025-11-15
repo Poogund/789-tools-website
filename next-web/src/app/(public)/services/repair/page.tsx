@@ -1,102 +1,149 @@
 import { repairServiceConfig } from '@/config/services';
 import { siteConfig } from '@/config/site';
+import { getCategories } from '@/lib/catalog-repository';
 import Link from 'next/link';
+import SafeImage from '@/components/common/SafeImage';
 
-export default function RepairServicePage() {
+export default async function RepairServicePage() {
   const { hero, categories, repairProcess, features, cta } = repairServiceConfig;
+  
+  const dbCategories = await getCategories();
+  
+  const categoryImages: Record<string, string> = {};
+  dbCategories.forEach(cat => {
+    if (cat.image_url) {
+      categoryImages[cat.name] = cat.image_url;
+    }
+  });
 
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary-color to-yellow-400 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">{hero.title}</h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">{hero.subtitle}</p>
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-color/10 via-yellow-400/10 to-primary-color/10"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-primary-color to-yellow-400 rounded-3xl mb-8 shadow-xl">
+              <i className="fa-solid fa-wrench text-white text-4xl"></i>
+            </div>
+            <h1 className="text-5xl md:text-6xl font-black mb-6 text-dark-color thai-text leading-tight">
+              {hero.title}
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-700 mb-10 thai-text leading-relaxed">
+              {hero.subtitle}
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Parts Categories Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-dark-color">
-            {categories.title}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {categories.items.map((category, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="aspect-w-16 aspect-h-12">
-                  <img
-                    src={category.image}
-                    alt={category.alt}
-                    className="w-full h-48 object-cover"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-center">{category.title}</h3>
-                </div>
-              </div>
-            ))}
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">PARTS CATEGORIES</div>
+              <h2 className="text-4xl md:text-5xl font-black mb-4 text-dark-color thai-text">{categories.title}</h2>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              {categories.items.map((category, index) => {
+                const categoryImage = categoryImages[category.title] || category.image;
+                return (
+                  <div key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all group border border-gray-100">
+                    <div className="aspect-video bg-gray-100 overflow-hidden">
+                      <SafeImage
+                        src={categoryImage}
+                        alt={category.alt}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        fallbackSrc={`https://placehold.co/400x300/eee/ccc?text=${encodeURIComponent(category.title)}`}
+                      />
+                    </div>
+                    <div className="p-6 text-center">
+                      <h3 className="text-lg font-black text-dark-color group-hover:text-primary-color transition-colors thai-text">{category.title}</h3>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-center text-gray-600 text-lg max-w-2xl mx-auto thai-text">{categories.note}</p>
           </div>
-          <p className="text-center text-gray-600">{categories.note}</p>
         </div>
       </section>
 
-      {/* Repair Service Section */}
-      <section className="py-16">
+      {/* Repair Process Section */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-dark-color">
-            {repairProcess.title}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {repairProcess.steps.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="bg-primary-color text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
-                  {index + 1}
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">REPAIR PROCESS</div>
+              <h2 className="text-4xl md:text-5xl font-black mb-4 text-dark-color thai-text">{repairProcess.title}</h2>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {repairProcess.steps.map((step, index) => (
+                <div key={index} className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-100 group text-center">
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-color/20 to-yellow-400/20 rounded-full blur-xl"></div>
+                    <div className="relative bg-gradient-to-br from-primary-color to-yellow-400 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto text-2xl font-black group-hover:scale-110 transition-transform shadow-lg">
+                      {index + 1}
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-black mb-4 text-dark-color thai-text">{step.title}</h3>
+                  <p className="text-gray-700 leading-relaxed thai-text">{step.description}</p>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-dark-color">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-section-bg-gray">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-dark-color">
-            {features.title}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.items.map((feature, index) => (
-              <div key={index} className="text-center">
-                <div className="text-primary-color text-4xl mb-4">
-                  <i className={`fa-solid ${feature.icon}`}></i>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">WHY CHOOSE US</div>
+              <h2 className="text-4xl md:text-5xl font-black mb-4 text-dark-color thai-text">{features.title}</h2>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {features.items.map((feature, index) => (
+                <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-100 group text-center">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-color to-yellow-400 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i className={`fa-solid ${feature.icon} text-white text-3xl`}></i>
+                  </div>
+                  <h3 className="text-xl font-black mb-4 text-dark-color thai-text">{feature.title}</h3>
+                  <p className="text-gray-700 leading-relaxed thai-text">{feature.description}</p>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-dark-color">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary-color text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">{cta.title}</h2>
-          <p className="text-xl mb-8">
-            โทร <a href={`tel:${siteConfig.phone}`} className="underline hover:no-underline">{siteConfig.phone}</a> หรือ{' '}
-            <a href="mailto:789Tools@gmail.com" className="underline hover:no-underline">ส่งอีเมล</a> {cta.description}
-          </p>
-          <Link 
-            href="/contact" 
-            className="inline-block bg-white text-primary-color px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-          >
-            {cta.buttonText}
-          </Link>
+      <section className="py-20 bg-gradient-to-br from-primary-color via-yellow-400 to-primary-color relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="max-w-3xl mx-auto">
+            <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl mb-8">
+              <i className="fa-solid fa-handshake text-white text-4xl"></i>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white thai-text">{cta.title}</h2>
+            <p className="text-xl mb-10 text-white/90 thai-text">
+              โทร <a href={`tel:${siteConfig.phone}`} className="underline font-bold hover:no-underline">{siteConfig.phone}</a> หรือ{' '}
+              <a href="mailto:789Tools@gmail.com" className="underline font-bold hover:no-underline">ส่งอีเมล</a> {cta.description}
+            </p>
+            <Link 
+              href="/contact" 
+              className="inline-flex items-center justify-center bg-white text-primary-color px-10 py-4 rounded-xl font-black hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl text-lg thai-text"
+            >
+              <i className="fa-solid fa-envelope mr-3"></i>
+              {cta.buttonText}
+            </Link>
+          </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

@@ -28,7 +28,7 @@ export default async function ProductsPage({
   }
 
   return (
-    <main className="shop-page-main">
+    <div className="shop-page-main">
       <div className="container">
         {/* Breadcrumbs */}
         <nav className="breadcrumbs">
@@ -71,7 +71,7 @@ export default async function ProductsPage({
           </aside>
 
           {/* Main product grid */}
-          <main className="shop-content">
+          <div className="shop-content">
             {/* Sort bar with product count */}
             <div className="sort-bar">
               <span className="product-count">
@@ -91,9 +91,9 @@ export default async function ProductsPage({
 
             {/* Product grid */}
             <ProductsClient products={products} />
-          </main>
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

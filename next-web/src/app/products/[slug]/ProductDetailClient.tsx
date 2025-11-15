@@ -10,7 +10,6 @@ interface ProductDetailClientProps {
 
 export default function ProductDetailClient({ product, images }: ProductDetailClientProps) {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [quantity, setQuantity] = useState(1);
 
   // Use product image_url as main image if no gallery images
   const allImages = images.length > 0 ? images : [{ 
@@ -24,12 +23,6 @@ export default function ProductDetailClient({ product, images }: ProductDetailCl
     setSelectedImage(index);
   };
 
-  const handleQuantityChange = (change: number) => {
-    const newQuantity = quantity + change;
-    if (newQuantity >= 1 && newQuantity <= 99) {
-      setQuantity(newQuantity);
-    }
-  };
 
   // Tab functionality
   useEffect(() => {
@@ -61,46 +54,34 @@ export default function ProductDetailClient({ product, images }: ProductDetailCl
   }, []);
 
   return (
-    <>
-      {/* Product Gallery */}
-      <div className="product-gallery">
-        {/* Main Image */}
-        <div className="main-image-wrapper">
-          <img
-            src={allImages[selectedImage].image_url}
-            alt={product.name}
-            className="main-image"
-          />
-        </div>
-
-        {/* Thumbnail List */}
-        <div className="thumbnail-list">
-          {allImages.map((image, index) => (
-            <button
-              key={image.id}
-              className={`thumbnail-item ${selectedImage === index ? 'active' : ''}`}
-              onClick={() => handleImageSelect(index)}
-            >
-              <img
-                src={image.image_url}
-                alt={`${product.name} - รูปที่ ${index + 1}`}
-                className="thumbnail-image"
-              />
-            </button>
-          ))}
-        </div>
+    <div className="product-gallery">
+      {/* Main Image */}
+      <div className="main-image-wrapper">
+        <img
+          src={allImages[selectedImage].image_url}
+          alt={product.name}
+          className="main-image"
+        />
       </div>
 
-      {/* Product Actions with Quantity */}
-      <script dangerouslySetInnerHTML={{
-        __html: `
-          // Update quantity input value
-          const quantityInput = document.getElementById('quantity-input');
-          if (quantityInput) {
-            quantityInput.value = '${quantity}';
-          }
-        `
-      }} />
-    </>
+      {/* Thumbnail List */}
+      <div className="thumbnail-list">
+        {allImages.map((image, index) => (
+          <button
+            key={image.id}
+            className={`thumbnail-item ${selectedImage === index ? 'active' : ''}`}
+            onClick={() => handleImageSelect(index)}
+            type="button"
+            aria-label={`ดูรูปภาพ ${index + 1}`}
+          >
+            <img
+              src={image.image_url}
+              alt={`${product.name} - รูปที่ ${index + 1}`}
+              className="thumbnail-image"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }

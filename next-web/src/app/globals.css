@@ -66,6 +66,9 @@ body {
   font-size: 0.8rem;
   text-align: center;
   border-bottom: 1px solid rgba(67, 67, 67, 0.187);
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .top-bar-message {
@@ -96,39 +99,82 @@ body {
   margin-right: 4px;
 }
 
-/* Sticky Header Styles */
-.main-header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+/* Sticky Header Wrapper - includes both header and nav */
+.sticky-header-wrapper {
+  position: -webkit-sticky !important; /* Safari support */
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 10000 !important;
   transition: all 0.3s ease;
-  background-color: var(--dark-color);
+  background-color: var(--dark-color) !important;
+  width: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: auto !important;
+  overflow: visible !important;
+  will-change: transform; /* Optimize for sticky */
 }
 
-.main-header.sticky {
+.sticky-header-wrapper.sticky {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
   background-color: rgba(44, 44, 44, 0.95);
 }
 
-/* Ensure navbar below sticky header */
+/* Main Header Styles */
+.main-header {
+  background-color: var(--dark-color) !important;
+  transition: all 0.3s ease;
+  width: 100% !important;
+  position: relative !important;
+  z-index: 9999 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: auto !important;
+  overflow: visible !important;
+}
+
+.sticky-header-wrapper.sticky .main-header {
+  background-color: transparent;
+}
+
+/* Navbar Styles */
 .navbar {
-  position: relative;
-  z-index: 999;
+  position: relative !important;
+  z-index: 9999 !important;
+  background-color: var(--dark-color) !important;
+  transition: all 0.3s ease;
+  width: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: auto !important;
+  overflow: visible !important;
+}
+
+.sticky-header-wrapper.sticky .navbar {
+  background-color: transparent;
 }
 
 /* Mobile sticky header adjustments */
 @media (max-width: 768px) {
-  .main-header.sticky {
+  .sticky-header-wrapper.sticky {
     background-color: rgba(44, 44, 44, 0.98);
   }
   
-  .main-header.sticky .logo img {
+  .sticky-header-wrapper.sticky .logo img {
     height: 40px;
     transition: height 0.3s ease;
   }
   
-  .main-header.sticky .search-bar {
+  .sticky-header-wrapper.sticky .search-bar {
     padding: 8px 12px;
     transition: padding 0.3s ease;
   }
@@ -280,7 +326,19 @@ body {
 }
 
 .nav-links {
-  display: none;
+  display: flex !important;
+  align-items: center;
+  gap: 25px;
+  font-weight: 700;
+  flex-grow: 1;
+  justify-content: center;
+  position: static;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-links a {
@@ -364,7 +422,28 @@ body {
 /* Mobile overrides */
 @media (max-width: 767px) {
   .top-bar {
-    display: none;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .main-header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .navbar {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    border-top: none;
+  }
+
+  .sticky-header-wrapper {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .main-header .search-bar {
@@ -377,10 +456,6 @@ body {
 
   .top-bar-login {
     display: none;
-  }
-
-  .navbar {
-    border-top: none;
   }
 
   .navbar .container {
@@ -1378,7 +1453,9 @@ body {
   background-image: url("/hero-background.jpg");
   background-position: center center;
   background-size: cover;
+  z-index: 1 !important;
   background-attachment: scroll;
+  margin-top: 0;
 }
 
 .hero-slider {
@@ -4120,6 +4197,77 @@ body {
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
+/* Ensure Navbar is ALWAYS visible - Global override - HIGHEST PRIORITY */
+html body .sticky-header-wrapper,
+html body .top-bar,
+html body .main-header,
+html body .navbar,
+body .sticky-header-wrapper,
+body .top-bar,
+body .main-header,
+body .navbar {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+}
+
+/* Sticky positioning for header wrapper */
+html body .sticky-header-wrapper,
+body .sticky-header-wrapper {
+  position: -webkit-sticky !important; /* Safari support */
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+/* Force Navbar to appear above everything */
+.min-h-screen {
+  position: relative !important;
+}
+
+.min-h-screen > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Sticky header wrapper MUST be sticky, not relative */
+.min-h-screen .sticky-header-wrapper,
+.min-h-screen > .sticky-header-wrapper {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10000 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.min-h-screen .top-bar,
+.min-h-screen > .top-bar {
+  position: relative !important;
+  z-index: 10000 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Ensure homepage content doesn't overlap navbar */
+.homepage {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.homepage .hero-section {
+  margin-top: 0 !important;
+  padding-top: 80px !important;
+}
+
 /* Industrial Hero Section */
 .homepage .hero-slider {
   background: linear-gradient(135deg, var(--industrial-blue) 0%, #1e40af 100%);
@@ -5022,6 +5170,55 @@ body {
 /* Reviews */
 .reviews-list {
   min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.review-item {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 24px;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.review-author {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--dark-color);
+}
+
+.review-rating {
+  color: var(--primary-color, #fdd835);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.review-rating .fa-regular {
+  color: #ccc;
+}
+
+.review-body {
+  font-style: italic;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.review-date {
+  font-size: 0.85rem;
+  color: #999;
 }
 
 /* Related Products */

@@ -2,16 +2,17 @@ import { ReactNode } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
-export default function PublicLayout({
+export default function ProductsLayout({
   children,
 }: {
   children: ReactNode;
 }) {
   return (
-    <>
+    <div className="min-h-screen">
       <Navbar />
-      <main className="min-h-screen">{children}</main>
+      <main>{children}</main>
       <Footer />
-    </>
+    </div>
   );
 }
+

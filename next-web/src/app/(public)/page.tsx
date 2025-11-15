@@ -58,7 +58,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main className="homepage">
+      <div className="homepage">
       {/* Hero Slider Section */}
       <HeroSlider slides={heroSlides} />
 
@@ -231,7 +231,7 @@ export default async function HomePage() {
 
       {/* CTA Section */}
       <CTASection />
-      </main>
+      </div>
     </>
   );
 }

@@ -1,53 +1,121 @@
 import { createServerSupabaseClient } from './supabase/server';
-import { Product, ProductImage, Category, HeroSlide, FAQItem, BlogPost } from '@/types';
+import { Product, ProductImage, Category, HeroSlide, FAQItem, BlogPost, Review } from '@/types';
+
+// Helper function to create a public Supabase client (uses anon key, respects RLS)
+function createPublicSupabaseClient() {
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // Fallback to service role if anon key not available
+    console.warn('Using service role key as fallback - anon key not found');
+    return createServerSupabaseClient();
+  }
+  
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: false,
+    },
+  });
+}
 
 // Products
 export async function getProducts(): Promise<Product[]> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .eq('is_active', true)
-    .order('created_at', { ascending: false });
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false });
 
-  if (error) {
-    // PGRST205 = table not found in schema cache (e.g. local DB not fully set up yet)
-    if ((error as any).code === 'PGRST205') return [];
-    throw error;
+    if (error) {
+      // PGRST205 = table not found in schema cache (e.g. local DB not fully set up yet)
+      if ((error as any).code === 'PGRST205') return [];
+      console.error('Error fetching products:', error);
+      return [];
+    }
+    return data || [];
+  } catch (error) {
+    console.error('Error in getProducts:', error);
+    return [];
   }
-  return data || [];
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .eq('slug', slug)
-    .eq('is_active', true)
-    .single();
+  try {
+    const supabase = createPublicSupabaseClient();
+    
+    if (!slug) {
+      return null;
+    }
+    
+    // Try exact match first
+    let { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('slug', slug)
+      .eq('is_active', true)
+      .single();
 
-  if (error) {
-    if ((error as any).code === 'PGRST116') return null; // Not found
-    if ((error as any).code === 'PGRST205') return null; // Table missing in local dev
-    throw error;
+    // If not found, try case-insensitive search or by ID
+    if (error && (error as any).code === 'PGRST116') {
+      const { data: allProducts, error: listError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true);
+      
+      if (!listError && allProducts) {
+        // Try case-insensitive slug match
+        let found = allProducts.find((p: Product) => 
+          p.slug?.toLowerCase() === slug.toLowerCase()
+        );
+        
+        // If still not found, try matching by ID (in case slug is actually an ID)
+        if (!found) {
+          found = allProducts.find((p: Product) => p.id === slug);
+        }
+        
+        if (found) {
+          return found;
+        }
+      }
+    }
+
+    if (error) {
+      if ((error as any).code === 'PGRST116') return null; // Not found
+      if ((error as any).code === 'PGRST205') return null; // Table missing in local dev
+      console.error('Error fetching product by slug:', error);
+      return null;
+    }
+    
+    return data || null;
+  } catch (error) {
+    console.error('Error in getProductBySlug:', error);
+    return null;
   }
-  return data;
 }
 
 export async function getProductImages(productId: string): Promise<ProductImage[]> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('product_images')
-    .select('*')
-    .eq('product_id', productId)
-    .order('sort_order', { ascending: true });
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from('product_images')
+      .select('*')
+      .eq('product_id', productId)
+      .order('sort_order', { ascending: true });
 
-  if (error) {
-    if ((error as any).code === 'PGRST205') return [];
-    throw error;
+    if (error) {
+      if ((error as any).code === 'PGRST205') return [];
+      console.error('Error fetching product images:', error);
+      return [];
+    }
+    return data || [];
+  } catch (error) {
+    console.error('Error in getProductImages:', error);
+    return [];
   }
-  return data || [];
 }
 
 // Get products with images (for catalog pages)
@@ -71,22 +139,38 @@ export async function getProductsWithImages(): Promise<(Product & { images: Prod
 
 // Get products by category
 export async function getProductsByCategory(categorySlug: string): Promise<Product[]> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('products')
-    .select(`
-      *,
-      categories!inner (slug)
-    `)
-    .eq('is_active', true)
-    .eq('categories.slug', categorySlug)
-    .order('created_at', { ascending: false });
+  try {
+    const supabase = createPublicSupabaseClient();
+    // First get category by slug
+    const { data: categoryData, error: categoryError } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('slug', categorySlug)
+      .eq('is_active', true)
+      .single();
+    
+    if (categoryError || !categoryData) {
+      return [];
+    }
+    
+    // Then get products by category_id
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('is_active', true)
+      .eq('category_id', categoryData.id)
+      .order('created_at', { ascending: false });
 
-  if (error) {
-    if ((error as any).code === 'PGRST205') return [];
-    throw error;
+    if (error) {
+      if ((error as any).code === 'PGRST205') return [];
+      console.error('Error fetching products by category:', error);
+      return [];
+    }
+    return data || [];
+  } catch (error) {
+    console.error('Error in getProductsByCategory:', error);
+    return [];
   }
-  return data || [];
 }
 
 // Get featured products
@@ -269,17 +353,18 @@ export async function getPromotionProducts(): Promise<Product[]> {
 
 // Categories
 export async function getCategories(): Promise<Category[]> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('is_active', true)
-    .order('sort_order', { ascending: true });
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from('categories')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
 
-  if (error) {
-    if ((error as any).code === 'PGRST205') {
-      // Fallback categories for local development
-      return [
+    if (error) {
+      if ((error as any).code === 'PGRST205') {
+        // Fallback categories for local development
+        return [
         {
           id: '1',
           name: 'เครื่องตัดคอนกรีต',
@@ -347,146 +432,203 @@ export async function getCategories(): Promise<Category[]> {
           updated_at: new Date().toISOString()
         }
       ];
+      }
+      console.error('Error fetching categories:', error);
+      return [];
     }
-    throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error in getCategories:', error);
+    return [];
   }
-  return data || [];
 }
 
 export async function getCategoryBySlug(slug: string): Promise<Category | null> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('slug', slug)
-    .eq('is_active', true)
-    .single();
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from('categories')
+      .select('*')
+      .eq('slug', slug)
+      .eq('is_active', true)
+      .single();
 
-  if (error) {
-    if ((error as any).code === 'PGRST116') return null;
-    if ((error as any).code === 'PGRST205') return null;
-    throw error;
+    if (error) {
+      if ((error as any).code === 'PGRST116') return null;
+      if ((error as any).code === 'PGRST205') return null;
+      console.error('Error fetching category by slug:', error);
+      return null;
+    }
+    return data || null;
+  } catch (error) {
+    console.error('Error in getCategoryBySlug:', error);
+    return null;
   }
-  return data;
 }
 
 // Hero Slides
 export async function getHeroSlides(): Promise<HeroSlide[]> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('hero_slides')
-    .select('*')
-    .eq('is_active', true)
-    .order('sort_order', { ascending: true });
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from('hero_slides')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
 
-  if (error) {
-    if ((error as any).code === 'PGRST205') {
-      // Table not found (e.g. local dev without migrations) -> fallback to default slides
-      return [
-        {
-          id: '1',
-          headline: 'ศูนย์รวมเครื่องมือช่างก่อสร้าง',
-          subheadline: 'ขาย-เช่า ครบวงจร พร้อมบริการซ่อม',
-          image_url: '/hero-background.jpg',
-          button_text: 'ดูสินค้าทั้งหมด',
-          button_url: '/products',
-          sort_order: 1,
-          is_active: true,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          id: '2',
-          headline: 'เครื่องตัดคอนกรีตคุณภาพสูง',
-          subheadline: 'รับประกันคุณภาพ ส่งเร็วทั่วประเทศ',
-          image_url: '/รถตัดพื้นคอนกรีต.png',
-          button_text: 'ติดต่อเรา',
-          button_url: '/contact',
-          sort_order: 2,
-          is_active: true,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ];
+    if (error) {
+      if ((error as any).code === 'PGRST205') {
+        // Table not found (e.g. local dev without migrations) -> fallback to default slides
+        return [
+          {
+            id: '1',
+            headline: 'ศูนย์รวมเครื่องมือช่างก่อสร้าง',
+            subheadline: 'ขาย-เช่า ครบวงจร พร้อมบริการซ่อม',
+            image_url: '/hero-background.jpg',
+            button_text: 'ดูสินค้าทั้งหมด',
+            button_url: '/products',
+            sort_order: 1,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: '2',
+            headline: 'เครื่องตัดคอนกรีตคุณภาพสูง',
+            subheadline: 'รับประกันคุณภาพ ส่งเร็วทั่วประเทศ',
+            image_url: '/รถตัดพื้นคอนกรีต.png',
+            button_text: 'ติดต่อเรา',
+            button_url: '/contact',
+            sort_order: 2,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ];
+      }
+      console.error('Error fetching hero slides:', error);
+      return [];
     }
-    throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error in getHeroSlides:', error);
+    return [];
   }
-  return data || [];
 }
 
 // FAQ Items
 export async function getFaqItems(): Promise<FAQItem[]> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('faq_items')
-    .select('*')
-    .eq('is_active', true)
-    .order('sort_order', { ascending: true });
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from('faq_items')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
 
-  if (error) {
-    if ((error as any).code === 'PGRST205') return [];
-    throw error;
+    if (error) {
+      if ((error as any).code === 'PGRST205') return [];
+      console.error('Error fetching FAQ items:', error);
+      return [];
+    }
+    return data || [];
+  } catch (error) {
+    console.error('Error in getFaqItems:', error);
+    return [];
   }
-  return data || [];
+}
+
+// Reviews
+export async function getReviews(): Promise<Review[]> {
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      if ((error as any).code === 'PGRST205') return [];
+      console.error('Error fetching reviews:', error);
+      return [];
+    }
+    return data || [];
+  } catch (error) {
+    console.error('Error in getReviews:', error);
+    return [];
+  }
 }
 
 // Blog Posts
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('status', 'published')
-    .order('published_at', { ascending: false });
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('status', 'published')
+      .order('published_at', { ascending: false });
 
-  if (error) {
-    if ((error as any).code === 'PGRST205') {
-      // Fallback blog posts for local development
-      return [
-        {
-          id: '1',
-          title: 'วิธีเลือกเครื่องตัดคอนกรีตที่เหมาะสม',
-          slug: 'how-to-choose-concrete-cutter',
-          content: '<p>เครื่องตัดคอนกรีตเป็นอุปกรณ์สำคัญในงานก่อสร้าง...</p>',
-          excerpt: 'คู่มือการเลือกเครื่องตัดคอนกรีตที่เหมาะกับงานของคุณ',
-          thumbnail_url: '/blog/concrete-cutter.jpg',
-          status: 'published' as const,
-          published_at: new Date().toISOString(),
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          id: '2',
-          title: 'การดูแลรักษาเครื่องตบดินให้ใช้งานได้นาน',
-          slug: 'maintain-compactor',
-          content: '<p>การดูแลรักษาเครื่องตบดินอย่างถูกต้องจะช่วยยืดอายุการใช้งาน...</p>',
-          excerpt: 'เคล็ดลับการดูแลรักษาเครื่องตบดินให้มีประสิทธิภาพสูงสุด',
-          thumbnail_url: '/blog/compactor.jpg',
-          status: 'published' as const,
-          published_at: new Date(Date.now() - 86400000).toISOString(),
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ];
+    if (error) {
+      if ((error as any).code === 'PGRST205') {
+        // Fallback blog posts for local development
+        return [
+          {
+            id: '1',
+            title: 'วิธีเลือกเครื่องตัดคอนกรีตที่เหมาะสม',
+            slug: 'how-to-choose-concrete-cutter',
+            content: '<p>เครื่องตัดคอนกรีตเป็นอุปกรณ์สำคัญในงานก่อสร้าง...</p>',
+            excerpt: 'คู่มือการเลือกเครื่องตัดคอนกรีตที่เหมาะกับงานของคุณ',
+            thumbnail_url: '/blog/concrete-cutter.jpg',
+            status: 'published' as const,
+            published_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: '2',
+            title: 'การดูแลรักษาเครื่องตบดินให้ใช้งานได้นาน',
+            slug: 'maintain-compactor',
+            content: '<p>การดูแลรักษาเครื่องตบดินอย่างถูกต้องจะช่วยยืดอายุการใช้งาน...</p>',
+            excerpt: 'เคล็ดลับการดูแลรักษาเครื่องตบดินให้มีประสิทธิภาพสูงสุด',
+            thumbnail_url: '/blog/compactor.jpg',
+            status: 'published' as const,
+            published_at: new Date(Date.now() - 86400000).toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ];
+      }
+      console.error('Error fetching blog posts:', error);
+      return [];
     }
-    throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error in getBlogPosts:', error);
+    return [];
   }
-  return data || [];
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-  const supabase = createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('slug', slug)
-    .eq('status', 'published')
-    .single();
+  try {
+    const supabase = createPublicSupabaseClient();
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .single();
 
-  if (error) {
-    if ((error as any).code === 'PGRST116') return null; // Not found
-    if ((error as any).code === 'PGRST205') return null; // Table missing in local dev
-    throw error;
+    if (error) {
+      if ((error as any).code === 'PGRST116') return null; // Not found
+      if ((error as any).code === 'PGRST205') return null; // Table missing in local dev
+      console.error('Error fetching blog post by slug:', error);
+      return null;
+    }
+    return data || null;
+  } catch (error) {
+    console.error('Error in getBlogPostBySlug:', error);
+    return null;
   }
-  return data;
 }

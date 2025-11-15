@@ -137,14 +137,11 @@ export default async function BlogDetailPage({ params }: Props) {
               {/* Thumbnail */}
               {post.thumbnail_url && (
                 <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
-                  <img
-                    src={post.thumbnail_url}
+                  <SafeImage
+                    src={post.thumbnail_url || 'https://placehold.co/800x400/eee/ccc?text=บทความ'}
                     alt={post.title}
                     className="w-full h-auto object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://placehold.co/800x400/eee/ccc?text=บทความ';
-                    }}
+                    fallbackSrc="https://placehold.co/800x400/eee/ccc?text=บทความ"
                   />
                 </div>
               )}

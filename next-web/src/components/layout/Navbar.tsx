@@ -6,6 +6,11 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // Debug: Log to confirm Navbar is rendering
+  useEffect(() => {
+    console.log('✅ Navbar component mounted');
+  }, []);
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -59,48 +64,50 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Main Header - Sticky */}
-      <div className={`main-header ${isScrolled ? 'sticky' : ''}`}>
-        <div className="container">
-          <a href="/" className="logo">
-            <img
-              src="/logo.png"
-              alt="โลโก้ 789 TOOLS"
-            />
-          </a>
+      {/* Sticky Header Wrapper - includes both header and nav */}
+      <div className={`sticky-header-wrapper ${isScrolled ? 'sticky' : ''}`}>
+        {/* Main Header */}
+        <div className="main-header">
+          <div className="container">
+            <a href="/" className="logo">
+              <img
+                src="/logo.png"
+                alt="โลโก้ 789 TOOLS"
+              />
+            </a>
 
-          <form className="search-bar" role="search">
-            <input
-              type="text"
-              placeholder="ค้นหาสินค้าที่คุณต้องการ..."
-              aria-label="Search"
-            />
-            <button type="submit" aria-label="Search Button">
-              <i className="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </form>
+            <form className="search-bar" role="search">
+              <input
+                type="text"
+                placeholder="ค้นหาสินค้าที่คุณต้องการ..."
+                aria-label="Search"
+              />
+              <button type="submit" aria-label="Search Button">
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </form>
 
-          <div className="contact-info">
-            <a href="#" className="social-icon facebook-icon" aria-label="Facebook">
-              <i className="fa-brands fa-facebook"></i>
-            </a>
-            <a href="#" className="social-icon line-icon" aria-label="LINE">
-              <i className="fa-brands fa-line"></i>
-            </a>
-            <a href="tel:0657898285" className="phone-number">
-              <strong>โทร</strong> 065-789-8285
-            </a>
-          </div>
-          <div className="nav-icons mobile-nav-icons">
-            <button className="hamburger-menu" aria-label="Open Menu" onClick={toggleMobileMenu}>
-              <i className="fa-solid fa-bars"></i>
-            </button>
+            <div className="contact-info">
+              <a href="#" className="social-icon facebook-icon" aria-label="Facebook">
+                <i className="fa-brands fa-facebook"></i>
+              </a>
+              <a href="#" className="social-icon line-icon" aria-label="LINE">
+                <i className="fa-brands fa-line"></i>
+              </a>
+              <a href="tel:0657898285" className="phone-number">
+                <strong>โทร</strong> 065-789-8285
+              </a>
+            </div>
+            <div className="nav-icons mobile-nav-icons">
+              <button className="hamburger-menu" aria-label="Open Menu" onClick={toggleMobileMenu}>
+                <i className="fa-solid fa-bars"></i>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Navigation Bar */}
-      <nav className="navbar">
+        {/* Navigation Bar */}
+        <nav className="navbar">
         <div className="container">
           <ul className="nav-links">
             <li><a href="/">หน้าแรก</a></li>
@@ -110,12 +117,12 @@ export default function Navbar() {
               </a>
             </li>
             <li>
-              <a href="/services">
+              <a href="/services/rental">
                 บริการให้เช่า <i className="fa-solid fa-caret-down"></i>
               </a>
             </li>
             <li>
-              <a href="/parts-services">
+              <a href="/services/repair">
                 อะไหล่ &amp; บริการ <i className="fa-solid fa-caret-down"></i>
               </a>
             </li>
@@ -130,7 +137,8 @@ export default function Navbar() {
             {/* Cart removed from desktop */}
           </div>
         </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
@@ -165,7 +173,7 @@ export default function Navbar() {
                 </li>
                 <li>
                   <a 
-                    href="/services" 
+                    href="/services/rental" 
                     onClick={closeMobileMenu}
                   >
                     บริการให้เช่า
@@ -173,7 +181,7 @@ export default function Navbar() {
                 </li>
                 <li>
                   <a 
-                    href="/parts-services" 
+                    href="/services/repair" 
                     onClick={closeMobileMenu}
                   >
                     อะไหล่ & บริการ
