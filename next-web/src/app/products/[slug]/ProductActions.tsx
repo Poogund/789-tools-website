@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { siteConfig } from '@/config/site';
 
 interface ProductActionsProps {
   productId: string;
@@ -27,6 +28,26 @@ export default function ProductActions({ productId, productName, price, salePric
 
   return (
     <>
+      {/* Contact Buttons */}
+      <div className="contact-buttons-group">
+        <a 
+          href={siteConfig.links.line}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-line flex-1"
+        >
+          <i className="fa-brands fa-line"></i>
+          แอดเฟรน
+        </a>
+        <a 
+          href={siteConfig.links.tel}
+          className="btn btn-danger flex-1"
+        >
+          <i className="fa-solid fa-phone"></i>
+          โทรสั่งซื้อ
+        </a>
+      </div>
+
       {/* Quantity Selector */}
       <div className="quantity-wrapper">
         <label htmlFor="quantity-input" className="quantity-label">จำนวน:</label>
@@ -67,13 +88,6 @@ export default function ProductActions({ productId, productName, price, salePric
         >
           <i className="fa-solid fa-cart-shopping"></i>
           เพิ่มลงรถเข็น
-        </button>
-        <button 
-          className="btn btn-wishlist"
-          type="button"
-          aria-label="เพิ่มลงรายการโปรด"
-        >
-          <i className="fa-regular fa-heart"></i>
         </button>
       </div>
     </>

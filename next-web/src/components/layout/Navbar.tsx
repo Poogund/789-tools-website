@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -97,6 +98,9 @@ export default function Navbar() {
               <a href="tel:0657898285" className="phone-number">
                 <strong>โทร</strong> 065-789-8285
               </a>
+              <Link href="/cart" className="cart-icon" aria-label="Shopping Cart">
+                <i className="fa-solid fa-cart-shopping"></i>
+              </Link>
             </div>
             <div className="nav-icons mobile-nav-icons">
               <button className="hamburger-menu" aria-label="Open Menu" onClick={toggleMobileMenu}>
@@ -134,7 +138,7 @@ export default function Navbar() {
             </li>
           </ul>
           <div className="nav-icons desktop-nav-icons">
-            {/* Cart removed from desktop */}
+            {/* Cart removed - cart icon is in main header contact-info */}
           </div>
         </div>
         </nav>

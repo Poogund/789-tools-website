@@ -296,6 +296,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.cart-icon:hover {
+  background-color: var(--primary-color);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .hamburger-menu {
@@ -434,9 +442,9 @@ body {
   }
 
   .navbar {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    display: none !important; /* ซ่อน navigation bar ใน mobile - ใช้แค่ Hamburger menu */
+    visibility: hidden !important;
+    opacity: 0 !important;
     border-top: none;
   }
 
@@ -2062,11 +2070,12 @@ body {
 
 .btn-primary {
   background-color: var(--primary-color);
-  color: var(--dark-color);
+  color: white; /* สีน้ำเงิน → ตัวอักษรสีขาว */
 }
 
 .btn-primary:hover {
-  background-color: #f4c430;
+  background-color: #f4c430; /* สีเหลือง */
+  color: var(--dark-color); /* สีเหลือง → ตัวอักษรสีดำ */
   transform: translateY(-2px);
 }
 
@@ -2079,6 +2088,40 @@ body {
 .btn-secondary:hover {
   background-color: var(--light-color);
   color: var(--dark-color);
+}
+
+.btn-line {
+  background-color: var(--line-color);
+  color: white;
+  border: none;
+}
+
+.btn-line:hover {
+  background-color: #05a648;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.contact-buttons-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .btn-outline {
@@ -4204,8 +4247,7 @@ html body .main-header,
 html body .navbar,
 body .sticky-header-wrapper,
 body .top-bar,
-body .main-header,
-body .navbar {
+body .main-header {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
@@ -4215,6 +4257,18 @@ body .navbar {
   overflow: visible !important;
   clip: auto !important;
   clip-path: none !important;
+}
+
+/* Mobile: ซ่อน navbar - ใช้แค่ Hamburger menu */
+@media (max-width: 767px) {
+  html body .navbar,
+  body .navbar {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
 }
 
 /* Sticky positioning for header wrapper */
@@ -5041,6 +5095,13 @@ body .sticky-header-wrapper {
   font-size: 1.1rem;
   padding: 14px 20px;
   gap: 8px;
+  background-color: var(--primary-color);
+  color: white; /* สีน้ำเงิน → ตัวอักษรสีขาว */
+}
+
+.btn-add-to-cart:hover {
+  background-color: #f4c430; /* สีเหลือง */
+  color: var(--dark-color); /* สีเหลือง → ตัวอักษรสีดำ */
 }
 
 .btn-wishlist {
