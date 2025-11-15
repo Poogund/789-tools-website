@@ -69,7 +69,7 @@ const fallbackPromotions: PromotionCard[] = [
 ];
 
 const VISIBLE_COUNT = 3;
-const MOBILE_VISIBLE_COUNT = 2;
+const MOBILE_VISIBLE_COUNT = 3;
 const AUTOPLAY_DELAY = 5000;
 
 export default function PromotionProductsSection({ products }: PromotionProductsSectionProps) {

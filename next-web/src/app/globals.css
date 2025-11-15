@@ -96,8 +96,42 @@ body {
   margin-right: 4px;
 }
 
+/* Sticky Header Styles */
 .main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
   background-color: var(--dark-color);
+}
+
+.main-header.sticky {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  background-color: rgba(44, 44, 44, 0.95);
+}
+
+/* Ensure navbar below sticky header */
+.navbar {
+  position: relative;
+  z-index: 999;
+}
+
+/* Mobile sticky header adjustments */
+@media (max-width: 768px) {
+  .main-header.sticky {
+    background-color: rgba(44, 44, 44, 0.98);
+  }
+  
+  .main-header.sticky .logo img {
+    height: 40px;
+    transition: height 0.3s ease;
+  }
+  
+  .main-header.sticky .search-bar {
+    padding: 8px 12px;
+    transition: padding 0.3s ease;
+  }
 }
 
 .main-header .container {
@@ -438,27 +472,28 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.94);
-  color: var(--light-color);
-  padding: 10px 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  padding: 15px 10px;
   text-align: center;
   transition: background 0.3s ease;
-  border: 2px solid #000000;
-  border-radius: 0 0 12px 12px;
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.75);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .card-name-overlay h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--light-color);
-  padding: 0 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  padding: 0;
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
 .card-name-overlay p {
@@ -631,59 +666,73 @@ body {
     padding: 0 8px;
   }
   
-  /* Promotion products mobile - 2 columns full width */
+  /* Hide slider buttons on mobile for more space */
+  .promotion-slider-button {
+    display: none !important;
+  }
+  
+  /* Promotion products mobile - 3 columns like reviews */
   .promotion-slider-grid {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
     width: 100% !important;
   }
   
-  /* Promotion card mobile optimization */
+  /* Promotion card mobile - match review card dimensions */
   .promotion-slider-grid .product-card {
-    border-radius: 8px !important;
+    border-radius: 20px 20px 0 0 !important;
     overflow: hidden !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
     transition: all 0.3s ease !important;
     width: 100% !important;
     margin: 0 !important;
+    background-color: var(--light-gray-bg) !important;
+    text-align: center !important;
   }
   
   .promotion-slider-grid .product-card:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-8px) !important;
+    box-shadow: 0 12px 40px rgba(253, 216, 53, 0.18) !important;
   }
   
+  /* Match review image wrapper height */
   .promotion-slider-grid .product-image {
-    height: 140px !important;
-    border-radius: 8px 8px 0 0 !important;
+    height: 160px !important;
+    border-radius: 20px 20px 0 0 !important;
     overflow: hidden !important;
+    position: relative !important;
   }
   
   .promotion-slider-grid .product-image img {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
+    aspect-ratio: 4 / 5 !important;
     object-fit: cover !important;
-    transition: transform 0.3s ease !important;
+    display: block !important;
+    transition: transform 0.4s ease !important;
   }
   
   .promotion-slider-grid .product-card:hover .product-image img {
     transform: scale(1.05) !important;
   }
   
+  /* Match review card content area */
   .promotion-slider-grid .product-info {
-    padding: 10px !important;
+    padding: 16px 12px !important;
     text-align: center !important;
     background: #ffffff !important;
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
   }
   
   .promotion-slider-grid .product-info h3 {
     font-size: 0.8rem !important;
     font-weight: 600 !important;
     color: #333 !important;
-    margin-bottom: 6px !important;
-    line-height: 1.2 !important;
-    min-height: 2.4em !important;
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+    min-height: 2.8em !important;
     display: -webkit-box !important;
     display: box !important;
     -webkit-line-clamp: 2 !important;
@@ -697,12 +746,12 @@ body {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    gap: 2px !important;
+    gap: 4px !important;
     margin-bottom: 0 !important;
   }
   
   .promotion-slider-grid .current-price {
-    font-size: 1rem !important;
+    font-size: 0.9rem !important;
     font-weight: 700 !important;
     color: #d32f2f !important;
   }
@@ -715,15 +764,15 @@ body {
   
   .promotion-slider-grid .product-badge.promotion {
     position: absolute !important;
-    top: 4px !important;
-    left: 4px !important;
-    padding: 2px 6px !important;
-    border-radius: 8px !important;
+    top: 6px !important;
+    left: 6px !important;
+    padding: 3px 8px !important;
+    border-radius: 12px !important;
     font-size: 0.6rem !important;
     font-weight: 600 !important;
     background: linear-gradient(135deg, #d32f2f 0%, #ff6b6b 100%) !important;
     color: white !important;
-    box-shadow: 0 1px 4px rgba(211, 47, 47, 0.3) !important;
+    box-shadow: 0 2px 6px rgba(211, 47, 47, 0.3) !important;
     z-index: 2 !important;
   }
   
@@ -1390,7 +1439,155 @@ body {
   min-height: 400px;
   text-align: left;
   max-width: 600px;
-  padding-left: 40px; /* จัดตำแหน่งให้ตรงกับเส้นสีเหลือง */
+  padding-left: 40px; /* จัดตำแหน่งให้ตรงกับเส้นสีเหลือง/* Industrial Typography - Raw & Professional */
+}
+
+.homepage h1, .homepage h2, .homepage h3 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.homepage h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem) !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  line-height: 1.1 !important;
+}
+
+.homepage h2 {
+  font-size: clamp(2rem, 5vw, 3rem) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  line-height: 1.2 !important;
+  margin-bottom: 1rem !important;
+}
+
+.homepage h3 {
+  font-size: clamp(1.5rem, 4vw, 2rem) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1.3 !important;
+}
+
+/* Industrial body text */
+.homepage p {
+  color: #cbd5e1 !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  font-size: 1rem !important;
+}
+
+/* Industrial links */
+.homepage a {
+  color: var(--industrial-orange) !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  border-bottom: 2px solid transparent !important;
+  transition: all 0.3s ease !important;
+}
+
+.homepage a:hover {
+  color: #fb923c !important;
+  border-bottom-color: var(--industrial-orange) !important;
+}
+
+/* Industrial buttons */
+.homepage .btn {
+  background: linear-gradient(135deg, var(--industrial-orange) 0%, #fb923c 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 12px 24px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.homepage .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.homepage .btn:hover::before {
+  left: 100%;
+}
+
+.homepage .btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4) !important;
+  background: linear-gradient(135deg, #fb923c 0%, var(--industrial-orange) 100%) !important;
+}
+
+.homepage .btn:active {
+  transform: translateY(0) !important;
+}
+
+/* Industrial secondary buttons */
+.homepage .btn-secondary {
+  background: transparent !important;
+  color: var(--industrial-orange) !important;
+  border: 2px solid var(--industrial-orange) !important;
+  box-shadow: none !important;
+}
+
+.homepage .btn-secondary:hover {
+  background: var(--industrial-orange) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3) !important;
+}
+
+/* Industrial text highlights */
+.homepage .text-highlight {
+  color: var(--industrial-orange) !important;
+  font-weight: 700 !important;
+}
+
+/* Industrial section titles */
+.homepage .section-title {
+  text-align: center !important;
+  margin-bottom: 3rem !important;
+}
+
+.homepage .section-title h2 {
+  position: relative !important;
+  display: inline-block !important;
+}
+
+.homepage .section-title h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--industrial-orange), #fb923c, var(--industrial-orange));
+  border-radius: 2px;
+}
+
+/* Industrial labels and badges */
+.homepage .badge, .homepage .label {
+  background: var(--industrial-orange) !important;
+  color: #ffffff !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
 }
 
 .hero-section h1 {
@@ -1506,6 +1703,196 @@ body {
 
 .indicator.active {
   background: var(--primary-color);
+}
+
+/* Industrial Action Buttons - Heavy Duty */
+.homepage .btn-primary {
+  background: linear-gradient(135deg, var(--industrial-orange) 0%, #fb923c 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 14px 28px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.homepage .btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left 0.6s ease;
+}
+
+.homepage .btn-primary:hover::before {
+  left: 100%;
+}
+
+.homepage .btn-primary:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  background: linear-gradient(135deg, #fb923c 0%, var(--industrial-orange) 100%) !important;
+}
+
+.homepage .btn-primary:active {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.4) !important;
+}
+
+/* Industrial secondary buttons */
+.homepage .btn-secondary {
+  background: transparent !important;
+  color: var(--industrial-orange) !important;
+  border: 2px solid var(--industrial-orange) !important;
+  border-radius: 6px !important;
+  padding: 12px 24px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.85rem !important;
+  box-shadow: none !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.homepage .btn-secondary:hover {
+  background: var(--industrial-orange) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Industrial outline buttons */
+.homepage .btn-outline {
+  background: transparent !important;
+  color: #ffffff !important;
+  border: 2px solid #475569 !important;
+  border-radius: 6px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.85rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.homepage .btn-outline:hover {
+  background: #475569 !important;
+  border-color: var(--industrial-orange) !important;
+  color: var(--industrial-orange) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Industrial ghost buttons */
+.homepage .btn-ghost {
+  background: rgba(249, 115, 22, 0.1) !important;
+  color: var(--industrial-orange) !important;
+  border: 1px solid rgba(249, 115, 22, 0.3) !important;
+  border-radius: 6px !important;
+  padding: 10px 20px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.8rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.homepage .btn-ghost:hover {
+  background: var(--industrial-orange) !important;
+  color: #ffffff !important;
+  border-color: var(--industrial-orange) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3) !important;
+}
+
+/* Industrial navigation buttons */
+.homepage .nav-btn {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #475569 !important;
+  border-radius: 6px !important;
+  padding: 10px 16px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  font-size: 0.8rem !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.homepage .nav-btn:hover {
+  background: linear-gradient(135deg, var(--industrial-orange) 0%, #fb923c 100%) !important;
+  border-color: var(--industrial-orange) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4) !important;
+}
+
+/* Industrial call-to-action buttons */
+.homepage .cta-button {
+  background: linear-gradient(135deg, var(--industrial-orange) 0%, #fb923c 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 16px 32px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-size: 1rem !important;
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.homepage .cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.homepage .cta-button:hover::before {
+  left: 100%;
+}
+
+.homepage .cta-button:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 30px rgba(249, 115, 22, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  background: linear-gradient(135deg, #fb923c 0%, var(--industrial-orange) 100%) !important;
+}
+
+/* Industrial small buttons */
+.homepage .btn-small {
+  background: linear-gradient(135deg, var(--industrial-orange) 0%, #fb923c 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 6px 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.7rem !important;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.homepage .btn-small:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4) !important;
 }
 
 /* Buttons */
@@ -1887,6 +2274,258 @@ body {
   border-radius: 12px;
   font-size: 0.7rem;
   font-weight: 700;
+}
+
+/* Industrial Why Us Section - Heavy Duty Features */
+.homepage .why-us-section {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  padding: 80px 0 !important;
+}
+
+.homepage .why-us-section .section-header {
+  text-align: center !important;
+  margin-bottom: 4rem !important;
+}
+
+.homepage .why-us-section .section-header h2 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: clamp(2rem, 5vw, 3rem) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.homepage .why-us-section .section-header p {
+  color: #94a3b8 !important;
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+}
+
+.homepage .why-us-features {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+  gap: 2rem !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+}
+
+.homepage .why-us-feature {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  border: 2px solid #475569 !important;
+  border-radius: 8px !important;
+  padding: 2rem !important;
+  text-align: center !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.homepage .why-us-feature::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--industrial-orange), #fb923c, var(--industrial-orange));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.homepage .why-us-feature:hover::before {
+  opacity: 1;
+}
+
+.homepage .why-us-feature:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  border-color: var(--industrial-orange) !important;
+}
+
+.homepage .why-us-feature i {
+  font-size: 3rem !important;
+  color: var(--industrial-orange) !important;
+  margin-bottom: 1.5rem !important;
+  display: block !important;
+}
+
+.homepage .why-us-feature h3 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.3rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  margin-bottom: 1rem !important;
+}
+
+.homepage .why-us-feature p {
+  color: #cbd5e1 !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  font-size: 1rem !important;
+}
+
+/* Industrial Categories Section - Tool Categories */
+.homepage .categories-section {
+  background: #0f172a !important;
+  padding: 80px 0 !important;
+}
+
+.homepage .categories-section .section-header {
+  text-align: center !important;
+  margin-bottom: 4rem !important;
+}
+
+.homepage .categories-section .section-header h2 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: clamp(2rem, 5vw, 3rem) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.homepage .categories-section .section-header p {
+  color: #94a3b8 !important;
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+}
+
+.homepage .categories-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 24px !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+}
+
+.homepage .category-card {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  border: 2px solid #475569 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  display: block !important;
+  text-decoration: none !important;
+}
+
+.homepage .category-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+  border-color: var(--industrial-orange) !important;
+}
+
+.homepage .category-image {
+  position: relative !important;
+  height: auto !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  overflow: hidden !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+.homepage .category-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.homepage .category-name-overlay {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)) !important;
+  padding: 24px 12px 12px 12px !important;
+  text-align: center !important;
+  transition: background 0.3s ease !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.homepage .category-name-overlay h3 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+}
+
+/* Industrial Partners Section - Brand Logos */
+.homepage .partners-section {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  padding: 60px 0 !important;
+}
+
+.homepage .partners-section .section-header {
+  text-align: center !important;
+  margin-bottom: 3rem !important;
+}
+
+.homepage .partners-section .section-header h2 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: clamp(1.8rem, 4vw, 2.5rem) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.homepage .partners-section .section-header p {
+  color: #94a3b8 !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+}
+
+.homepage .partners-logo-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 3rem !important;
+  max-width: 1000px !important;
+  margin: 0 auto !important;
+}
+
+.homepage .partner-logo {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  border: 1px solid #475569 !important;
+  border-radius: 8px !important;
+  padding: 1.5rem 2rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 120px !important;
+  min-height: 80px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.homepage .partner-logo:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  border-color: var(--industrial-orange) !important;
+}
+
+.homepage .partner-logo img {
+  max-width: 100px !important;
+  max-height: 50px !important;
+  filter: brightness(1.2) contrast(1.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.homepage .partner-logo:hover img {
+  filter: brightness(1.3) contrast(1.2) !important;
 }
 
 /* Reviews Section */
@@ -2896,103 +3535,149 @@ body {
   margin-bottom: 0 !important;
 }
 
-.reviews-grid {
-  display: grid !important;
-  gap: 24px !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  margin-bottom: 40px !important;
-}
-
-.reviews-grid .review-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 8px 30px rgba(253, 216, 53, 0.12) !important;
+/* Industrial Review Cards - Raw & Tough */
+.homepage .reviews-grid .review-card {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  border: 2px solid #475569 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
   overflow: hidden !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   position: relative !important;
-  border: 1px solid #e2e8f0 !important;
+  text-align: center !important;
 }
 
-.reviews-grid .review-card::before {
+.homepage .reviews-grid .review-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary-color), #ffd54f, var(--primary-color));
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
+  height: 2px;
+  background: linear-gradient(90deg, var(--industrial-orange), #fb923c, var(--industrial-orange));
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.reviews-grid .review-card:hover::before {
-  transform: scaleX(1);
+.homepage .reviews-grid .review-card:hover::before {
+  opacity: 1;
 }
 
-.reviews-grid .review-card:hover {
-  transform: translateY(-8px) !important;
-  box-shadow: 0 12px 40px rgba(253, 216, 53, 0.18) !important;
-  border-color: var(--primary-color) !important;
+.homepage .reviews-grid .review-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  border-color: var(--industrial-orange) !important;
 }
 
-.reviews-grid .review-image-wrapper {
-  border-radius: 20px 20px 0 0 !important;
+/* Industrial review image */
+.homepage .reviews-grid .review-image-wrapper {
+  border-radius: 6px 6px 0 0 !important;
   overflow: hidden !important;
   position: relative !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  border-bottom: 1px solid #475569 !important;
 }
 
-.reviews-grid .review-image-wrapper::after {
+.homepage .reviews-grid .review-image-wrapper::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(0deg, rgba(0,0,0,0.1) 0%, transparent 50%);
+  background: linear-gradient(0deg, rgba(0,0,0,0.2) 0%, transparent 50%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.reviews-grid .review-card:hover .review-image-wrapper::after {
+.homepage .reviews-grid .review-card:hover .review-image-wrapper::after {
   opacity: 1;
 }
 
-.reviews-grid .review-card img {
+.homepage .reviews-grid .review-card img {
   width: 100% !important;
   height: auto !important;
   aspect-ratio: 4 / 5 !important;
   object-fit: cover !important;
   display: block !important;
-  transition: transform 0.4s ease !important;
+  transition: transform 0.3s ease !important;
+  filter: brightness(1.05) contrast(1.05);
 }
 
-.reviews-grid .review-card:hover img {
-  transform: scale(1.05) !important;
+.homepage .reviews-grid .review-card:hover img {
+  transform: scale(1.03) !important;
 }
 
-.reviews-grid .review-card p {
+/* Industrial review content */
+.homepage .reviews-grid .review-card p {
   padding: 20px !important;
   font-size: 0.95rem !important;
   font-weight: 500 !important;
-  color: var(--dark-color) !important;
+  color: #ffffff !important;
   line-height: 1.6 !important;
   position: relative !important;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  border-top: 1px solid #475569 !important;
+  margin: 0 !important;
 }
 
-.reviews-grid .review-card p::before {
+.homepage .reviews-grid .review-card p::before {
   content: '"';
   position: absolute;
   top: 10px;
   left: 10px;
   font-size: 2rem;
-  color: var(--primary-color);
-  opacity: 0.2;
+  color: var(--industrial-orange);
+  opacity: 0.3;
   font-family: Georgia, serif;
 }
 
-.reviews-footer {
-  text-align: center !important;
-  padding: 20px !important;
+/* Industrial review rating */
+.homepage .reviews-grid .review-rating {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  color: var(--industrial-orange) !important;
+  padding: 12px 20px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-top: 1px solid #475569 !important;
+}
+
+.homepage .reviews-grid .review-rating .verified {
+  color: #10b981 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em;
+}
+
+/* Industrial review actions */
+.homepage .reviews-grid .review-actions {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  border-top: 1px solid #475569 !important;
+  padding: 12px 20px !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 16px !important;
+}
+
+.homepage .reviews-grid .review-actions button {
+  background: rgba(249, 115, 22, 0.1) !important;
+  color: var(--industrial-orange) !important;
+  border: 1px solid var(--industrial-orange) !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease !important;
+}
+
+.homepage .reviews-grid .review-actions button:hover {
+  background: var(--industrial-orange) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
 }
 
 .reviews-footer .btn {
@@ -3564,6 +4249,80 @@ body {
   color: var(--industrial-orange);
 }
 
+/* Industrial Homepage Theme - Dark & Raw */
+.homepage {
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+/* Section backgrounds - Industrial dark */
+.homepage .promotion-products-section {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  padding: 60px 0;
+}
+
+.homepage .reviews-section {
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  padding: 60px 0;
+}
+
+.homepage .featured-products-section {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  padding: 60px 0;
+}
+
+.homepage .categories-section {
+  background: #0f172a;
+  padding: 60px 0;
+}
+
+.homepage .why-us-section {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  padding: 60px 0;
+}
+
+.homepage .partners-section {
+  background: #0f172a;
+  padding: 40px 0;
+}
+
+/* Section headers - Industrial white */
+.homepage .section-header h2 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: clamp(2rem, 5vw, 2.8rem) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px !important;
+}
+
+.homepage .section-header p {
+  color: #94a3b8 !important;
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+}
+
+/* Section links - Industrial orange accent */
+.homepage .section-header a {
+  color: var(--industrial-orange) !important;
+  font-weight: 600 !important;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.homepage .section-header a:hover {
+  border-bottom-color: var(--industrial-orange);
+  color: #fb923c !important;
+}
+
+/* Container adjustments for dark theme */
+.homepage .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 /* Industrial Footer */
 .homepage .site-footer {
   background: var(--industrial-dark-gray);
@@ -3746,17 +4505,24 @@ body {
 .homepage .gradient-steel {
   background: linear-gradient(135deg, var(--industrial-steel) 0%, var(--industrial-gray) 100%);
 }
+
 @media (min-width: 992px) {
   .reviews-grid {
     grid-template-columns: repeat(4, 1fr) !important;
   }
+
+  .homepage .category-name-overlay h3 {
+    font-size: 0.8rem !important;  /* ขนาดบนคอม */
+  }
 }
+
 .promotion-slider-grid .product-card {
-  background: linear-gradient(135deg, #fff 0%, #fff9e6 100%) !important;
-  border: 2px solid var(--primary-color) !important;
-  box-shadow: 0 8px 25px rgba(253, 216, 53, 0.3), 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  border: 2px solid #475569 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
   transform: translateY(0) !important;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   position: relative !important;
   overflow: hidden !important;
 }
@@ -3765,72 +4531,56 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
-  animation: promotionShine 3s infinite;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--industrial-orange), #fb923c, var(--industrial-orange));
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-@keyframes promotionShine {
-  0% { left: -100%; }
-  50% { left: 100%; }
-  100% { left: 100%; }
+.promotion-slider-grid .product-card:hover::before {
+  opacity: 1;
 }
 
 .promotion-slider-grid .product-card:hover {
-  transform: translateY(-8px) scale(1.02) !important;
-  box-shadow: 0 12px 35px rgba(253, 216, 53, 0.4), 0 8px 25px rgba(0, 0, 0, 0.15) !important;
-  border-color: var(--accent-color) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  border-color: var(--industrial-orange) !important;
 }
 
 .promotion-slider-grid .product-image {
   position: relative !important;
-  background: linear-gradient(135deg, #fff 0%, #fffef5 100%) !important;
-  border-radius: 8px !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  border-radius: 6px 6px 0 0 !important;
   overflow: hidden !important;
+  border-bottom: 1px solid #475569 !important;
 }
 
 .promotion-slider-grid .product-image img {
-  transition: transform 0.4s ease !important;
+  transition: transform 0.3s ease !important;
+  filter: brightness(1.1) contrast(1.05);
 }
 
 .promotion-slider-grid .product-card:hover .product-image img {
-  transform: scale(1.1) !important;
-}
-
-.promotion-slider-grid .product-badge.promotion {
-  background: linear-gradient(135deg, var(--danger-color) 0%, #ff6b6b 100%) !important;
-  color: white !important;
-  padding: 6px 12px !important;
-  border-radius: 20px !important;
-  font-weight: 700 !important;
-  font-size: 0.75rem !important;
-  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.4) !important;
-  animation: pulse 2s infinite !important;
-  position: absolute !important;
-  top: 8px !important;
-  left: 8px !important;
-  z-index: 2 !important;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  transform: scale(1.03) !important;
 }
 
 .promotion-slider-grid .product-info {
   padding: 16px !important;
   text-align: center !important;
-  background: linear-gradient(135deg, #fff 0%, #fff9e6 100%) !important;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  border-top: 1px solid #475569 !important;
 }
 
 .promotion-slider-grid .product-info h3 {
-  color: var(--dark-color) !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
   font-size: 1rem !important;
-  margin-bottom: 12px !important;
   line-height: 1.4 !important;
+  margin-bottom: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .promotion-slider-grid .product-price {
@@ -3843,46 +4593,24 @@ body {
 }
 
 .promotion-slider-grid .current-price {
-  font-size: 1.3rem !important;
+  font-size: 1.2rem !important;
   font-weight: 800 !important;
-  color: var(--danger-color) !important;
-  text-shadow: 0 1px 2px rgba(211, 47, 47, 0.2) !important;
+  color: var(--industrial-orange) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
 .promotion-slider-grid .original-price {
-  font-size: 0.85rem !important;
-  color: #999 !important;
+  font-size: 0.8rem !important;
+  color: #94a3b8 !important;
   text-decoration: line-through !important;
-  opacity: 0.8 !important;
 }
 
-/* Promotion Section Header Special Styling */
-.promotion-products-section .section-header {
-  background: linear-gradient(135deg, var(--primary-color) 0%, #ffd54f 100%) !important;
-  padding: 24px 30px !important;
-  border-radius: 16px !important;
-  margin-bottom: 40px !important;
-  box-shadow: 0 8px 25px rgba(253, 216, 53, 0.3) !important;
-}
-
-.promotion-products-section .section-title h2 {
+.promotion-slider-grid .product-badge.promotion {
+  background: linear-gradient(135deg, var(--industrial-orange) 0%, #fb923c 100%) !important;
   color: #ffffff !important;
-  font-weight: 800 !important;
-  font-size: 2rem !important;
-  margin-bottom: 8px !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
-}
-
-.promotion-products-section .section-title p {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  font-size: 1.1rem !important;
-  opacity: 0.9 !important;
-}
-
-/* Override general section-title styles for promotion */
-.homepage .promotion-products-section .section-title h2,
-.promotion-products-section .section-title h2 {
+  padding: 4px 10px !important;
+  border-radius: 4px !important;
+  font-size: 0.65rem !important;
   color: #ffffff !important;
 }
 

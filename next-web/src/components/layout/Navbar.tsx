@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -12,6 +13,20 @@ export default function Navbar() {
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
   };
+
+  // Handle scroll effect for sticky header
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -44,8 +59,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Main Header */}
-      <div className="main-header">
+      {/* Main Header - Sticky */}
+      <div className={`main-header ${isScrolled ? 'sticky' : ''}`}>
         <div className="container">
           <a href="/" className="logo">
             <img
