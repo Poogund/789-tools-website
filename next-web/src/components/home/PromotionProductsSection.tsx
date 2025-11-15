@@ -75,31 +75,7 @@ const AUTOPLAY_DELAY = 5000;
 export default function PromotionProductsSection({ products }: PromotionProductsSectionProps) {
   const formatPrice = (price: number) => new Intl.NumberFormat('th-TH').format(price);
 
-  const normalizedProducts = useMemo<PromotionCard[]>(() => {
-    if (!products || products.length === 0) {
-      return [];
-    }
-
-    return products
-      .filter((product) => product)
-      .map((product) => ({
-        id: product.id,
-        name: product.name,
-        link: product.slug ? `/products/${product.slug}` : '#',
-        image: product.image_url || product.image_path || '/placeholder-product.jpg',
-        price: product.price,
-        originalPrice: product.original_price,
-      }));
-  }, [products]);
-
-  const cards = useMemo<PromotionCard[]>(() => {
-    if (normalizedProducts.length >= 6) {
-      return normalizedProducts.slice(0, 6);
-    }
-
-    const combined = [...normalizedProducts, ...fallbackPromotions];
-    return combined.slice(0, 6);
-  }, [normalizedProducts]);
+  const cards: PromotionCard[] = fallbackPromotions;
 
   const [currentIndex, setCurrentIndex] = useState(0);
 

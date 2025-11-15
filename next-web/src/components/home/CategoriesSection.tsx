@@ -58,7 +58,7 @@ export default function CategoriesSection({ categories }: CategoriesSectionProps
     }
   ];
 
-  const displayCategories = categories.length > 0 ? categories : fallbackCategories;
+  const displayCategories = fallbackCategories;
 
   return (
     <section className="categories-section" style={{ backgroundColor: '#e0e0e0', padding: '60px 0' }}>
@@ -131,7 +131,7 @@ export default function CategoriesSection({ categories }: CategoriesSectionProps
                 <h3 style={{
                   
                   fontSize: '1.2rem',
-                  Weight: '600',
+                  fontWeight: '600',
                   color: '#ffffff',
                   padding: '0',
                   margin: '0'

@@ -1,5 +1,5 @@
 import { createServerSupabaseClient } from './supabase/server';
-import { Product, ProductImage, Category, HeroSlide, FAQItem } from '@/types';
+import { Product, ProductImage, Category, HeroSlide, FAQItem, BlogPost } from '@/types';
 
 // Products
 export async function getProducts(): Promise<Product[]> {
@@ -428,4 +428,65 @@ export async function getFaqItems(): Promise<FAQItem[]> {
     throw error;
   }
   return data || [];
+}
+
+// Blog Posts
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false });
+
+  if (error) {
+    if ((error as any).code === 'PGRST205') {
+      // Fallback blog posts for local development
+      return [
+        {
+          id: '1',
+          title: 'วิธีเลือกเครื่องตัดคอนกรีตที่เหมาะสม',
+          slug: 'how-to-choose-concrete-cutter',
+          content: '<p>เครื่องตัดคอนกรีตเป็นอุปกรณ์สำคัญในงานก่อสร้าง...</p>',
+          excerpt: 'คู่มือการเลือกเครื่องตัดคอนกรีตที่เหมาะกับงานของคุณ',
+          thumbnail_url: '/blog/concrete-cutter.jpg',
+          status: 'published' as const,
+          published_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: '2',
+          title: 'การดูแลรักษาเครื่องตบดินให้ใช้งานได้นาน',
+          slug: 'maintain-compactor',
+          content: '<p>การดูแลรักษาเครื่องตบดินอย่างถูกต้องจะช่วยยืดอายุการใช้งาน...</p>',
+          excerpt: 'เคล็ดลับการดูแลรักษาเครื่องตบดินให้มีประสิทธิภาพสูงสุด',
+          thumbnail_url: '/blog/compactor.jpg',
+          status: 'published' as const,
+          published_at: new Date(Date.now() - 86400000).toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ];
+    }
+    throw error;
+  }
+  return data || [];
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .single();
+
+  if (error) {
+    if ((error as any).code === 'PGRST116') return null; // Not found
+    if ((error as any).code === 'PGRST205') return null; // Table missing in local dev
+    throw error;
+  }
+  return data;
 }

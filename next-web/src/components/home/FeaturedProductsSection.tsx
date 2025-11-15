@@ -57,7 +57,7 @@ export default function FeaturedProductsSection({ products }: FeaturedProductsSe
     }
   ];
 
-  const displayProducts = products.length > 0 ? products.slice(0, 6) : fallbackProducts;
+  const displayProducts = fallbackProducts;
 
   return (
     <section className="featured-products-section">
