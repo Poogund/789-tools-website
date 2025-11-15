@@ -129,8 +129,9 @@ export default function CategoriesSection({ categories }: CategoriesSectionProps
                 transition: 'background 0.3s ease'
               }}>
                 <h3 style={{
-                  fontSize: '1.1rem',
-                  fontWeight: '600',
+                  
+                  fontSize: '1.2rem',
+                  Weight: '600',
                   color: '#ffffff',
                   padding: '0',
                   margin: '0'
