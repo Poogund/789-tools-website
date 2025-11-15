@@ -6,59 +6,8 @@ interface CategoriesSectionProps {
 }
 
 export default function CategoriesSection({ categories }: CategoriesSectionProps) {
-  // Legacy fallback categories if no data
-  const fallbackCategories = [
-    {
-      id: "cat-001",
-      name: "เครื่องจักรงานคอนกรีต",
-      image_url: "/category-concrete-cutter.jpg",
-      description: "รถตัดคอนกรีต เครื่องขัดคอนกรีต"
-    },
-    {
-      id: "cat-002",
-      name: "เครื่องขัดมันพื้นปูน",
-      image_url: "/category-power-trowel.jpg",
-      description: "เครื่องขัดมัน ใบขัดมัน ถาดขัดมัน"
-    },
-    {
-      id: "cat-003",
-      name: "ใบและถาดขัดมัน",
-      image_url: "/category-blades-pans.jpg",
-      description: "ใบเจียร ใบตัด ถาดขัดมัน"
-    },
-    {
-      id: "cat-004",
-      name: "เครื่องปาดปูน",
-      image_url: "/category-screed.jpg",
-      description: "เครื่องปาดปูน อุปกรณ์ปาดปูน"
-    },
-    {
-      id: "cat-005",
-      name: "เครื่องตบดิน",
-      image_url: "/category-compactor.jpg",
-      description: "เครื่องตบดิน แผ่นตบดิน"
-    },
-    {
-      id: "cat-006",
-      name: "เครื่องผสมและผลิต",
-      image_url: "/category-concrete-mixer.jpg",
-      description: "โม่ผสมปูน เครื่องผสมคอนกรีต"
-    },
-    {
-      id: "cat-007",
-      name: "เครื่องปั่นไฟ",
-      image_url: "/category-power-generator.jpg",
-      description: "เครื่องปั่นไฟ จ่ายไฟ สำรองไฟ"
-    },
-    {
-      id: "cat-008",
-      name: "เครื่องดูดฝุ่นอุตสาหกรรม",
-      image_url: "/category-industrial-vacuum.jpg",
-      description: "เครื่องดูดฝุ่น อุปกรณ์ทำความสะอาด"
-    }
-  ];
-
-  const displayCategories = fallbackCategories;
+  // Use categories from Supabase, fallback to empty array if none provided
+  const displayCategories = categories && categories.length > 0 ? categories : [];
 
   return (
     <section className="categories-section" style={{ backgroundColor: '#e0e0e0', padding: '60px 0' }}>
@@ -78,7 +27,7 @@ export default function CategoriesSection({ categories }: CategoriesSectionProps
           gap: '24px'
         }}>
           {displayCategories.map((category) => (
-            <Link key={category.id} href={`/products/category/${category.id}`} className="category-card" style={{
+            <Link key={category.id} href={`/products/category/${category.slug}`} className="category-card" style={{
               display: 'block',
               position: 'relative',
               borderRadius: '12px',

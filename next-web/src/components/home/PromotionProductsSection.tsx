@@ -75,7 +75,15 @@ const AUTOPLAY_DELAY = 5000;
 export default function PromotionProductsSection({ products }: PromotionProductsSectionProps) {
   const formatPrice = (price: number) => new Intl.NumberFormat('th-TH').format(price);
 
-  const cards: PromotionCard[] = fallbackPromotions;
+  // Use products from Supabase, transform to PromotionCard format
+  const cards: PromotionCard[] = products && products.length > 0 ? products.map(product => ({
+    id: product.id,
+    name: product.name,
+    link: `/products/${product.slug}`,
+    image: product.image_url || '/placeholder-product.png',
+    price: product.sale_price || product.price,
+    originalPrice: product.sale_price ? product.price : undefined
+  })) : [];
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
