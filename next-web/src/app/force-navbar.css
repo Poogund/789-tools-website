@@ -42,7 +42,7 @@ body .sticky-header-wrapper,
 
 /* Force nav-links to display */
 .nav-links {
-  display: flex !important;
+  
   visibility: visible !important;
   opacity: 1 !important;
 }

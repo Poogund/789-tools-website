@@ -334,7 +334,7 @@ body {
 }
 
 .nav-links {
-  display: flex !important;
+  display: none; /* ซ่อนเมนู Navigation บนมือถือ - ใช้แค่ Hamburger menu */
   align-items: center;
   gap: 25px;
   font-weight: 700;
