@@ -7,17 +7,26 @@ function createPublicSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   
+  console.log('[createPublicSupabaseClient] Environment check:', {
+    hasUrl: !!supabaseUrl,
+    hasAnonKey: !!supabaseAnonKey,
+    urlPreview: supabaseUrl ? `${supabaseUrl.substring(0, 30)}...` : 'missing'
+  });
+  
   if (!supabaseUrl || !supabaseAnonKey) {
     // Fallback to service role if anon key not available
-    console.warn('Using service role key as fallback - anon key not found');
+    console.warn('[createPublicSupabaseClient] Using service role key as fallback - anon key not found');
     return createServerSupabaseClient();
   }
   
-  return createClient(supabaseUrl, supabaseAnonKey, {
+  const client = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       persistSession: false,
     },
   });
+  
+  console.log('[createPublicSupabaseClient] Created public client successfully');
+  return client;
 }
 
 // Products
@@ -45,26 +54,38 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   try {
+    console.log('[getProductBySlug] Starting search for slug:', slug);
+    
     const supabase = createPublicSupabaseClient();
     
     if (!slug) {
+      console.log('[getProductBySlug] No slug provided');
       return null;
     }
     
-    // Try exact match first
+    // Try exact match first (without is_active filter since RLS policy allows all)
+    console.log('[getProductBySlug] Attempting exact match...');
     let { data, error } = await supabase
       .from('products')
       .select('*')
       .eq('slug', slug)
-      .eq('is_active', true)
       .single();
+
+    console.log('[getProductBySlug] Query result:', { 
+      hasData: !!data, 
+      errorCode: (error as any)?.code, 
+      errorMessage: (error as any)?.message 
+    });
 
     // If not found, try case-insensitive search or by ID
     if (error && (error as any).code === 'PGRST116') {
+      console.log('[getProductBySlug] Not found, trying case-insensitive search...');
       const { data: allProducts, error: listError } = await supabase
         .from('products')
-        .select('*')
-        .eq('is_active', true);
+        .select('*');
+      
+      console.log('[getProductBySlug] All products count:', allProducts?.length);
+      console.log('[getProductBySlug] List error:', listError);
       
       if (!listError && allProducts) {
         // Try case-insensitive slug match
@@ -78,21 +99,34 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
         }
         
         if (found) {
+          console.log('[getProductBySlug] Found via fallback:', found.name);
           return found;
         }
       }
     }
 
     if (error) {
-      if ((error as any).code === 'PGRST116') return null; // Not found
-      if ((error as any).code === 'PGRST205') return null; // Table missing in local dev
-      console.error('Error fetching product by slug:', error);
+      if ((error as any).code === 'PGRST116') {
+        console.log('[getProductBySlug] Product not found (PGRST116)');
+        return null; // Not found
+      }
+      if ((error as any).code === 'PGRST205') {
+        console.log('[getProductBySlug] Table missing (PGRST205)');
+        return null; // Table missing in local dev
+      }
+      console.error('[getProductBySlug] Error fetching product by slug:', error);
       return null;
+    }
+    
+    if (data) {
+      console.log('[getProductBySlug] Successfully found product:', data.name);
+    } else {
+      console.log('[getProductBySlug] No data returned');
     }
     
     return data || null;
   } catch (error) {
-    console.error('Error in getProductBySlug:', error);
+    console.error('[getProductBySlug] Exception caught:', error);
     return null;
   }
 }

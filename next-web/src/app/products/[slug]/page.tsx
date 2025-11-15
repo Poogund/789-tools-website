@@ -62,19 +62,26 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
+  console.log('[ProductPage] Received params:', params);
+  
   // Ensure params.slug exists
   if (!params || !params.slug) {
+    console.error('[ProductPage] No params or slug provided');
     notFound();
   }
+
+  console.log('[ProductPage] Fetching product for slug:', params.slug);
 
   // Fetch product data
   const product = await getProductBySlug(params.slug);
   
   // Handle not found - log for debugging
   if (!product) {
-    console.error(`Product not found for slug: ${params.slug}`);
+    console.error(`[ProductPage] Product not found for slug: ${params.slug}`);
     notFound();
   }
+
+  console.log('[ProductPage] Product found:', product.name);
 
   // Fetch product images
   const productImages: ProductImage[] = await getProductImages(product.id);
