@@ -13,10 +13,18 @@ function createPublicSupabaseClient() {
     urlPreview: supabaseUrl ? `${supabaseUrl.substring(0, 30)}...` : 'missing'
   });
   
-  if (!supabaseUrl || !supabaseAnonKey) {
-    // Fallback to service role if anon key not available
-    console.warn('[createPublicSupabaseClient] Using service role key as fallback - anon key not found');
-    return createServerSupabaseClient();
+  if (!supabaseUrl) {
+    throw new Error('NEXT_PUBLIC_SUPABASE_URL is required');
+  }
+  
+  if (!supabaseAnonKey) {
+    // Try to use service role as fallback, but log warning
+    console.warn('[createPublicSupabaseClient] Anon key not found, trying service role as fallback');
+    try {
+      return createServerSupabaseClient();
+    } catch (error) {
+      throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY is required. Please add it to .env.local');
+    }
   }
   
   const client = createClient(supabaseUrl, supabaseAnonKey, {
