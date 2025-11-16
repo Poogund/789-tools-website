@@ -13,52 +13,43 @@ import type { Order } from '@/types';
  */
 
 /**
- * Create Supabase client with user session (reads from cookies)
- * Used for server components that need authenticated user data
- */
-function createServerSupabaseClientWithSession() {
-  const cookieStore = cookies();
-  
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options);
-            });
-          } catch (error) {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
-        },
-      },
-    }
-  );
-}
-
-/**
  * Get orders for the currently authenticated user
  * Returns empty array if user is not authenticated or has no customer record
  * 
  * Logic:
- * 1. Get authenticated user from Supabase Auth
- * 2. Find customer_id from customers table using auth_id
- * 3. Query orders table by customer_id
- * 4. Order by created_at DESC (newest first)
+ * 1. Create Supabase client with session (reads from cookies)
+ * 2. Get authenticated user from Supabase Auth
+ * 3. Find customer_id from customers table using auth_id
+ * 4. Query orders table by customer_id
+ * 5. Order by created_at DESC (newest first)
  * 
  * @returns Array of orders for current user
  */
 export async function getOrdersForCurrentUser(): Promise<Order[]> {
   try {
-    // Create client with session (reads cookies)
-    const supabase = createServerSupabaseClientWithSession();
+    // Create Supabase client with user session (reads from cookies)
+    const cookieStore = cookies();
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll();
+          },
+          setAll(cookiesToSet) {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) => {
+                cookieStore.set(name, value, options);
+              });
+            } catch (error) {
+              // The `setAll` method was called from a Server Component.
+              // This can be ignored if you have middleware refreshing user sessions.
+            }
+          },
+        },
+      }
+    );
     
     // Step 1: Get authenticated user
     const { data: { user }, error: userError } = await supabase.auth.getUser();

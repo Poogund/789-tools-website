@@ -19,35 +19,123 @@ export async function syncUserToCustomerTable(user: User) {
     const email = user.email;
     const name = user.email || user.user_metadata?.full_name || user.user_metadata?.name || 'User';
     
-    // Use upsert to handle both insert and update
-    // If email exists, update auth_id and name; otherwise insert
-    // Note: Using email as conflict key since it has UNIQUE constraint
-    const { data, error } = await supabase
+    // Check if customer already exists by auth_id
+    const { data: existingCustomer } = await supabase
       .from('customers')
-      .upsert(
-        {
-          auth_id: authId,
+      .select('id, email, auth_id')
+      .eq('auth_id', authId)
+      .maybeSingle();
+
+    // If customer exists with this auth_id, update it
+    if (existingCustomer) {
+      const { data, error } = await supabase
+        .from('customers')
+        .update({
           email: email || '',
           name: name,
           updated_at: new Date().toISOString(),
-        },
-        {
-          onConflict: 'email',
-          // Update auth_id and name if email already exists
-          ignoreDuplicates: false,
+        })
+        .eq('auth_id', authId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('[syncUserToCustomerTable] Update error:', error);
+        throw error;
+      }
+
+      return data?.id || null;
+    }
+
+    // If customer exists with this email but different auth_id, update it
+    if (email) {
+      const { data: existingByEmail } = await supabase
+        .from('customers')
+        .select('id, email, auth_id')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (existingByEmail) {
+        const { data, error } = await supabase
+          .from('customers')
+          .update({
+            auth_id: authId,
+            name: name,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('email', email)
+          .select()
+          .single();
+
+        if (error) {
+          console.error('[syncUserToCustomerTable] Update by email error:', error);
+          throw error;
         }
-      )
+
+        return data?.id || null;
+      }
+    }
+
+    // Insert new customer
+    const { data, error } = await supabase
+      .from('customers')
+      .insert({
+        auth_id: authId,
+        email: email || '',
+        name: name,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
       .select()
       .single();
 
     if (error) {
-      console.error('[syncUserToCustomerTable] Error:', error);
+      console.error('[syncUserToCustomerTable] Insert error:', error);
+      
+      // If it's a unique constraint error, try to update instead
+      if (error.code === '23505' || error.message?.includes('unique') || error.message?.includes('duplicate')) {
+        // Try to get existing customer and update
+        if (email) {
+          const { data: existing } = await supabase
+            .from('customers')
+            .select('id')
+            .eq('email', email)
+            .maybeSingle();
+          
+          if (existing) {
+            const { data: updated, error: updateError } = await supabase
+              .from('customers')
+              .update({
+                auth_id: authId,
+                name: name,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('email', email)
+              .select()
+              .single();
+            
+            if (updateError) {
+              throw updateError;
+            }
+            
+            return updated?.id || null;
+          }
+        }
+      }
+      
       throw error;
     }
 
     return data?.id || null;
-  } catch (error) {
+  } catch (error: any) {
     console.error('[syncUserToCustomerTable] Failed to sync user:', error);
+    
+    // Don't throw permission errors - let login continue
+    if (error?.code === '42501' || error?.message?.includes('permission') || error?.message?.includes('policy')) {
+      console.warn('[syncUserToCustomerTable] Permission denied - this may be due to RLS policies');
+      return null;
+    }
+    
     throw error;
   }
 }

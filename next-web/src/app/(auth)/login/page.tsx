@@ -47,20 +47,58 @@ export default function LoginPage() {
       });
 
       if (authError) {
-        throw authError;
+        // Handle specific Supabase auth errors
+        let errorMessage = 'เกิดข้อผิดพลาดในการล็อกอิน';
+        
+        if (authError.message) {
+          // Check for common error messages
+          if (authError.message.includes('Invalid login credentials') || authError.message.includes('email not confirmed')) {
+            errorMessage = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง หรืออีเมลของคุณยังไม่ได้ยืนยัน กรุณาตรวจสอบอีเมลและคลิกลิงก์ยืนยัน';
+          } else if (authError.message.includes('Email not confirmed')) {
+            errorMessage = 'กรุณายืนยันอีเมลของคุณก่อนเข้าสู่ระบบ ตรวจสอบอีเมลที่คุณใช้สมัครสมาชิก';
+          } else if (authError.message.includes('Too many requests')) {
+            errorMessage = 'มีการพยายามเข้าสู่ระบบบ่อยเกินไป กรุณารอสักครู่แล้วลองอีกครั้ง';
+          } else {
+            errorMessage = authError.message;
+          }
+        }
+        
+        throw new Error(errorMessage);
       }
 
       if (authData.user) {
-        // Sync user to customers table
-        await syncUserToCustomerTable(authData.user);
+        // Sync user to customers table (async - don't block login if it fails)
+        syncUserToCustomerTable(authData.user).catch((syncError: any) => {
+          console.error('Sync error:', syncError);
+          // Log error but don't block login
+          if (syncError?.code === '42501' || syncError?.message?.includes('permission')) {
+            console.warn('User sync failed due to permissions - this is OK for now');
+          } else {
+            console.warn('User sync failed:', syncError?.message || syncError);
+          }
+        });
 
-        // Redirect to account page or return URL
+        // Redirect immediately - don't wait for sync
         router.push(redirectTo);
         router.refresh();
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Login error:', err);
-      setError(err instanceof Error ? err.message : 'เกิดข้อผิดพลาดในการล็อกอิน');
+      
+      // Better error message handling
+      let errorMessage = 'เกิดข้อผิดพลาดในการล็อกอิน';
+      
+      if (err?.message) {
+        errorMessage = err.message;
+      } else if (typeof err === 'string') {
+        errorMessage = err;
+      } else if (err?.error_description) {
+        errorMessage = err.error_description;
+      } else if (err?.code === '42501') {
+        errorMessage = 'คุณไม่มีสิทธิ์เข้าถึงระบบ กรุณาติดต่อผู้ดูแลระบบ';
+      }
+      
+      setError(errorMessage);
       setIsSubmitting(false);
     }
   };
