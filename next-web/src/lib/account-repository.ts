@@ -1,6 +1,5 @@
 import { createServerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { createServerSupabaseClient } from './supabase/server';
 import type { Order } from '@/types';
 
 /**
@@ -74,9 +73,8 @@ export async function getOrdersForCurrentUser(): Promise<Order[]> {
     }
     
     // Step 3: Query orders by customer_id, ordered by created_at DESC
-    // Use server client (with service role) for more reliable query
-    const supabaseServer = createServerSupabaseClient();
-    const { data: orders, error: ordersError } = await supabaseServer
+    // Use the same session-based client to ensure RLS policies work correctly
+    const { data: orders, error: ordersError } = await supabase
       .from('orders')
       .select('*')
       .eq('customer_id', customer.id)

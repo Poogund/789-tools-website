@@ -4617,7 +4617,7 @@ body.menu-open .hero-slider,
 /* Error Alert */
 .login-error-alert {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 16px;
   background: #fee2e2;
@@ -4631,12 +4631,42 @@ body.menu-open .hero-slider,
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.login-error-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
 }
 
 .login-error-text {
   font-size: 0.875rem;
   font-weight: 500;
   flex: 1;
+}
+
+.login-error-help {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #991b1b;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.login-error-help:hover {
+  opacity: 1;
+}
+
+.login-error-help svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* Form */

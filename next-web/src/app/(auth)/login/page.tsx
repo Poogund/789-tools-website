@@ -50,15 +50,25 @@ export default function LoginPage() {
         // Handle specific Supabase auth errors
         let errorMessage = 'เกิดข้อผิดพลาดในการล็อกอิน';
         
+        // Log full error for debugging
+        console.error('Supabase Auth Error:', {
+          message: authError.message,
+          status: authError.status,
+          code: authError.code,
+          name: authError.name,
+        });
+        
         if (authError.message) {
           // Check for common error messages
-          if (authError.message.includes('Invalid login credentials') || authError.message.includes('email not confirmed')) {
-            errorMessage = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง หรืออีเมลของคุณยังไม่ได้ยืนยัน กรุณาตรวจสอบอีเมลและคลิกลิงก์ยืนยัน';
-          } else if (authError.message.includes('Email not confirmed')) {
-            errorMessage = 'กรุณายืนยันอีเมลของคุณก่อนเข้าสู่ระบบ ตรวจสอบอีเมลที่คุณใช้สมัครสมาชิก';
+          if (authError.message.includes('Invalid login credentials')) {
+            errorMessage = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบและลองอีกครั้ง';
           } else if (authError.message.includes('Too many requests')) {
             errorMessage = 'มีการพยายามเข้าสู่ระบบบ่อยเกินไป กรุณารอสักครู่แล้วลองอีกครั้ง';
+          } else if (authError.message.includes('Email not confirmed') || authError.message.includes('email not confirmed')) {
+            // Only show email confirmation error if Supabase requires it
+            errorMessage = 'กรุณายืนยันอีเมลของคุณก่อนเข้าสู่ระบบ ตรวจสอบอีเมลที่คุณใช้สมัครสมาชิก';
           } else {
+            // Show the actual error message from Supabase
             errorMessage = authError.message;
           }
         }
@@ -167,7 +177,25 @@ export default function LoginPage() {
               <svg className="login-error-icon" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
-              <span className="login-error-text">{error}</span>
+              <div className="login-error-content">
+                <span className="login-error-text">{error}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    console.log('Current error state:', error);
+                    if (typeof window !== 'undefined') {
+                      alert('กรุณาเปิด Developer Console (F12) เพื่อดู error logs เพิ่มเติม');
+                    }
+                  }}
+                  className="login-error-help"
+                  title="ดู error logs เพิ่มเติม"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4M12 8h.01"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           )}
 
