@@ -1,6 +1,6 @@
 import { repairServiceConfig } from '@/config/services';
 import { siteConfig } from '@/config/site';
-import { getCategories } from '@/lib/catalog-repository';
+import { getCategories, getProducts } from '@/lib/catalog-repository';
 import Link from 'next/link';
 import SafeImage from '@/components/common/SafeImage';
 
@@ -8,139 +8,258 @@ export default async function RepairServicePage() {
   const { hero, categories, repairProcess, features, cta } = repairServiceConfig;
   
   const dbCategories = await getCategories();
+  const allProducts = await getProducts();
   
+  // Build category images map - first from category image_url, then from products
   const categoryImages: Record<string, string> = {};
+  
+  // First, add category images
   dbCategories.forEach(cat => {
     if (cat.image_url) {
       categoryImages[cat.name] = cat.image_url;
     }
   });
+  
+  // Then, for categories without images, find first product image from that category
+  dbCategories.forEach(cat => {
+    if (!categoryImages[cat.name] && cat.id) {
+      const categoryProduct = allProducts.find(p => 
+        p.category_id === cat.id && 
+        p.image_url && 
+        p.is_active
+      );
+      if (categoryProduct?.image_url) {
+        categoryImages[cat.name] = categoryProduct.image_url;
+      }
+    }
+  });
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
+    <main className="repair-service-page">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-color/10 via-yellow-400/10 to-primary-color/10"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-5xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-primary-color to-yellow-400 rounded-3xl mb-8 shadow-xl">
-              <i className="fa-solid fa-wrench text-white text-4xl"></i>
+      <section className="repair-hero">
+        <div className="repair-hero-background"></div>
+        <div className="container">
+          <div className="repair-hero-content">
+            <div className="repair-hero-badge">
+              <i className="fa-solid fa-wrench"></i>
+              <span>อะไหล่ & บริการ</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-black mb-6 text-dark-color thai-text leading-tight">
-              {hero.title}
+            <h1 className="repair-hero-title">
+              อะไหล่แท้ & บริการซ่อม<br />
+              <span className="repair-hero-highlight">คุณภาพสูง</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-700 mb-10 thai-text leading-relaxed">
-              {hero.subtitle}
+            <p className="repair-hero-description">
+              จำหน่ายอะไหล่แท้สำหรับเครื่องมือก่อสร้างทุกประเภท พร้อมบริการซ่อม และตรวจเช็กสภาพโดยทีมช่างมืออาชีพ
             </p>
+            <div className="repair-hero-cta">
+              <a 
+                href={`tel:${siteConfig.phone}`}
+                className="repair-btn repair-btn-primary"
+              >
+                <i className="fa-solid fa-phone"></i>
+                <span>โทรเลย {siteConfig.phone}</span>
+              </a>
+              <Link 
+                href="/contact"
+                className="repair-btn repair-btn-secondary"
+              >
+                <i className="fa-solid fa-envelope"></i>
+                <span>ติดต่อสอบถาม</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="repair-benefits">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">ทำไมต้องเลือกเรา</h2>
+            <p className="section-subtitle">อะไหล่แท้และบริการซ่อมที่เชื่อถือได้</p>
+          </div>
+          <div className="benefits-grid">
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-certificate"></i>
+              </div>
+              <h3>อะไหล่แท้ 100%</h3>
+              <p>มั่นใจในคุณภาพและความทนทานของอะไหล่ทุกชิ้น</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-clock"></i>
+              </div>
+              <h3>บริการรวดเร็ว</h3>
+              <p>มีอะไหล่ในสต็อกพร้อมจัดส่ง และการซ่อมเสร็จภายในเวลาที่กำหนด</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-user-gear"></i>
+              </div>
+              <h3>ช่างผู้เชี่ยวชาญ</h3>
+              <p>ทีมช่างมากประสบการณ์ ให้คำปรึกษาและซ่อมตรงจุด</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-shield-halved"></i>
+              </div>
+              <h3>รับประกันงานซ่อม</h3>
+              <p>รับประกันคุณภาพงานซ่อมทุกครั้ง พร้อมบริการหลังการขาย</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-toolbox"></i>
+              </div>
+              <h3>อะไหล่ครบวงจร</h3>
+              <p>มีอะไหล่สำหรับเครื่องมือก่อสร้างทุกประเภท</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-headset"></i>
+              </div>
+              <h3>คำปรึกษาฟรี</h3>
+              <p>ให้คำปรึกษาเลือกอะไหล่ที่เหมาะสมและวิธีดูแลเครื่องมือ</p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Parts Categories Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">PARTS CATEGORIES</div>
-              <h2 className="text-4xl md:text-5xl font-black mb-4 text-dark-color thai-text">{categories.title}</h2>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {categories.items.map((category, index) => {
-                const categoryImage = categoryImages[category.title] || category.image;
-                return (
-                  <div key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all group border border-gray-100">
-                    <div className="aspect-video bg-gray-100 overflow-hidden">
-                      <SafeImage
-                        src={categoryImage}
-                        alt={category.alt}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        fallbackSrc={`https://placehold.co/400x300/eee/ccc?text=${encodeURIComponent(category.title)}`}
-                      />
-                    </div>
-                    <div className="p-6 text-center">
-                      <h3 className="text-lg font-black text-dark-color group-hover:text-primary-color transition-colors thai-text">{category.title}</h3>
-                    </div>
+      <section className="repair-categories">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">{categories.title}</h2>
+            <p className="section-subtitle">อะไหล่คุณภาพสูงสำหรับเครื่องมือทุกประเภท</p>
+          </div>
+          <div className="categories-grid">
+            {categories.items.map((category, index) => {
+              // Priority: 1. Category image from DB, 2. Product image from DB, 3. Config image, 4. Fallback
+              let categoryImage = categoryImages[category.title] || category.image;
+              
+              // If still no image, try to find from products by category name match
+              if (!categoryImage || categoryImage.includes('placehold')) {
+                const matchingCategory = dbCategories.find(c => c.name === category.title);
+                if (matchingCategory?.id) {
+                  const categoryProduct = allProducts.find(p => 
+                    p.category_id === matchingCategory.id && 
+                    p.image_url && 
+                    p.is_active
+                  );
+                  if (categoryProduct?.image_url) {
+                    categoryImage = categoryProduct.image_url;
+                  }
+                }
+              }
+              
+              return (
+                <Link 
+                  key={index} 
+                  href="/products"
+                  className="category-card"
+                >
+                  <div className="category-image">
+                    <SafeImage
+                      src={categoryImage}
+                      alt={category.alt}
+                      className="category-img"
+                      fallbackSrc={`https://placehold.co/400x300/eee/ccc?text=${encodeURIComponent(category.title)}`}
+                    />
                   </div>
-                );
-              })}
-            </div>
-            <p className="text-center text-gray-600 text-lg max-w-2xl mx-auto thai-text">{categories.note}</p>
+                  <div className="category-info">
+                    <h3>{category.title}</h3>
+                    <span className="category-link">
+                      ดูอะไหล่ <i className="fa-solid fa-chevron-right"></i>
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+          <div className="categories-note">
+            <i className="fa-solid fa-info-circle"></i>
+            <p>{categories.note}</p>
           </div>
         </div>
       </section>
 
       {/* Repair Process Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">REPAIR PROCESS</div>
-              <h2 className="text-4xl md:text-5xl font-black mb-4 text-dark-color thai-text">{repairProcess.title}</h2>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {repairProcess.steps.map((step, index) => (
-                <div key={index} className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-100 group text-center">
-                  <div className="relative mb-6">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary-color/20 to-yellow-400/20 rounded-full blur-xl"></div>
-                    <div className="relative bg-gradient-to-br from-primary-color to-yellow-400 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto text-2xl font-black group-hover:scale-110 transition-transform shadow-lg">
-                      {index + 1}
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-black mb-4 text-dark-color thai-text">{step.title}</h3>
-                  <p className="text-gray-700 leading-relaxed thai-text">{step.description}</p>
+      <section className="repair-process">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">{repairProcess.title}</h2>
+            <p className="section-subtitle">ขั้นตอนง่ายๆ เพียง 4 ขั้นตอน</p>
+          </div>
+          <div className="process-timeline">
+            {repairProcess.steps.map((step, index) => (
+              <div key={index} className="process-step">
+                <div className="process-number">{index + 1}</div>
+                <div className="process-content">
+                  <h3>{step.title}</h3>
+                  <p>{step.description}</p>
                 </div>
-              ))}
-            </div>
+                {index < repairProcess.steps.length - 1 && (
+                  <div className="process-connector">
+                    <i className="fa-solid fa-arrow-down"></i>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">WHY CHOOSE US</div>
-              <h2 className="text-4xl md:text-5xl font-black mb-4 text-dark-color thai-text">{features.title}</h2>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {features.items.map((feature, index) => (
-                <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-100 group text-center">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-color to-yellow-400 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
-                    <i className={`fa-solid ${feature.icon} text-white text-3xl`}></i>
-                  </div>
-                  <h3 className="text-xl font-black mb-4 text-dark-color thai-text">{feature.title}</h3>
-                  <p className="text-gray-700 leading-relaxed thai-text">{feature.description}</p>
+      <section className="repair-features">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">{features.title}</h2>
+            <p className="section-subtitle">คุณภาพที่เหนือกว่า</p>
+          </div>
+          <div className="features-grid">
+            {features.items.map((feature, index) => (
+              <div key={index} className="feature-card">
+                <div className="feature-icon">
+                  <i className={`fa-solid ${feature.icon}`}></i>
                 </div>
-              ))}
-            </div>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary-color via-yellow-400 to-primary-color relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="max-w-3xl mx-auto">
-            <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl mb-8">
-              <i className="fa-solid fa-handshake text-white text-4xl"></i>
+      <section className="repair-cta">
+        <div className="container">
+          <div className="cta-content">
+            <div className="cta-icon">
+              <i className="fa-solid fa-tools"></i>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white thai-text">{cta.title}</h2>
-            <p className="text-xl mb-10 text-white/90 thai-text">
-              โทร <a href={`tel:${siteConfig.phone}`} className="underline font-bold hover:no-underline">{siteConfig.phone}</a> หรือ{' '}
-              <a href="mailto:789Tools@gmail.com" className="underline font-bold hover:no-underline">ส่งอีเมล</a> {cta.description}
+            <h2>{cta.title}</h2>
+            <p>
+              {cta.description}<br />
+              โทร <a href={`tel:${siteConfig.phone}`}>{siteConfig.phone}</a> หรือ{' '}
+              <a href="mailto:789Tools@gmail.com">ส่งอีเมล</a>
             </p>
-            <Link 
-              href="/contact" 
-              className="inline-flex items-center justify-center bg-white text-primary-color px-10 py-4 rounded-xl font-black hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl text-lg thai-text"
-            >
-              <i className="fa-solid fa-envelope mr-3"></i>
-              {cta.buttonText}
-            </Link>
+            <div className="cta-buttons">
+              <a 
+                href={`tel:${siteConfig.phone}`}
+                className="repair-btn repair-btn-primary repair-btn-large"
+              >
+                <i className="fa-solid fa-phone"></i>
+                <span>โทรเลย</span>
+              </a>
+              <Link 
+                href="/contact"
+                className="repair-btn repair-btn-secondary repair-btn-large"
+              >
+                <i className="fa-solid fa-envelope"></i>
+                <span>ติดต่อเรา</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

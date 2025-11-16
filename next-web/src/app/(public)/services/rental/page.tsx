@@ -10,168 +10,249 @@ export default async function RentalServicePage() {
   const dbCategories = await getCategories();
   const products = await getProducts();
   
-  const categoryImages: Record<string, string> = {};
-  dbCategories.forEach(cat => {
-    if (cat.image_url) {
-      categoryImages[cat.name] = cat.image_url;
-    }
-  });
-  
-  const rentalProducts = products.filter(p => p.rent_price).slice(0, 4);
+  const rentalProducts = products.filter(p => p.rent_price).slice(0, 6);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-color/10 via-yellow-400/10 to-primary-color/10"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-5xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-primary-color to-yellow-400 rounded-3xl mb-8 shadow-xl">
-              <i className="fa-solid fa-tools text-white text-4xl"></i>
+    <main className="rental-service-page">
+      {/* Hero Section - Modern & Clean */}
+      <section className="rental-hero">
+        <div className="rental-hero-background"></div>
+        <div className="container">
+          <div className="rental-hero-content">
+            <div className="rental-hero-badge">
+              <i className="fa-solid fa-tools"></i>
+              <span>บริการให้เช่า</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-black mb-6 text-dark-color thai-text leading-tight">
-              {hero.title}
+            <h1 className="rental-hero-title">
+              เช่าเครื่องมือก่อสร้าง<br />
+              <span className="rental-hero-highlight">คุณภาพสูง</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-700 mb-10 thai-text leading-relaxed">
-              {hero.subtitle}
+            <p className="rental-hero-description">
+              เช่าเครื่องมือช่างคุณภาพสูง สะดวก รวดเร็ว พร้อมบริการซ่อมและคำปรึกษาหน้างานโดยทีมงานมืออาชีพ
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="rental-hero-cta">
               <a 
                 href={`tel:${siteConfig.phone}`}
-                className="inline-flex items-center justify-center bg-gradient-to-r from-primary-color to-yellow-400 text-white px-10 py-4 rounded-xl font-bold hover:from-yellow-400 hover:to-primary-color transition-all shadow-xl hover:shadow-2xl text-lg thai-text"
+                className="rental-btn rental-btn-primary"
               >
-                <i className="fa-solid fa-phone mr-3"></i>
-                โทรเลย
+                <i className="fa-solid fa-phone"></i>
+                <span>โทรเลย {siteConfig.phone}</span>
               </a>
               <Link 
                 href="/contact"
-                className="inline-flex items-center justify-center bg-white border-2 border-primary-color text-primary-color px-10 py-4 rounded-xl font-bold hover:bg-primary-color hover:text-white transition-all shadow-xl hover:shadow-2xl text-lg thai-text"
+                className="rental-btn rental-btn-secondary"
               >
-                <i className="fa-solid fa-file-invoice mr-3"></i>
-                ขอใบเสนอราคา
+                <i className="fa-solid fa-file-invoice"></i>
+                <span>ขอใบเสนอราคา</span>
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Process Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">RENTAL PROCESS</div>
-              <h2 className="text-4xl md:text-5xl font-black mb-4 text-dark-color thai-text">{process.title}</h2>
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto thai-text">ขั้นตอนง่ายๆ เพียง 4 ขั้นตอน</p>
+      {/* Why Choose Us Section */}
+      <section className="rental-benefits">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">ทำไมต้องเลือกเรา</h2>
+            <p className="section-subtitle">บริการให้เช่าเครื่องมือก่อสร้างที่ครบวงจร</p>
+          </div>
+          <div className="benefits-grid">
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-truck-fast"></i>
+              </div>
+              <h3>จัดส่งเร็ว</h3>
+              <p>จัดส่งเครื่องมือถึงหน้างานอย่างรวดเร็ว พร้อมใช้งานทันที</p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {process.steps.map((step, index) => (
-                <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-100 group text-center">
-                  <div className="relative mb-6">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary-color/20 to-yellow-400/20 rounded-full blur-xl"></div>
-                    <div className="relative bg-gradient-to-br from-primary-color to-yellow-400 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto text-2xl font-black group-hover:scale-110 transition-transform shadow-lg">
-                      {index + 1}
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-black mb-4 text-dark-color thai-text">{step.title}</h3>
-                  <p className="text-gray-700 leading-relaxed thai-text">{step.description}</p>
-                </div>
-              ))}
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-shield-halved"></i>
+              </div>
+              <h3>รับประกันคุณภาพ</h3>
+              <p>เครื่องมือทุกชิ้นผ่านการตรวจสอบพร้อมรับประกันคุณภาพ</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-wrench"></i>
+              </div>
+              <h3>บริการซ่อม</h3>
+              <p>ทีมช่างมืออาชีพพร้อมให้บริการซ่อมและบำรุงรักษา</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-headset"></i>
+              </div>
+              <h3>คำปรึกษาฟรี</h3>
+              <p>ให้คำปรึกษาเลือกเครื่องมือที่เหมาะสมกับงานของคุณ</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-money-bill-wave"></i>
+              </div>
+              <h3>ราคายุติธรรม</h3>
+              <p>ราคาเช่าที่เป็นธรรม ไม่มีค่าใช้จ่ายแอบแฝง</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">
+                <i className="fa-solid fa-clock"></i>
+              </div>
+              <h3>ยืดหยุ่นเวลา</h3>
+              <p>เช่าได้ตามระยะเวลาที่ต้องการ ไม่จำกัดขั้นต่ำ</p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Rental Process Section */}
+      <section className="rental-process">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">ขั้นตอนการเช่า</h2>
+            <p className="section-subtitle">ง่ายๆ เพียง 4 ขั้นตอน</p>
+          </div>
+          <div className="process-timeline">
+            {process.steps.map((step, index) => (
+              <div key={index} className="process-step">
+                <div className="process-number">{index + 1}</div>
+                <div className="process-content">
+                  <h3>{step.title}</h3>
+                  <p>{step.description}</p>
+                </div>
+                {index < process.steps.length - 1 && (
+                  <div className="process-connector">
+                    <i className="fa-solid fa-arrow-down"></i>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Rental Products */}
+      {rentalProducts.length > 0 && (
+        <section className="rental-products">
+          <div className="container">
+            <div className="section-header">
+              <h2 className="section-title">สินค้าแนะนำสำหรับเช่า</h2>
+              <p className="section-subtitle">เครื่องมือคุณภาพสูงพร้อมใช้งาน</p>
+            </div>
+            <div className="products-grid">
+              {rentalProducts.map((product) => (
+                <Link 
+                  key={product.id}
+                  href={`/products/${product.slug || product.id}`}
+                  className="product-card"
+                >
+                  <div className="product-image">
+                    <SafeImage
+                      src={product.image_url || '/placeholder-product.jpg'}
+                      alt={product.name}
+                      className="product-img"
+                      fallbackSrc="/placeholder-product.jpg"
+                    />
+                    {product.is_promotion && (
+                      <span className="product-badge">SALE</span>
+                    )}
+                  </div>
+                  <div className="product-info">
+                    <h3 className="product-name">{product.name}</h3>
+                    <div className="product-pricing">
+                      <span className="rent-price">
+                        เช่าเริ่มต้น <strong>฿{new Intl.NumberFormat('th-TH').format(product.rent_price || 0)}</strong>
+                      </span>
+                      {product.price && (
+                        <span className="buy-price">
+                          ซื้อ ฿{new Intl.NumberFormat('th-TH').format(product.price)}
+                        </span>
+                      )}
+                    </div>
+                    <div className="product-action">
+                      <span className="view-details">
+                        ดูรายละเอียด <i className="fa-solid fa-arrow-right"></i>
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="section-footer">
+              <Link href="/products" className="rental-btn rental-btn-outline">
+                <span>ดูสินค้าทั้งหมด</span>
+                <i className="fa-solid fa-arrow-right"></i>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Categories Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">POPULAR CATEGORIES</div>
-              <h2 className="text-4xl md:text-5xl font-black mb-4 text-dark-color thai-text">{categories.title}</h2>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {categories.items.map((category, index) => {
-                const categoryImage = categoryImages[category.title] || category.image;
-                return (
-                  <Link 
-                    key={index} 
-                    href="/products"
-                    className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all group border border-gray-100"
-                  >
-                    <div className="aspect-video bg-gray-100 overflow-hidden">
-                      <SafeImage
-                        src={categoryImage}
-                        alt={category.alt}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        fallbackSrc={`https://placehold.co/400x300/eee/ccc?text=${encodeURIComponent(category.title)}`}
-                      />
-                    </div>
-                    <div className="p-6 text-center">
-                      <h3 className="text-lg font-black text-dark-color group-hover:text-primary-color transition-colors thai-text">{category.title}</h3>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-            <div className="text-center">
-              <Link 
-                href="/products"
-                className="inline-flex items-center justify-center bg-gradient-to-r from-primary-color to-yellow-400 text-white px-10 py-4 rounded-xl font-bold hover:from-yellow-400 hover:to-primary-color transition-all shadow-xl hover:shadow-2xl text-lg thai-text"
-              >
-                {categories.buttonText} <i className="fa-solid fa-arrow-right ml-3"></i>
-              </Link>
-            </div>
+      <section className="rental-categories">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">หมวดหมู่เครื่องมือ</h2>
+            <p className="section-subtitle">เลือกเครื่องมือตามประเภทงาน</p>
           </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">WHY CHOOSE US</div>
-              <h2 className="text-4xl md:text-5xl font-black mb-4 text-dark-color thai-text">{features.title}</h2>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {features.items.map((feature, index) => (
-                <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-100 group text-center">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-color to-yellow-400 rounded-2xl mb-6 group-hover:scale-110 transition-transform">
-                    <i className={`fa-solid ${feature.icon} text-white text-3xl`}></i>
+          <div className="categories-grid">
+            {categories.items.map((category, index) => {
+              const categoryImage = dbCategories.find(c => c.name === category.title)?.image_url || category.image;
+              return (
+                <Link 
+                  key={index} 
+                  href="/products"
+                  className="category-card"
+                >
+                  <div className="category-image">
+                    <SafeImage
+                      src={categoryImage}
+                      alt={category.title}
+                      className="category-img"
+                      fallbackSrc={`https://placehold.co/400x300/eee/ccc?text=${encodeURIComponent(category.title)}`}
+                    />
                   </div>
-                  <h3 className="text-xl font-black mb-4 text-dark-color thai-text">{feature.title}</h3>
-                  <p className="text-gray-700 leading-relaxed thai-text">{feature.description}</p>
-                </div>
-              ))}
-            </div>
+                  <div className="category-info">
+                    <h3>{category.title}</h3>
+                    <span className="category-link">
+                      ดูสินค้า <i className="fa-solid fa-chevron-right"></i>
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary-color via-yellow-400 to-primary-color relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="max-w-3xl mx-auto">
-            <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl mb-8">
-              <i className="fa-solid fa-handshake text-white text-4xl"></i>
+      <section className="rental-cta">
+        <div className="container">
+          <div className="cta-content">
+            <div className="cta-icon">
+              <i className="fa-solid fa-handshake"></i>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white thai-text">{cta.title}</h2>
-            <p className="text-xl mb-10 text-white/90 thai-text">
-              โทรหาเราที่ <a href={`tel:${siteConfig.phone}`} className="underline font-bold hover:no-underline">{siteConfig.phone}</a> หรือ{' '}
-              <a href="mailto:789Tools@gmail.com" className="underline font-bold hover:no-underline">ส่งอีเมล</a> {cta.description}
+            <h2>พร้อมเริ่มต้นเช่าเครื่องมือกับเรา?</h2>
+            <p>
+              ติดต่อเราวันนี้เพื่อรับคำปรึกษาและใบเสนอราคา<br />
+              โทร <a href={`tel:${siteConfig.phone}`}>{siteConfig.phone}</a> หรือ{' '}
+              <a href="mailto:789Tools@gmail.com">ส่งอีเมล</a>
             </p>
-            <Link 
-              href="/contact" 
-              className="inline-flex items-center justify-center bg-white text-primary-color px-10 py-4 rounded-xl font-black hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl text-lg thai-text"
-            >
-              <i className="fa-solid fa-envelope mr-3"></i>
-              {cta.buttonText}
-            </Link>
+            <div className="cta-buttons">
+              <a 
+                href={`tel:${siteConfig.phone}`}
+                className="rental-btn rental-btn-primary rental-btn-large"
+              >
+                <i className="fa-solid fa-phone"></i>
+                <span>โทรเลย</span>
+              </a>
+              <Link 
+                href="/contact"
+                className="rental-btn rental-btn-secondary rental-btn-large"
+              >
+                <i className="fa-solid fa-envelope"></i>
+                <span>ติดต่อเรา</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -30,188 +30,198 @@ export default function ContactPage() {
       icon: 'fa-map-marker-alt',
       title: 'ที่อยู่',
       content: '7/307 ถ.เสมาฟ้าคราม ต.คูคต อ.ลำลูกกา, จังหวัดปทุมธานี',
-      color: 'from-blue-500 to-blue-600'
     },
     {
       icon: 'fa-phone',
       title: 'โทรศัพท์',
       content: siteConfig.phone,
       link: `tel:${siteConfig.phone}`,
-      color: 'from-green-500 to-green-600'
     },
     {
       icon: 'fa-envelope',
       title: 'อีเมล',
       content: '789Tools@gmail.com',
       link: 'mailto:789Tools@gmail.com',
-      color: 'from-purple-500 to-purple-600'
     },
     {
       icon: 'fa-brands fa-line',
       title: 'LINE',
       content: '@789Tools',
       link: siteConfig.links.line,
-      color: 'from-[#00C300] to-[#00B300]'
-    }
+    },
+    {
+      icon: 'fa-brands fa-facebook-messenger',
+      title: 'Messenger',
+      content: '789 Tools',
+      link: siteConfig.links.messenger,
+    },
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
+    <main className="contact-page">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-color/5 via-yellow-400/5 to-primary-color/5"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-primary-color to-yellow-400 rounded-3xl mb-8 shadow-xl">
-              <i className="fa-solid fa-envelope-open text-white text-4xl"></i>
+      <section className="contact-hero">
+        <div className="contact-hero-background"></div>
+        <div className="container mx-auto px-4">
+          <div className="contact-hero-content">
+            <div className="contact-hero-badge">
+              <i className="fa-solid fa-envelope-open"></i>
             </div>
-            <h1 className="text-5xl md:text-6xl font-black mb-6 text-dark-color thai-text leading-tight">
-              ติดต่อเรา
+            <h1 className="contact-hero-title">
+              ติดต่อ <span className="contact-hero-highlight">เรา</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 thai-text leading-relaxed">
+            <p className="contact-hero-description">
               หากคุณมีคำถามเกี่ยวกับสินค้า บริการเช่าหรือซ่อมเครื่องมือ หรือต้องการใบเสนอราคา
+              เราพร้อมให้คำปรึกษาและบริการคุณด้วยทีมงานมืออาชีพ
             </p>
           </div>
         </div>
       </section>
 
-      {/* Contact Methods Grid */}
-      <section className="py-20 bg-white">
+      {/* Contact Methods Section */}
+      <section className="contact-methods">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-              {contactMethods.map((method, idx) => {
-                const Component = method.link ? 'a' : 'div';
-                const props = method.link ? { href: method.link } : {};
-                return (
-                  <Component
-                    key={idx}
-                    {...props}
-                    className={`bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all border border-gray-100 group ${method.link ? 'cursor-pointer' : ''}`}
-                  >
-                    <div className={`w-16 h-16 bg-gradient-to-br ${method.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                      <i className={`fa-solid ${method.icon} text-white text-2xl`}></i>
-                    </div>
-                    <h3 className="text-xl font-black mb-3 text-dark-color thai-text">{method.title}</h3>
-                    <p className={`text-gray-700 ${method.link ? 'group-hover:text-primary-color transition-colors' : ''} thai-text`}>
-                      {method.content}
-                    </p>
-                  </Component>
-                );
-              })}
-            </div>
+          <div className="section-header">
+            <div className="section-badge">CONTACT METHODS</div>
+            <h2 className="section-title">ช่องทางติดต่อ</h2>
+            <p className="section-subtitle">
+              เลือกช่องทางที่สะดวกสำหรับคุณ เราพร้อมให้บริการทุกวัน
+            </p>
+          </div>
+          <div className="methods-grid">
+            {contactMethods.map((method, idx) => {
+              const Component = method.link ? 'a' : 'div';
+              const props = method.link ? { href: method.link, target: method.link.startsWith('http') ? '_blank' : undefined, rel: method.link.startsWith('http') ? 'noopener noreferrer' : undefined } : {};
+              return (
+                <Component
+                  key={idx}
+                  {...props}
+                  className={`method-card ${method.link ? 'method-card-link' : ''}`}
+                >
+                  <div className="method-icon">
+                    <i className={`fa-solid ${method.icon}`}></i>
+                  </div>
+                  <h3 className="method-title">{method.title}</h3>
+                  <p className="method-content">{method.content}</p>
+                </Component>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Map & Form Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      {/* Form & Map Section */}
+      <section className="contact-form-map">
         <div className="container mx-auto px-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* Map */}
-              <div className="order-2 lg:order-1">
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-                  <div className="aspect-video">
-                    <iframe
-                      title="แผนที่ร้าน 789 Tools"
-                      src="https://maps.google.com/maps?q=7%2F307%20ถ.%E0%B9%80%E0%B8%AA%E0%B8%A1%E0%B8%B2%E0%B8%9F%E0%B9%89%E0%B8%B2%E0%B8%84%E0%B8%A3%E0%B8%B2%E0%B8%A1%20ต.%E0%B8%84%E0%B8%B9%E0%B8%84%E0%B8%95%20อ.%E0%B8%A5%E0%B8%B3%E0%B8%A5%E0%B8%B9%E0%B8%81%E0%B8%B2%20จ.%E0%B8%9B%E0%B8%97%E0%B8%B8%E0%B8%A1%E0%B8%98%E0%B8%B2%E0%B8%99%E0%B8%B5&output=embed"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      className="w-full h-full"
-                    ></iframe>
-                  </div>
+          <div className="form-map-grid">
+            {/* Contact Form */}
+            <div className="form-container">
+              <div className="form-card">
+                <div className="form-header">
+                  <div className="section-badge">SEND MESSAGE</div>
+                  <h2 className="section-title">ส่งข้อความหาเรา</h2>
+                  <p className="section-subtitle">
+                    กรอกแบบฟอร์มด้านล่าง เราจะติดต่อกลับโดยเร็วที่สุด
+                  </p>
                 </div>
-              </div>
-
-              {/* Contact Form */}
-              <div className="order-1 lg:order-2">
-                <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10 border border-gray-100">
-                  <div className="mb-8">
-                    <div className="text-primary-color text-sm font-bold mb-4 thai-text tracking-wider">SEND MESSAGE</div>
-                    <h2 className="text-3xl md:text-4xl font-black mb-4 text-dark-color thai-text">ส่งข้อความหาเรา</h2>
-                    <p className="text-gray-600 thai-text">กรอกแบบฟอร์มด้านล่าง เราจะติดต่อกลับโดยเร็วที่สุด</p>
+                <form onSubmit={handleSubmit} className="contact-form">
+                  <div className="form-group">
+                    <label htmlFor="name" className="form-label">
+                      <i className="fa-solid fa-user"></i>
+                      ชื่อ *
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="ชื่อของคุณ"
+                      className="form-input"
+                    />
                   </div>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2 thai-text">
-                        <i className="fa-solid fa-user text-primary-color mr-2"></i>
-                        ชื่อ *
-                      </label>
-                      <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="ชื่อของคุณ"
-                        className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-color focus:border-primary-color transition-all thai-text text-lg"
-                      />
-                    </div>
 
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2 thai-text">
-                        <i className="fa-solid fa-envelope text-primary-color mr-2"></i>
-                        Email *
-                      </label>
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="อีเมลของคุณ"
-                        className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-color focus:border-primary-color transition-all text-lg"
-                      />
-                    </div>
+                  <div className="form-group">
+                    <label htmlFor="email" className="form-label">
+                      <i className="fa-solid fa-envelope"></i>
+                      Email *
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="อีเมลของคุณ"
+                      className="form-input"
+                    />
+                  </div>
 
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-bold text-gray-700 mb-2 thai-text">
-                        <i className="fa-solid fa-phone text-primary-color mr-2"></i>
-                        เบอร์โทร *
-                      </label>
-                      <input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        required
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="เบอร์ติดต่อ"
-                        className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-color focus:border-primary-color transition-all text-lg"
-                      />
-                    </div>
+                  <div className="form-group">
+                    <label htmlFor="phone" className="form-label">
+                      <i className="fa-solid fa-phone"></i>
+                      เบอร์โทร *
+                    </label>
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="เบอร์ติดต่อ"
+                      className="form-input"
+                    />
+                  </div>
 
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2 thai-text">
-                        <i className="fa-solid fa-message text-primary-color mr-2"></i>
-                        ข้อความ *
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={6}
-                        required
-                        value={formData.message}
-                        onChange={handleChange}
-                        placeholder="ข้อความของคุณ"
-                        className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-color focus:border-primary-color transition-all resize-none thai-text text-lg"
-                      ></textarea>
-                    </div>
+                  <div className="form-group">
+                    <label htmlFor="message" className="form-label">
+                      <i className="fa-solid fa-message"></i>
+                      ข้อความ *
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows={6}
+                      required
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder="ข้อความของคุณ"
+                      className="form-textarea"
+                    ></textarea>
+                  </div>
 
-                    <button
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-primary-color to-yellow-400 text-white px-10 py-5 rounded-xl font-bold hover:from-yellow-400 hover:to-primary-color transition-all shadow-xl hover:shadow-2xl text-lg thai-text"
-                    >
-                      <i className="fa-solid fa-paper-plane mr-3"></i>
-                      ส่งข้อความ
-                    </button>
-                  </form>
+                  <button type="submit" className="form-submit-btn">
+                    <i className="fa-solid fa-paper-plane"></i>
+                    ส่งข้อความ
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            {/* Map */}
+            <div className="map-container">
+              <div className="map-card">
+                <div className="map-header">
+                  <div className="section-badge">LOCATION</div>
+                  <h2 className="section-title">แผนที่ร้าน</h2>
+                  <p className="section-subtitle">
+                    เยี่ยมชมร้านของเราได้ที่ 7/307 ถ.เสมาฟ้าคราม ต.คูคต อ.ลำลูกกา, จังหวัดปทุมธานี
+                  </p>
+                </div>
+                <div className="map-wrapper">
+                  <iframe
+                    title="แผนที่ร้าน 789 Tools"
+                    src="https://maps.google.com/maps?q=7%2F307%20ถ.%E0%B9%80%E0%B8%AA%E0%B8%A1%E0%B8%B2%E0%B8%9F%E0%B9%89%E0%B8%B2%E0%B8%84%E0%B8%A3%E0%B8%B2%E0%B8%A1%20ต.%E0%B8%84%E0%B8%B9%E0%B8%84%E0%B8%95%20อ.%E0%B8%A5%E0%B8%B3%E0%B8%A5%E0%B8%B9%E0%B8%81%E0%B8%B2%20จ.%E0%B8%9B%E0%B8%97%E0%B8%B8%E0%B8%A1%E0%B8%98%E0%B8%B2%E0%B8%99%E0%B8%B5&output=embed"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    className="map-iframe"
+                  ></iframe>
                 </div>
               </div>
             </div>
@@ -220,22 +230,26 @@ export default function ContactPage() {
       </section>
 
       {/* Quick Contact CTA */}
-      <section className="py-20 bg-gradient-to-br from-primary-color via-yellow-400 to-primary-color relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white thai-text">ต้องการความช่วยเหลือด่วน?</h2>
-            <p className="text-xl mb-10 text-white/90 thai-text">โทรหาเราได้เลย เราพร้อมให้บริการ 24/7</p>
-            <a 
-              href={`tel:${siteConfig.phone}`}
-              className="inline-flex items-center justify-center bg-white text-primary-color px-12 py-5 rounded-xl font-black hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl text-xl thai-text"
-            >
-              <i className="fa-solid fa-phone mr-3"></i>
-              {siteConfig.phone}
-            </a>
+      <section className="contact-cta">
+        <div className="container mx-auto px-4">
+          <div className="cta-content">
+            <div className="cta-icon">
+              <i className="fa-solid fa-phone"></i>
+            </div>
+            <h2 className="cta-title">ต้องการความช่วยเหลือด่วน?</h2>
+            <p className="cta-description">
+              โทรหาเราได้เลย เราพร้อมให้บริการทุกวัน
+            </p>
+            <div className="cta-buttons">
+              <a href={`tel:${siteConfig.phone}`} className="cta-btn primary">
+                <i className="fa-solid fa-phone"></i>
+                {siteConfig.phone}
+              </a>
+              <a href={siteConfig.links.line} target="_blank" rel="noopener noreferrer" className="cta-btn secondary">
+                <i className="fa-brands fa-line"></i>
+                แอด LINE
+              </a>
+            </div>
           </div>
         </div>
       </section>

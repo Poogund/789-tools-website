@@ -7,24 +7,44 @@ export const repairServiceConfig = {
     title: "หมวดหมู่อะไหล่ยอดนิยม",
     items: [
       {
-        title: "ใบตัดและใบขัด",
+        title: "เครื่องจักรงานคอนกรีต",
+        image: "/category-concrete-cutter.jpg",
+        alt: "อะไหล่เครื่องจักรงานคอนกรีต"
+      },
+      {
+        title: "เครื่องขัดมันพื้นปูน",
+        image: "/category-power-trowel.jpg",
+        alt: "อะไหล่เครื่องขัดมันพื้นปูน"
+      },
+      {
+        title: "ใบและถาดขัดมัน",
         image: "/category-blades-pans.jpg",
-        alt: "ใบตัดคอนกรีตและใบขัดมัน"
+        alt: "ใบและถาดขัดมัน"
       },
       {
-        title: "อะไหล่เครื่องยนต์",
-        image: "https://placehold.co/400x300/eee/ccc?text=อะไหล่เครื่องยนต์",
-        alt: "อะไหล่เครื่องยนต์"
+        title: "เครื่องปาดปูน",
+        image: "/category-screed.jpg",
+        alt: "อะไหล่เครื่องปาดปูน"
       },
       {
-        title: "อะไหล่เครื่องขัดมัน",
-        image: "https://placehold.co/400x300/eee/ccc?text=อะไหล่เครื่องขัดมัน",
-        alt: "อะไหล่เครื่องขัดมัน"
+        title: "เครื่องตบดิน",
+        image: "/category-compactor.jpg",
+        alt: "อะไหล่เครื่องตบดิน"
       },
       {
-        title: "อะไหล่อื่นๆ",
-        image: "https://placehold.co/400x300/eee/ccc?text=อะไหล่อื่นๆ",
-        alt: "อะไหล่อื่นๆ"
+        title: "เครื่องผสมและผลิต",
+        image: "/category-concrete-mixer.jpg",
+        alt: "อะไหล่เครื่องผสมคอนกรีต"
+      },
+      {
+        title: "เครื่องปั่นไฟ",
+        image: "/category-power-generator.jpg",
+        alt: "อะไหล่เครื่องปั่นไฟ"
+      },
+      {
+        title: "เครื่องดูดฝุ่นอุตสาหกรรม",
+        image: "/category-industrial-vacuum.jpg",
+        alt: "อะไหล่เครื่องดูดฝุ่นอุตสาหกรรม"
       }
     ],
     note: "หากไม่พบอะไหล่ที่ต้องการ กรุณาติดต่อทีมงานเพื่อสอบถามข้อมูลเพิ่มเติม"
