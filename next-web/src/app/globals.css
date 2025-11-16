@@ -30,6 +30,9 @@
   --industrial-steel: #475569;
   --font-main: "Montserrat", sans-serif;
   --font-thai: "Sarabun", sans-serif;
+  
+  /* Header height for mobile menu positioning */
+  --header-height: 122px; /* Default fallback value */
 }
 
 body {
@@ -307,17 +310,42 @@ body {
 }
 
 .hamburger-menu {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 44px;
   height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   background: transparent;
   border: none;
-  color: var(--light-color);
-  font-size: 1.5rem;
   cursor: pointer;
+  gap: 5px;
+  padding: 0;
+  z-index: 10003 !important; /* Higher than menu panel to ensure it's clickable */
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.hamburger-line {
+  width: 24px;
+  height: 3px;
+  background-color: var(--light-color);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform-origin: center;
+}
+
+.hamburger-menu.active .hamburger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger-menu.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger-menu.active .hamburger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 .navbar {
@@ -483,72 +511,298 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  background-color: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  z-index: 10001 !important; /* Higher than header (10000) */
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+/* Overlay starts below header on mobile */
+@media (max-width: 767px) {
+  .mobile-menu-overlay {
+    top: var(--header-height, 60px);
+  }
+  
+  /* Ensure overlay covers from header down */
+  .mobile-menu-overlay.active {
+    top: var(--header-height, 60px);
+  }
+}
+
+.mobile-menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .mobile-menu-panel {
   position: fixed;
-  top: 0;
+  top: 60px;
   right: 0;
-  height: 100%;
+  height: 100vh;
   width: 85%;
-  max-width: 350px;
-  background-color: var(--dark-color);
-  box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.25);
-  z-index: 1000;
+  max-width: 380px;
+  background: linear-gradient(180deg, var(--dark-color) 0%, #1a1a2e 100%);
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+  z-index: 10002 !important; /* Higher than overlay (10001) */
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.mobile-menu-header {
-  padding: 16px;
+/* Panel starts below header on mobile */
+@media (max-width: 767px) {
+  .mobile-menu-panel {
+    top: var(--header-height, 60px) !important;
+    height: calc(100vh - var(--header-height, 60px)) !important;
+  }
+  
+  /* Ensure panel stays below header when active */
+  .mobile-menu-panel.active {
+    top: var(--header-height, 60px) !important;
+  }
+}
+
+.mobile-menu-panel.active {
+  transform: translateX(0);
+}
+
+/* Mobile menu header removed - logo section deleted */
+
+/* Mobile Menu Search */
+.mobile-menu-search {
+  padding: 20px 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-search-form {
   display: flex;
-  justify-content: space-between;
+  gap: 8px;
   align-items: center;
 }
 
-.mobile-menu-title {
+.mobile-search-form input {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   color: var(--light-color);
-  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
 }
 
-.mobile-menu-close {
-  background: transparent;
+.mobile-search-form input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.mobile-search-form input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--primary-color);
+}
+
+.mobile-search-form button {
+  width: 44px;
+  height: 44px;
+  background: var(--primary-color);
   border: none;
+  border-radius: 8px;
   color: var(--light-color);
-  font-size: 1.2rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.mobile-search-form button:hover {
+  background: var(--accent-color);
+  transform: scale(1.05);
+}
+
+/* Quick Contact Buttons */
+.mobile-menu-quick-contact {
+  padding: 20px 24px;
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quick-contact-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.quick-contact-btn i {
+  font-size: 1.3rem;
+}
+
+.quick-contact-btn.phone-btn {
+  background: linear-gradient(135deg, var(--primary-color), #0056b3);
+  color: var(--light-color);
+}
+
+.quick-contact-btn.phone-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 86, 179, 0.4);
+}
+
+.quick-contact-btn.line-btn {
+  background: linear-gradient(135deg, #00C300, #00A000);
+  color: var(--light-color);
+}
+
+.quick-contact-btn.line-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 195, 0, 0.4);
+}
+
+.quick-contact-btn.facebook-btn {
+  background: linear-gradient(135deg, #1877F2, #0d5fcc);
+  color: var(--light-color);
+}
+
+.quick-contact-btn.facebook-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.4);
+}
+
+/* Mobile Navigation Links */
+.mobile-menu-nav {
+  flex: 1;
+  padding: 10px 0;
+  overflow-y: auto;
 }
 
 .mobile-nav-links {
   position: static;
   display: flex !important;
   flex-direction: column;
-  transform: translateX(0);
-  opacity: 1;
-  pointer-events: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.mobile-nav-links li a {
-  display: block;
+.mobile-menu-panel:not(.active) .mobile-nav-links .menu-item {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.mobile-menu-panel.active .mobile-nav-links .menu-item {
+  animation: slideInMenuItem 0.4s ease forwards;
+}
+
+.mobile-menu-panel.active .mobile-nav-links .menu-item:nth-child(1) { animation-delay: 0.1s; }
+.mobile-menu-panel.active .mobile-nav-links .menu-item:nth-child(2) { animation-delay: 0.15s; }
+.mobile-menu-panel.active .mobile-nav-links .menu-item:nth-child(3) { animation-delay: 0.2s; }
+.mobile-menu-panel.active .mobile-nav-links .menu-item:nth-child(4) { animation-delay: 0.25s; }
+.mobile-menu-panel.active .mobile-nav-links .menu-item:nth-child(5) { animation-delay: 0.3s; }
+.mobile-menu-panel.active .mobile-nav-links .menu-item:nth-child(6) { animation-delay: 0.35s; }
+.mobile-menu-panel.active .mobile-nav-links .menu-item:nth-child(7) { animation-delay: 0.4s; }
+
+@keyframes slideInMenuItem {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.mobile-nav-links .menu-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   padding: 18px 24px;
   font-size: 1.05rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: background-color 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
   color: var(--light-color);
   text-decoration: none;
+  position: relative;
 }
 
-.mobile-nav-links li a:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+.mobile-nav-links .menu-link i:first-child {
+  width: 24px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--primary-color);
 }
 
-.mobile-nav-links li:last-child a {
+.mobile-nav-links .menu-link span {
+  flex: 1;
+  font-weight: 500;
+}
+
+.mobile-nav-links .menu-link i:last-child {
+  font-size: 0.9rem;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav-links .menu-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  padding-left: 28px;
+}
+
+.mobile-nav-links .menu-link:hover i:last-child {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+.mobile-nav-links .menu-item:last-child .menu-link {
   border-bottom: none;
 }
 
-.mobile-nav-links li.nav-menu-login {
+/* Mobile Menu Footer */
+.mobile-menu-footer {
+  padding: 20px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.mobile-menu-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: var(--light-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-login:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.mobile-menu-login i {
+  font-size: 1.1rem;
 }
 
 .card-name-overlay {
@@ -1464,6 +1718,31 @@ body {
   z-index: 1 !important;
   background-attachment: scroll;
   margin-top: 0;
+}
+
+/* Ensure hero section stays below mobile menu when menu is open */
+body.menu-open .hero-section,
+.mobile-menu-overlay.active ~ * .hero-section,
+body.menu-open .min-h-screen .hero-section,
+body.menu-open .min-h-\[85vh\] .hero-section,
+body.menu-open [class*="min-h"] .hero-section {
+  z-index: 0 !important;
+  position: relative !important;
+}
+
+body.menu-open .hero-slide,
+body.menu-open .hero-overlay,
+body.menu-open .hero-content-container,
+body.menu-open .hero-nav,
+body.menu-open .hero-indicators,
+body.menu-open .hero-slider,
+.mobile-menu-overlay.active ~ * .hero-slide,
+.mobile-menu-overlay.active ~ * .hero-overlay,
+.mobile-menu-overlay.active ~ * .hero-content-container,
+.mobile-menu-overlay.active ~ * .hero-nav,
+.mobile-menu-overlay.active ~ * .hero-indicators,
+.mobile-menu-overlay.active ~ * .hero-slider {
+  z-index: 0 !important;
 }
 
 .hero-slider {
@@ -4289,6 +4568,12 @@ body .sticky-header-wrapper {
 .min-h-screen > * {
   position: relative !important;
   z-index: 1 !important;
+}
+
+/* Ensure hero section in min-h-screen doesn't interfere with mobile menu */
+body.menu-open .min-h-screen > .hero-section,
+body.menu-open .min-h-screen .hero-section {
+  z-index: 0 !important;
 }
 
 /* Sticky header wrapper MUST be sticky, not relative */

@@ -34,17 +34,50 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Calculate header height and set CSS variable
+  useEffect(() => {
+    const calculateHeaderHeight = () => {
+      const stickyWrapper = document.querySelector('.sticky-header-wrapper');
+      if (stickyWrapper) {
+        const height = stickyWrapper.getBoundingClientRect().height;
+        const headerHeight = height > 0 ? height : 122; // Fallback to 122px if height is 0
+        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+      } else {
+        // Fallback if element not found
+        document.documentElement.style.setProperty('--header-height', '122px');
+      }
+    };
+
+    // Calculate on mount with a small delay to ensure DOM is ready
+    const timeoutId = setTimeout(() => {
+      calculateHeaderHeight();
+    }, 100);
+
+    // Calculate on resize and scroll (header might change height on scroll)
+    window.addEventListener('resize', calculateHeaderHeight);
+    window.addEventListener('scroll', calculateHeaderHeight);
+    
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', calculateHeaderHeight);
+      window.removeEventListener('scroll', calculateHeaderHeight);
+    };
+  }, []);
+
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('menu-open');
     } else {
       document.body.style.overflow = 'unset';
+      document.body.classList.remove('menu-open');
     }
 
     // Cleanup on unmount
     return () => {
       document.body.style.overflow = 'unset';
+      document.body.classList.remove('menu-open');
     };
   }, [mobileMenuOpen]);
 
@@ -103,8 +136,15 @@ export default function Navbar() {
               </Link>
             </div>
             <div className="nav-icons mobile-nav-icons">
-              <button className="hamburger-menu" aria-label="Open Menu" onClick={toggleMobileMenu}>
-                <i className="fa-solid fa-bars"></i>
+              <button 
+                className={`hamburger-menu ${mobileMenuOpen ? 'active' : ''}`}
+                aria-label={mobileMenuOpen ? "Close Menu" : "Open Menu"}
+                aria-expanded={mobileMenuOpen}
+                onClick={toggleMobileMenu}
+              >
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
               </button>
             </div>
           </div>
@@ -145,89 +185,139 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div className="mobile-menu-overlay" onClick={closeMobileMenu}>
-          <div className="mobile-menu-panel" onClick={(e) => e.stopPropagation()}>
-            <div className="mobile-menu-header">
-              <span className="mobile-menu-title">เมนู</span>
-              <button 
-                onClick={closeMobileMenu}
-                className="mobile-menu-close"
-              >
-                <i className="fa-solid fa-times"></i>
+      <div 
+        className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`}
+        onClick={closeMobileMenu}
+      >
+        <div 
+          className={`mobile-menu-panel ${mobileMenuOpen ? 'active' : ''}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Search Bar in Mobile Menu */}
+          <div className="mobile-menu-search">
+            <form className="mobile-search-form" role="search" onSubmit={(e) => { e.preventDefault(); closeMobileMenu(); }}>
+              <input
+                type="text"
+                placeholder="ค้นหาสินค้า..."
+                aria-label="Search"
+              />
+              <button type="submit" aria-label="Search Button">
+                <i className="fa-solid fa-magnifying-glass"></i>
               </button>
-            </div>
-            <nav className="mobile-menu-nav">
-              <ul className="nav-links mobile-nav-links active">
-                <li>
-                  <a 
-                    href="/" 
-                    onClick={closeMobileMenu}
-                  >
-                    หน้าแรก
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="/products" 
-                    onClick={closeMobileMenu}
-                  >
-                    สินค้าทั้งหมด
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="/services/rental" 
-                    onClick={closeMobileMenu}
-                  >
-                    บริการให้เช่า
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="/services/repair" 
-                    onClick={closeMobileMenu}
-                  >
-                    อะไหล่ & บริการ
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="/reviews" 
-                    onClick={closeMobileMenu}
-                  >
-                    รีวิวหน้างาน
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="/about" 
-                    onClick={closeMobileMenu}
-                  >
-                    เกี่ยวกับเรา
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="/contact" 
-                    onClick={closeMobileMenu}
-                  >
-                    ติดต่อเรา
-                  </a>
-                </li>
-                <li className="nav-menu-login">
-                  <a 
-                    href="#" 
-                    onClick={closeMobileMenu}
-                  >
-                    <i className="fa-solid fa-user mr-2"></i> Login / Register
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            </form>
+          </div>
+
+          {/* Quick Contact Buttons */}
+          <div className="mobile-menu-quick-contact">
+            <a href="tel:0657898285" className="quick-contact-btn phone-btn">
+              <i className="fa-solid fa-phone"></i>
+              <span>โทรเลย</span>
+            </a>
+            <a href="#" className="quick-contact-btn line-btn">
+              <i className="fa-brands fa-line"></i>
+              <span>LINE</span>
+            </a>
+            <a href="#" className="quick-contact-btn facebook-btn">
+              <i className="fa-brands fa-facebook"></i>
+              <span>Facebook</span>
+            </a>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="mobile-menu-nav">
+            <ul className="nav-links mobile-nav-links">
+              <li className="menu-item">
+                <a 
+                  href="/" 
+                  onClick={closeMobileMenu}
+                  className="menu-link"
+                >
+                  <i className="fa-solid fa-home"></i>
+                  <span>หน้าแรก</span>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a 
+                  href="/products" 
+                  onClick={closeMobileMenu}
+                  className="menu-link"
+                >
+                  <i className="fa-solid fa-toolbox"></i>
+                  <span>สินค้าทั้งหมด</span>
+                  <i className="fa-solid fa-chevron-right"></i>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a 
+                  href="/services/rental" 
+                  onClick={closeMobileMenu}
+                  className="menu-link"
+                >
+                  <i className="fa-solid fa-calendar-check"></i>
+                  <span>บริการให้เช่า</span>
+                  <i className="fa-solid fa-chevron-right"></i>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a 
+                  href="/services/repair" 
+                  onClick={closeMobileMenu}
+                  className="menu-link"
+                >
+                  <i className="fa-solid fa-wrench"></i>
+                  <span>อะไหล่ & บริการ</span>
+                  <i className="fa-solid fa-chevron-right"></i>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a 
+                  href="/reviews" 
+                  onClick={closeMobileMenu}
+                  className="menu-link"
+                >
+                  <i className="fa-solid fa-star"></i>
+                  <span>รีวิวหน้างาน</span>
+                  <i className="fa-solid fa-chevron-right"></i>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a 
+                  href="/about" 
+                  onClick={closeMobileMenu}
+                  className="menu-link"
+                >
+                  <i className="fa-solid fa-info-circle"></i>
+                  <span>เกี่ยวกับเรา</span>
+                  <i className="fa-solid fa-chevron-right"></i>
+                </a>
+              </li>
+              <li className="menu-item">
+                <a 
+                  href="/contact" 
+                  onClick={closeMobileMenu}
+                  className="menu-link"
+                >
+                  <i className="fa-solid fa-envelope"></i>
+                  <span>ติดต่อเรา</span>
+                  <i className="fa-solid fa-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          {/* Login Section */}
+          <div className="mobile-menu-footer">
+            <a 
+              href="#" 
+              onClick={closeMobileMenu}
+              className="mobile-menu-login"
+            >
+              <i className="fa-solid fa-user"></i>
+              <span>Login / Register</span>
+            </a>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 }
