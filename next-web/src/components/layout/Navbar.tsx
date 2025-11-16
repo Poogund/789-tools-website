@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(60); // Default fallback value
+  const headerRef = useRef<HTMLDivElement>(null);
 
   // Debug: Log to confirm Navbar is rendering
   useEffect(() => {
@@ -34,17 +36,15 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Calculate header height and set CSS variable
+  // Calculate header height in real-time
   useEffect(() => {
     const calculateHeaderHeight = () => {
-      const stickyWrapper = document.querySelector('.sticky-header-wrapper');
-      if (stickyWrapper) {
-        const height = stickyWrapper.getBoundingClientRect().height;
-        const headerHeight = height > 0 ? height : 122; // Fallback to 122px if height is 0
-        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-      } else {
-        // Fallback if element not found
-        document.documentElement.style.setProperty('--header-height', '122px');
+      if (headerRef.current) {
+        const height = headerRef.current.getBoundingClientRect().height;
+        const calculatedHeight = height > 0 ? height : 60; // Fallback to 60px if height is 0
+        setHeaderHeight(calculatedHeight);
+        // Also update CSS variable for backward compatibility
+        document.documentElement.style.setProperty('--header-height', `${calculatedHeight}px`);
       }
     };
 
@@ -62,7 +62,7 @@ export default function Navbar() {
       window.removeEventListener('resize', calculateHeaderHeight);
       window.removeEventListener('scroll', calculateHeaderHeight);
     };
-  }, []);
+  }, [isScrolled]); // Recalculate when isScrolled changes
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -99,7 +99,10 @@ export default function Navbar() {
       </div>
 
       {/* Sticky Header Wrapper - includes both header and nav */}
-      <div className={`sticky-header-wrapper ${isScrolled ? 'sticky' : ''}`}>
+      <div 
+        ref={headerRef}
+        className={`sticky-header-wrapper ${isScrolled ? 'sticky' : ''}`}
+      >
         {/* Main Header */}
         <div className="main-header">
           <div className="container">
@@ -188,10 +191,17 @@ export default function Navbar() {
       <div 
         className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`}
         onClick={closeMobileMenu}
+        style={{
+          top: `${headerHeight}px`,
+        }}
       >
         <div 
           className={`mobile-menu-panel ${mobileMenuOpen ? 'active' : ''}`}
           onClick={(e) => e.stopPropagation()}
+          style={{
+            top: `${headerHeight}px`,
+            height: `calc(100vh - ${headerHeight}px)`,
+          }}
         >
           {/* Search Bar in Mobile Menu */}
           <div className="mobile-menu-search">
