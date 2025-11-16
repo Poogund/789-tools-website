@@ -76,7 +76,10 @@ export default function LoginPage() {
         throw new Error(errorMessage);
       }
 
-      if (authData.user) {
+      if (authData.user && authData.session) {
+        // Verify session was created successfully
+        console.log('[Login] Session created successfully for user:', authData.user.email);
+        
         // Sync user to customers table (async - don't block login if it fails)
         syncUserToCustomerTable(authData.user).catch((syncError: any) => {
           console.error('Sync error:', syncError);
@@ -88,9 +91,17 @@ export default function LoginPage() {
           }
         });
 
-        // Redirect immediately - don't wait for sync
+        // Wait a moment to ensure session cookie is set before redirect
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Redirect to account page or return URL
         router.push(redirectTo);
         router.refresh();
+      } else if (authData.user && !authData.session) {
+        // Session not created - this shouldn't happen with email/password
+        console.error('[Login] User authenticated but no session created');
+        setError('เกิดข้อผิดพลาดในการสร้าง session กรุณาลองอีกครั้ง');
+        setIsSubmitting(false);
       }
     } catch (err: any) {
       console.error('Login error:', err);

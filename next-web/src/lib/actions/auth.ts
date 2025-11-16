@@ -1,6 +1,6 @@
 'use server';
 
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createServerSupabaseAdminClient } from '@/lib/supabase/server';
 import type { User } from '@supabase/supabase-js';
 
 /**
@@ -9,10 +9,14 @@ import type { User } from '@supabase/supabase-js';
  * 
  * @param user - Supabase Auth User object
  * @returns Customer ID or null if error
+ * 
+ * NOTE: Uses admin client to bypass RLS since this is called from server action
+ * and we already have the authenticated user object from client-side auth
  */
 export async function syncUserToCustomerTable(user: User) {
   try {
-    const supabase = createServerSupabaseClient();
+    // Use admin client to bypass RLS - we already have authenticated user from client
+    const supabase = createServerSupabaseAdminClient();
     
     // Extract user data
     const authId = user.id;

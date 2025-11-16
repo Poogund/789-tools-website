@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createServerClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { syncUserToCustomerTable } from '@/lib/actions/auth';
 
 /**
  * OAuth callback handler for Supabase social login (API-C1)
  * Handles redirects from Google/Facebook OAuth
  * Spec: F05, Plan: §5.1
+ * 
+ * IMPORTANT: Uses createServerClient with cookies support to properly create session cookies
  */
 export async function GET(request: Request) {
   try {
@@ -17,9 +20,31 @@ export async function GET(request: Request) {
       throw new Error('No code provided');
     }
 
-    const supabase = createServerSupabaseClient();
+    // Create Supabase client with cookies support for route handler
+    const cookieStore = cookies();
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll();
+          },
+          setAll(cookiesToSet) {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) => {
+                cookieStore.set(name, value, options);
+              });
+            } catch (error) {
+              // Ignore cookie errors in route handler
+              console.warn('[auth/callback] Cookie set error (may be expected):', error);
+            }
+          },
+        },
+      }
+    );
 
-    // Exchange code for session
+    // Exchange code for session (this will create session cookies)
     const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
 
     if (exchangeError) {
@@ -40,8 +65,10 @@ export async function GET(request: Request) {
       throw new Error('User not found after exchange');
     }
 
-    // Sync user to customers table (DoD TASK-040)
-    await syncUserToCustomerTable(user);
+    // Sync user to customers table (async - don't block redirect)
+    syncUserToCustomerTable(user).catch((syncError: any) => {
+      console.error('[auth/callback] Sync error (non-blocking):', syncError);
+    });
 
     // Redirect to account page (DoD TASK-041)
     return NextResponse.redirect(`${origin}/account`);
@@ -49,7 +76,8 @@ export async function GET(request: Request) {
     console.error('[auth/callback] Error:', error);
     // Error handling: Redirect to login with error
     const { origin } = new URL(request.url);
-    return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
+    const errorMessage = error instanceof Error ? error.message : 'auth_callback_failed';
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(errorMessage)}`);
   }
 }
 
