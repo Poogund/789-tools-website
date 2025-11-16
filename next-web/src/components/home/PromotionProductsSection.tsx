@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { Product } from '@/types';
+import SafeImage from '@/components/common/SafeImage';
 
 interface PromotionProductsSectionProps {
   products: Product[];
@@ -80,7 +81,7 @@ export default function PromotionProductsSection({ products }: PromotionProducts
     id: product.id,
     name: product.name,
     link: `/products/${product.slug}`,
-    image: product.image_url || '/placeholder-product.png',
+    image: product.image_url || 'https://placehold.co/400x300/eee/ccc?text=Product',
     price: product.sale_price || product.price,
     originalPrice: product.sale_price ? product.price : undefined
   })) : [];
@@ -173,10 +174,17 @@ export default function PromotionProductsSection({ products }: PromotionProducts
             {visibleProducts.map((product, index) => (
               <Link key={`${product.id}-${index}`} href={product.link} className="product-card">
                 <div className="product-image">
-                  <img
+                  <SafeImage
                     src={product.image}
                     alt={product.name}
-                    loading="lazy"
+                    className="product-img"
+                    fallbackSrc="https://placehold.co/400x300/eee/ccc?text=Product"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block'
+                    }}
                   />
                   <span className="product-badge promotion">โปร</span>
                 </div>

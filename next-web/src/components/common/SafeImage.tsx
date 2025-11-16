@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, CSSProperties } from 'react';
 
 interface SafeImageProps {
   src: string;
@@ -11,6 +11,7 @@ interface SafeImageProps {
   objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
   priority?: boolean;
   fallbackSrc?: string;
+  style?: CSSProperties;
 }
 
 export default function SafeImage({
@@ -21,7 +22,8 @@ export default function SafeImage({
   height,
   objectFit = 'cover',
   priority = false,
-  fallbackSrc = 'https://placehold.co/400x300/eee/ccc?text=Image'
+  fallbackSrc = 'https://placehold.co/400x300/eee/ccc?text=Image',
+  style
 }: SafeImageProps) {
   const [imgSrc, setImgSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
@@ -42,7 +44,7 @@ export default function SafeImage({
       height={height}
       onError={handleError}
       loading={priority ? 'eager' : 'lazy'}
-      style={{ objectFit }}
+      style={{ objectFit, ...style }}
     />
   );
 }

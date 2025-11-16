@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Category } from '@/types';
+import SafeImage from '@/components/common/SafeImage';
 
 interface CategoriesSectionProps {
   categories: Category[];
@@ -37,34 +38,19 @@ export default function CategoriesSection({ categories }: CategoriesSectionProps
               transition: 'transform 0.3s ease, box-shadow 0.3s ease',
               backgroundColor: '#ffffff'
             }}>
-              <div className="category-image" style={{ position: 'relative' }}>
-                <img 
-                  src={category.image_url} 
-                  alt={category.name} 
-                  loading="lazy" 
+              <div className="category-image" style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', overflow: 'hidden', backgroundColor: '#f5f5f5' }}>
+                <SafeImage
+                  src={category.image_url || ''}
+                  alt={category.name}
+                  className="category-img"
+                  fallbackSrc="https://placehold.co/400x400/e0e0e0/999?text=Category"
                   style={{
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    aspectRatio: '1 / 1'
+                    display: 'block'
                   }}
                 />
-                {!category.image_url && (
-                  <div className="category-image-placeholder" style={{
-                    position: 'absolute',
-                    top: '0',
-                    left: '0',
-                    right: '0',
-                    bottom: '0',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#f5f5f5',
-                    color: '#999'
-                  }}>
-                    <i className="fa-solid fa-tools" style={{ fontSize: '2rem' }}></i>
-                  </div>
-                )}
               </div>
               <div className="card-name-overlay thai-text" style={{
                 position: 'absolute',
