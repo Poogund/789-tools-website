@@ -80,9 +80,9 @@ export default function Navbar() {
           </p>
           <div className="top-bar-links">
             <a href="#">ไทย / อังกฤษ</a>
-            <a href="#" className="top-bar-login">
+            <Link href="/login" className="top-bar-login">
               <i className="fa-solid fa-user"></i> Login / Register
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -167,7 +167,7 @@ export default function Navbar() {
             <li><a href="/about">เกี่ยวกับเรา</a></li>
             <li><a href="/contact">ติดต่อเรา</a></li>
             <li className="nav-menu-login">
-              <a href="#"><i className="fa-solid fa-user"></i> Login / Register</a>
+              <Link href="/login"><i className="fa-solid fa-user"></i> Login / Register</Link>
             </li>
           </ul>
           <div className="nav-icons desktop-nav-icons">
@@ -335,7 +335,7 @@ export default function Navbar() {
           {/* Footer with Login */}
           <div className="mobile-menu-footer">
             <Link 
-              href="#" 
+              href="/login" 
               onClick={closeMobileMenu}
               className="mobile-menu-login"
             >
