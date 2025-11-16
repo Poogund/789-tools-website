@@ -86,13 +86,27 @@ export default function PromotionProductsSection({ products }: PromotionProducts
   })) : [];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Handle client-side mounting to prevent hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 576);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     setCurrentIndex(0);
   }, [cards.length]);
 
   useEffect(() => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 576;
+    if (!isMounted) return;
+    
     const visibleCount = isMobile ? MOBILE_VISIBLE_COUNT : VISIBLE_COUNT;
     
     if (cards.length <= visibleCount) return;
@@ -102,7 +116,7 @@ export default function PromotionProductsSection({ products }: PromotionProducts
     }, AUTOPLAY_DELAY);
 
     return () => clearInterval(timer);
-  }, [cards.length]);
+  }, [cards.length, isMobile, isMounted]);
 
   const handlePrev = () => {
     if (cards.length <= 1) return;
@@ -115,8 +129,8 @@ export default function PromotionProductsSection({ products }: PromotionProducts
   };
 
   const visibleProducts = useMemo(() => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 576;
-    const visibleCount = isMobile ? MOBILE_VISIBLE_COUNT : VISIBLE_COUNT;
+    // Use default desktop count during SSR to prevent hydration mismatch
+    const visibleCount = isMounted ? (isMobile ? MOBILE_VISIBLE_COUNT : VISIBLE_COUNT) : VISIBLE_COUNT;
     
     if (cards.length <= visibleCount) {
       return cards;
@@ -126,7 +140,7 @@ export default function PromotionProductsSection({ products }: PromotionProducts
       const cardIndex = (currentIndex + index) % cards.length;
       return cards[cardIndex];
     });
-  }, [cards, currentIndex]);
+  }, [cards, currentIndex, isMobile, isMounted]);
 
   if (cards.length === 0) {
     return null;

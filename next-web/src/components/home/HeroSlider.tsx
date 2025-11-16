@@ -9,17 +9,23 @@ interface HeroSliderProps {
 
 export default function HeroSlider({ slides }: HeroSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Handle client-side mounting to prevent hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Auto-rotate slides
   useEffect(() => {
-    if (slides.length <= 1) return;
+    if (!isMounted || slides.length <= 1) return;
 
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, [slides.length, isMounted]);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
