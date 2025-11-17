@@ -316,103 +316,400 @@ Each task includes: ID, Title, Goal, DoD, Spec Mapping, Dependencies, Estimate, 
 
 ---
 
-### Admin – Basic Modules
+### TASK-050 – Admin Layout Shell & Navigation
 
-#### TASK-050 – Admin Layout & Auth Guard (A0)
-- **Goal:** สร้าง `/admin` layout + ป้องกัน access ด้วย admin role
-- **DoD:**
-  - `/(admin)/admin/layout.tsx` พร้อม sidebar
-  - middleware เช็ค role admin ก่อนเข้า `/admin/*`
-- **Spec:** A0
-- **Plan:** §5.2, §7.1
-- **Dependencies:** TASK-002, TASK-011
-- **Estimate:** 1–1.5 วัน
-- **Owner:** TBC
+- **Category:** Admin / Layout
+- **Route หลัก:** `/admin`
+- **เป้าหมาย:**  
+  สร้างโครงหน้า Admin หลัก (Layout Shell) ที่มี Sidebar + Topbar + Content Area เพื่อใช้เป็นฐานให้ทุกหน้าหลังบ้าน
 
-#### TASK-051 – Admin Product CRUD (B1)
-- **Goal:** หลังบ้านจัดการสินค้าได้
-- **DoD:**
-  - `/admin/products` แสดงตารางสินค้า
-  - สามารถเพิ่ม/แก้/ซ่อนสินค้า
-  - อัปโหลดรูปได้ และเก็บ URL ใน DB
-- **Spec:** B1, products tables
-- **Plan:** §7.4
-- **Dependencies:** TASK-050, TASK-010
-- **Estimate:** 1.5–2 วัน
-- **Owner:** TBC
+#### รายละเอียด
 
-#### TASK-052 – Admin Categories (B2)
-- **Goal:** CRUD หมวดสินค้า
-- **DoD:**
-  - `/admin/categories` เพิ่ม/แก้/ลบหมวดได้
-- **Spec:** B2
-- **Plan:** §7.4
-- **Dependencies:** TASK-050, TASK-010
-- **Estimate:** 0.5–1 วัน
-- **Owner:** TBC
+- ใช้โครงสร้างแยก `(admin)` เช่น  
+  - `src/app/(admin)/layout.tsx` → Layout หลัก  
+  - `src/app/(admin)/page.tsx` → Dashboard Overview (TASK-051)
+- Layout แบ่ง 3 ส่วนหลัก:
+  1. **Sidebar (ซ้าย)**  
+     - โลโก้ / ชื่อระบบ: `789 TOOLS Admin`  
+     - เมนูหลัก:
+       - Dashboard → `/admin`
+       - Orders → `/admin/orders`
+       - Products → `/admin/products`
+       - Customers → `/admin/customers`
+       - Content → `/admin/content/home`
+     - แสดงเมนู active ชัดเจน (เช่น สีพื้นหลัง / สีตัวอักษร)
+  2. **Topbar**  
+     - แสดงชื่อหน้าปัจจุบัน (เช่น "Dashboard", "Orders")  
+     - ช่อง Search (ยังไม่ต้องเชื่อมจริงใน MVP ได้)  
+     - ไอคอน Notification (placeholder)  
+     - Avatar + ชื่อผู้ใช้: เช่น "Admin"
+  3. **Content Area**  
+     - ความกว้างแบบอ่านง่าย (เช่น max-width ~ 1280px)  
+     - มี padding รอบ ๆ (เช่น `px-6 py-6`)  
+     - พื้นหลังนอก card เป็นเทาอ่อน (`#F5F5F7`)  
+     - Card สีขาว มุมโค้ง + เงาเบา ๆ
 
-#### TASK-053 – Admin Hero Slides (B3)
-- **Goal:** จัดการ Hero slider
-- **DoD:**
-  - `/admin/hero` เพิ่ม/แก้/ลบ/เปิดปิดสไลด์ได้
-  - ลำดับสไลด์มี sort_order ทำงาน
-- **Spec:** B3
-- **Plan:** §7.4
-- **Dependencies:** TASK-050, TASK-010
-- **Estimate:** 1 วัน
-- **Owner:** TBC
+- Responsive:
+  - Desktop: Sidebar กว้าง ~ 240–260px แสดงตลอด
+  - Mobile: Sidebar หุบได้ (แสดงผ่านปุ่ม hamburger)
 
-#### TASK-054 – Admin Blog CRUD (B8)
-- **Goal:** จัดการบทความ blog
-- **DoD:**
-  - `/admin/blog` สร้าง/แก้บทความ, set draft/published
-- **Spec:** B8
-- **Plan:** §7.4
-- **Dependencies:** TASK-050, TASK-010
-- **Estimate:** 1–1.5 วัน
-- **Owner:** TBC
+#### DoD (Definition of Done)
 
-#### TASK-055 – Admin FAQ CRUD (B7)
-- **Goal:** จัดการ FAQ
-- **DoD:**
-  - `/admin/faq` เพิ่ม/แก้/ลบคำถาม–คำตอบได้
-- **Spec:** B7
-- **Plan:** §7.4
-- **Dependencies:** TASK-050, TASK-010
-- **Estimate:** 0.5–1 วัน
-- **Owner:** TBC
+- เข้า `/admin` แล้วเห็น:
+  - Sidebar + Topbar + Content Area ทำงานครบ
+- คลิกเมนูใน Sidebar แล้ว:
+  - เปลี่ยนเส้นทางไปยัง route ที่ถูกต้อง (แม้บางหน้าใน TASK ต่อไปจะยังเป็น placeholder ได้)
+- Layout แสดงผลได้ทั้งบนหน้าจอใหญ่และเล็ก (Sidebar สามารถหุบ/แสดงได้ใน mobile)
 
-#### TASK-056 – Admin Reviews & Leads (B6, B9)
-- **Goal:** หน้าจัดการรีวิว + leads
-- **DoD:**
-  - `/admin/reviews` เพิ่ม/แก้/เปิดปิดรีวิว
-  - `/admin/leads` แสดง leads จาก DB + เปลี่ยน status ได้
-- **Spec:** B6, B9
-- **Plan:** §7.4
-- **Dependencies:** TASK-050, TASK-010, TASK-011
-- **Estimate:** 1–1.5 วัน
-- **Owner:** TBC
 
-#### TASK-057 – Admin Orders Management (B12)
-- **Goal:** หน้าดู/อัปเดตคำสั่งซื้อหลังบ้าน
-- **DoD:**
-  - `/admin/orders` แสดง list + filter ได้ตาม status
-  - ดูรายละเอียด order + เปลี่ยน status/payment_status
-- **Spec:** B12
-- **Plan:** §7.4
-- **Dependencies:** TASK-032, TASK-050
-- **Estimate:** 1–1.5 วัน
-- **Owner:** TBC
+---
 
-#### TASK-058 – Admin Settings Basic (B13)
-- **Goal:** ตั้งค่าข้อมูลพื้นฐาน เช่น LINE, เบอร์โทร, ธนาคาร
-- **DoD:**
-  - `/admin/settings` แก้ config พื้นฐานได้ (เก็บใน table settings หรือ config JSON)
-- **Spec:** B13
-- **Plan:** §7.4
-- **Dependencies:** TASK-050
-- **Estimate:** 0.5–1 วัน
-- **Owner:** TBC
+### TASK-051 – Admin Dashboard Overview (KPI + Chart)
+
+- **Category:** Admin / Dashboard
+- **Route:** `/admin`
+- **เป้าหมาย:**  
+  แสดงภาพรวมสถานะร้านค้าปัจจุบันในรูปแบบ KPI การ์ด + กราฟยอดขาย + ตารางคำสั่งซื้อล่าสุด
+
+#### รายละเอียด
+
+- ส่วนบน: Summary Cards 4 ใบ แสดงข้อมูลเชิงตัวเลข:
+  1. ยอดขายวันนี้ (Today Revenue)
+  2. ยอดขาย 7 วันล่าสุด (Last 7 days)
+  3. จำนวนคำสั่งซื้อวันนี้
+  4. จำนวนออเดอร์ที่ต้องจัดการ (เช่น status = `pending` หรือ `processing`)
+
+- ส่วนกลาง: กราฟยอดขาย (Daily Revenue Chart)
+  - ประเภท: Line chart หรือ Bar chart
+  - แกน X: วันที่ (ช่วง 7 หรือ 30 วันล่าสุด)
+  - แกน Y: ยอดขาย (THB)
+  - ถ้ายังไม่มีข้อมูลจริง สามารถใช้ mock data ชั้น UI ก่อนได้ แต่ต้องออกแบบให้พร้อมต่อเชื่อมจริง
+
+- ส่วนล่าง: ตาราง “Latest Orders”
+  - แสดง 5–10 คำสั่งซื้อล่าสุด
+  - คอลัมน์:
+    - Order ID (เช่น `#ORD-xxxx`)
+    - Customer name
+    - Total
+    - Status
+    - Created At
+    - Action: ปุ่ม "View" → ลิงก์ไป `/admin/orders/[id]` (TASK-053)
+
+- Mood & Tone:
+  - ใช้ card สีขาว มุมโค้ง + เงาบาง
+  - ใช้สีแบรนด์: น้ำเงิน `#000AFF`, เหลือง `#E3B935`, เทา/ดำสำหรับตัวอักษร
+
+#### DoD
+
+- หน้า `/admin` แสดง:
+  - KPI Cards 4 ใบ
+  - กราฟยอดขาย (mock หรือจริง)
+  - ตาราง Latest Orders
+- ถ้ายังไม่มีคำสั่งซื้อ:
+  - แสดง empty state ที่ดูดี (เช่น ไอคอน + ข้อความ “ยังไม่มีคำสั่งซื้อ”)
+- ปุ่ม "View" ในแต่ละแถวพาไป `/admin/orders/[id]` ถูกต้อง (ถ้า route ยังไม่พร้อม แสดง placeholder ได้ใน Task นี้ แต่ path ต้องถูก)
+
+
+---
+
+### TASK-052 – Admin Orders List + Filters
+
+- **Category:** Admin / Orders
+- **Route:** `/admin/orders`
+- **เป้าหมาย:**  
+  แสดงรายการคำสั่งซื้อทั้งหมดในระบบ พร้อมความสามารถในการค้นหาและกรองตามสถานะ
+
+#### รายละเอียด
+
+- ตารางคำสั่งซื้อ:
+  - แสดงข้อมูลจากตาราง `orders`
+  - คอลัมน์ (อย่างน้อย):
+    - Order ID (แสดงสั้น เช่น `#ORD-xxxxx`)
+    - Created At (วันที่สั่งซื้อ)
+    - Customer name
+    - Total (ยอดรวม)
+    - Order Status (`pending`, `confirmed`, `processing`, `shipped`, `completed`, `cancelled`)
+    - Payment Status (`unpaid`, `paid`, `failed`)
+    - Action: ปุ่ม "ดูรายละเอียด" → `/admin/orders/[id]`
+
+- Filters / Search:
+  - Dropdown เลือก Order Status
+  - Dropdown เลือก Payment Status
+  - Search input (ค้นด้วย Order ID หรือชื่อลูกค้า)
+  - ปุ่ม Reset Filters
+
+- UX:
+  - เรียงลำดับเริ่มต้นตาม `created_at` (ล่าสุดอยู่บนสุด)
+  - ตาราง scroll ได้ในหน้าจอเล็ก
+
+#### DoD
+
+- `/admin/orders` ดึงข้อมูลจาก `orders` จริง (ไม่ใช่ mock)
+- สามารถ:
+  - กรองตาม Order Status ได้
+  - กรองตาม Payment Status ได้
+  - ค้นหาด้วยคำหลัก (Order ID / ชื่อ) แล้วตารางแสดงผลที่ตรงเงื่อนไข
+- ปุ่ม "ดูรายละเอียด" ในแต่ละแถวพาไป `/admin/orders/[id]` ถูกต้อง
+
+
+---
+
+### TASK-053 – Admin Order Detail + Status Update
+
+- **Category:** Admin / Orders
+- **Route:** `/admin/orders/[id]`
+- **เป้าหมาย:**  
+  ให้แอดมินสามารถดูรายละเอียดคำสั่งซื้อครบถ้วน และเปลี่ยนสถานะคำสั่งซื้อ/การชำระเงินได้
+
+#### รายละเอียด
+
+- ข้อมูลหัวข้อ (Order Summary):
+  - Order ID
+  - วันที่สั่ง (`created_at`)
+  - วิธีชำระ (`payment_method`)
+  - สถานะคำสั่งซื้อ (`order_status`)
+  - สถานะการชำระ (`payment_status`)
+
+- ข้อมูลลูกค้า:
+  - ชื่อ
+  - อีเมล
+  - เบอร์โทร
+  - ที่อยู่จัดส่ง
+
+- รายการสินค้า (Order Items):
+  - อ่านจาก `order_items` โดย `order_id`
+  - แสดงตาราง:
+    - ชื่อสินค้า
+    - จำนวน
+    - ราคาต่อหน่วย
+    - ราคารวมของรายการ (quantity * unit_price)
+
+- สรุปยอด:
+  - Subtotal
+  - Shipping cost
+  - Grand total
+
+- ฟังก์ชันอัปเดตสถานะ:
+  - UI สำหรับแก้ไขสถานะคำสั่งซื้อ (`order_status`)  
+    - เช่น Dropdown หรือชุดปุ่ม: `pending` → `confirmed` → `processing` → `shipped` → `completed` / `cancelled`
+  - (ถ้าต้องการ) UI สำหรับแก้ไข `payment_status` (`unpaid`, `paid`, `failed`)
+  - ปุ่ม "Update" เพื่อบันทึกการเปลี่ยนแปลง
+  - เมื่อกด update:
+    - เขียนค่าใหม่ลง `orders`
+    - แสดง Toast/แจ้งเตือน `อัปเดตสำเร็จ` หรือ `เกิดข้อผิดพลาด`
+
+#### DoD
+
+- เปิด `/admin/orders/[id]` ด้วย `id` ที่ถูกต้อง:
+  - เห็นข้อมูลหัวข้อ, ลูกค้า, รายการสินค้า, สรุปยอด ครบ
+- เปลี่ยน `order_status` แล้ว:
+  - ค่าใน DB ถูกอัปเดต
+  - กลับมาที่หน้าเดิมและเห็นสถานะใหม่
+- ถ้า `id` ไม่ถูกต้องหรือไม่มีคำสั่งซื้อ:
+  - แสดง 404 หรือหน้าข้อความ “ไม่พบคำสั่งซื้อ”
+
+
+---
+
+### TASK-054 – Admin Products List + Quick Toggle
+
+- **Category:** Admin / Products
+- **Route:** `/admin/products`
+- **เป้าหมาย:**  
+  ให้แอดมินดูรายการสินค้าในร้านทั้งหมด และเปิด/ปิดการแสดงผลสินค้าได้อย่างรวดเร็ว
+
+#### รายละเอียด
+
+- ตารางสินค้า:
+  - ข้อมูลจากตาราง `products`
+  - คอลัมน์:
+    - (ถ้ามี) รูป thumb เล็ก ๆ ของสินค้า
+    - ชื่อสินค้า
+    - หมวดหมู่
+    - ราคา / ราคาโปรโมชัน (`price`, `sale_price`)
+    - สถานะการแสดงผล (`is_active`)
+    - Action: ปุ่ม "แก้ไข" → `/admin/products/[id]`
+
+- Filters / Search:
+  - Search box ค้นตามชื่อสินค้า
+  - Dropdown filter ตามหมวดหมู่ (ถ้ามีตาราง `categories`)
+  - Filter ตามสถานะ active/inactive
+
+- Quick Toggle:
+  - มี switch หรือ checkbox บนตารางสำหรับเปิด/ปิด `is_active`
+  - เมื่อ toggle:
+    - อัปเดตค่าที่ DB ทันที
+    - UI สะท้อนสถานะใหม่ทันที (optimistic update ได้)
+
+#### DoD
+
+- `/admin/products` แสดงสินค้าจาก DB จริง
+- ค้นหา + filter แล้วตารางแสดงผลตามเงื่อนไข
+- การ toggle `is_active`:
+  - อัปเดตฟิลด์ใน DB สำเร็จ
+  - ถ้า error มีข้อความแจ้งเตือนที่เข้าใจง่าย
+- ปุ่ม "แก้ไข" พาไป `/admin/products/[id]` ถูกต้อง
+
+
+---
+
+### TASK-055 – Admin Product Detail + Basic Edit
+
+- **Category:** Admin / Products
+- **Route:** `/admin/products/[id]`
+- **เป้าหมาย:**  
+  ให้แอดมินแก้ไขข้อมูลพื้นฐานของสินค้าได้จากหน้าเดียว
+
+#### รายละเอียด
+
+- ฟอร์มแก้ไขข้อมูลสินค้า:
+  - ชื่อสินค้า (`name`)
+  - Slug (`slug`)
+  - คำอธิบาย (`description`)
+  - ราคา (`price`)
+  - ราคาโปรโมชัน (`sale_price`) (optional)
+  - ประเภท (`type`: `product` | `service`)
+  - หมวดหมู่ (`category_id` → เลือกจาก dropdown)
+  - สถานะ (`is_active`: เปิด/ปิดการแสดงผล)
+
+- UX:
+  - เลย์เอาต์แบบ 2 คอลัมน์ (ถ้าจอใหญ่):  
+    - ซ้าย: ข้อมูลชื่อ/คำอธิบาย  
+    - ขวา: ราคา/สถานะ/หมวดหมู่
+  - ปุ่ม “บันทึกการเปลี่ยนแปลง” ด้านล่างหรือด้านบนขวา
+
+- Validation:
+  - `name`, `price`, `category_id` ต้องไม่ว่าง
+  - `price`, `sale_price` ต้องเป็นตัวเลข
+  - แสดง error message ข้างฟิลด์ที่ผิด
+
+#### DoD
+
+- โหลด `/admin/products/[id]` แล้วแบบฟอร์ม prefill ด้วยข้อมูลจริงจาก DB
+- แก้ไขค่าแล้วกดบันทึก:
+  - เขียนข้อมูลใหม่ลง DB
+  - มีข้อความแจ้ง “บันทึกสำเร็จ”
+- ถ้า `id` สินค้าไม่ถูกต้อง:
+  - แสดง 404 หรือ “ไม่พบสินค้า”
+
+
+---
+
+### TASK-056 – Admin Customers List
+
+- **Category:** Admin / Customers
+- **Route:** `/admin/customers`
+- **เป้าหมาย:**  
+  ให้แอดมินดูรายชื่อลูกค้าและภาพรวมการสั่งซื้อของแต่ละคน
+
+#### รายละเอียด
+
+- ตารางลูกค้า:
+  - ใช้ข้อมูลจากตาราง `customers`
+  - ใช้การ aggregate จาก `orders` เพื่อหาจำนวนครั้งและยอดใช้จ่ายรวม
+  - คอลัมน์:
+    - ชื่อลูกค้า
+    - อีเมล
+    - เบอร์โทร
+    - จำนวนคำสั่งซื้อทั้งหมด (count orders)
+    - ยอดใช้จ่ายรวม (sum `orders.total`)
+    - (optional) วันที่สั่งครั้งล่าสุด
+
+- Filters / Search:
+  - ค้นหาตามชื่อ / อีเมล / เบอร์โทร
+  - เรียงลำดับตาม:
+    - จำนวนคำสั่งซื้อ
+    - ยอดใช้จ่ายรวม
+    - วันที่คำสั่งซื้อล่าสุด
+
+#### DoD
+
+- `/admin/customers` แสดงข้อมูลลูกค้าจริงจาก DB
+- ตัวเลขจำนวน order และยอดรวม ถูกต้อง (เทียบกับ DB ได้)
+- Search และ sort ทำงานตามที่ระบุ
+- Empty state เมื่อยังไม่มีลูกค้าในระบบ
+
+
+---
+
+### TASK-057 – Admin Homepage Content (Hero / Banners)
+
+- **Category:** Admin / Content
+- **Route:** `/admin/content/home`
+- **เป้าหมาย:**  
+  ให้แอดมินสามารถจัดการ Hero Slides / Banner ของหน้าแรกได้จากหลังบ้าน
+
+#### รายละเอียด
+
+- แสดงรายการ Hero Slides จากตาราง เช่น `hero_slides` (หรือชื่อใกล้เคียง)
+  - ฟิลด์:
+    - headline
+    - subheadline
+    - button_text
+    - button_url
+    - image_url (ถ้ามี)
+    - sort_order
+    - is_active
+
+- UI:
+  - List / Table ของ slides แต่ละตัว
+  - Toggle ปิด/เปิด `is_active`
+  - ช่องกรอก/แก้ไขข้อมูล text (headline, subheadline, ฯลฯ)
+  - ปุ่ม "เพิ่ม Slide ใหม่"
+  - ความสามารถในการเปลี่ยนลำดับ (sort_order) เช่น:
+    - ปุ่มเลื่อนขึ้น/ลง
+    - หรือ input ลำดับตัวเลข
+
+- การเชื่อมกับหน้า Public:
+  - หน้า `/` (Home) ต้องอ่านข้อมูลจาก table นี้
+  - แสดงเฉพาะ `is_active = true` ตาม `sort_order`
+
+#### DoD
+
+- `/admin/content/home` แสดงรายการ Hero Slides ได้
+- สามารถ:
+  - แก้ไขข้อความ/URL แล้วบันทึกลง DB
+  - เปิด/ปิด slide ผ่าน toggle
+  - ปรับลำดับการแสดงผล
+- หน้า Home (`/`) แสดงผลตามข้อมูลจริงจาก table นี้
+
+
+---
+
+### TASK-058 – Admin Access Control & Protect /admin
+
+- **Category:** Admin / Security
+- **Route:** ทุก route ที่ขึ้นต้นด้วย `/admin`
+- **เป้าหมาย:**  
+  จำกัดการเข้าถึงส่วน Admin ให้เฉพาะผู้ใช้ที่มีสิทธิ์เป็น admin เท่านั้น
+
+#### รายละเอียด
+
+- Schema:
+  - เพิ่มฟิลด์ `role` ให้กับผู้ใช้ เช่น:
+    - ในตาราง `profiles` หรือ `customers` หรือ `users` (ตามโครงปัจจุบัน)
+    - ค่า role เช่น: `admin`, `staff`, `customer`
+  - กำหนดว่าผู้ใช้ admin ต้องมี `role = 'admin'`
+
+- Logic การป้องกัน:
+  - ใช้ middleware หรือ guard ฝั่ง server:
+    - ถ้าไม่พบ session (ไม่ล็อกอิน):
+      - redirect ไป `/login?redirect=/admin`
+    - ถ้าล็อกอินแล้วแต่ `role !== 'admin'`:
+      - แสดงหน้า 403 (Forbidden) หรือ redirect ไปหน้า `/`
+  - ใช้ logic เดียวกันกับทุก route ที่ขึ้นต้นด้วย `/admin`
+
+- UI เมื่อสิทธิ์ไม่พอ:
+  - แสดงข้อความ:
+    - เช่น “คุณไม่มีสิทธิ์เข้าถึงหน้าจัดการระบบ (Admin)”
+
+#### DoD
+
+- ทดสอบด้วย user ปกติ (role = customer):
+  - เข้า `/admin` หรือ `/admin/...` → ต้องเข้าไม่ได้ (403 หรือ redirect)
+- ทดสอบด้วย user admin (role = admin):
+  - เข้า `/admin` และทุก route ในชุด admin ได้ปกติ
+- การตรวจสิทธิ์ทำงานทั้งบน `/admin`, `/admin/orders`, `/admin/products`, ฯลฯ
 
 ---
 

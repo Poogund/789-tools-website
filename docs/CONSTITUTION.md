@@ -27,7 +27,6 @@
 7. **Accessibility Budget** – รองรับ keyboard navigation และ aria-label ใน UI สำคัญ
 8. **Security Budget** – ป้องกัน admin routes, ต้อง validate input ทุกครั้ง
 9. **Deployment Stability** – ต้องผ่าน checklist testing ก่อน release ทุกครั้ง
-10. Frontend Design Reuse – การออกแบบหน้าเว็บ (layout, colors, spacing) ต้องยึดจากเว็บเก่าที่อยู่ในโฟลเดอร์ /legacy เป็นหลัก ห้าม redesign ใหม่ทั้งหมด นอกจากจะระบุไว้ใน SPEC/PLAN ให้ทำ
 
 
 ---
