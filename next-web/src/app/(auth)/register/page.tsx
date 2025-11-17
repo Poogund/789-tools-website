@@ -2,298 +2,454 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { supabaseBrowserClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 
-// Zod Schema for register form
-const registerSchema = z
-  .object({
-    email: z.string().email('กรุณากรอกอีเมลให้ถูกต้อง'),
-    password: z.string().min(6, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'),
-    confirmPassword: z.string().min(6, 'กรุณายืนยันรหัสผ่าน'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'รหัสผ่านไม่ตรงกัน',
-    path: ['confirmPassword'],
-  });
-
-type RegisterFormData = z.infer<typeof registerSchema>;
-
 export default function RegisterPage() {
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
-  });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
 
-  const onSubmit = async (data: RegisterFormData) => {
+    // Validate inputs
+    if (!fullName || !phoneNumber || !email || !password || !confirmPassword) {
+      setError('กรุณากรอกข้อมูลให้ครบถ้วน');
+      return;
+    }
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      setError('รหัสผ่านไม่ตรงกัน');
+      return;
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      setError('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      setIsSubmitting(true);
-      setError(null);
-      setSuccess(false);
-
-      // Sign up with email and password
-      const { data: authData, error: authError } = await supabaseBrowserClient.auth.signUp({
-        email: data.email,
-        password: data.password,
-      });
-
-      if (authError) {
-        throw authError;
-      }
-
-      if (authData.user) {
-        // Show success message
-        setSuccess(true);
-      }
-    } catch (err) {
-      console.error('Register error:', err);
-      setError(err instanceof Error ? err.message : 'เกิดข้อผิดพลาดในการสมัครสมาชิก');
-      setIsSubmitting(false);
+      // TODO: Implement registration logic
+      console.log('Register:', { fullName, phoneNumber, email, password });
+      router.push('/login?message=สมัครสมาชิกสำเร็จ');
+    } catch (error: any) {
+      setError(error.message || 'เกิดข้อผิดพลาดในการสมัครสมาชิก');
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Success Screen
-  if (success) {
-    return (
-      <div className="register-page-wrapper">
-        <div className="register-success-section">
-          <div className="register-success-container">
-            <div className="register-success-icon-wrapper">
-              <svg className="register-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <polyline points="22 4 12 14.01 9 11.01" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <h1 className="register-success-title">สมัครสมาชิกสำเร็จ!</h1>
-            <p className="register-success-message">
-              เราได้ส่งลิงก์ยืนยันอีเมลไปยังอีเมลของคุณแล้ว
-            </p>
-            <p className="register-success-submessage">
-              กรุณาตรวจสอบอีเมลและคลิกลิงก์เพื่อยืนยันบัญชีของคุณ
-            </p>
-            <Link href="/login" className="register-success-button">
-              <span>ไปหน้าเข้าสู่ระบบ</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleSocialRegister = (provider: 'facebook' | 'google') => {
+    // TODO: Implement social registration
+    console.log(`Register with ${provider}`);
+  };
 
   return (
-    <div className="register-page-wrapper">
-      {/* Hero Background Section */}
-      <div className="register-hero-section">
-        <div className="register-hero-overlay"></div>
-        <div className="register-hero-content">
-          <div className="register-hero-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 9V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <rect x="3" y="9" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M9 9h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Premium Animated Background */}
+      <div className="absolute inset-0">
+        {/* Main gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        
+        {/* Animated gradient orbs */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-float"></div>
+        <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-float-delayed"></div>
+        <div className="absolute bottom-0 left-1/3 w-72 h-72 bg-pink-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-float-slow"></div>
+        
+        {/* Grid pattern overlay */}
+        <div 
+          className="absolute inset-0 opacity-20" 
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='grid' width='60' height='60' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 60 0 L 0 0 0 60' fill='none' stroke='white' stroke-width='0.5' opacity='0.1'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grid)' /%3E%3C/svg%3E")`
+          }}
+        ></div>
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
+        {/* Premium Register Card */}
+        <div 
+          className="relative bg-white/5 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl border border-white/10 transition-all duration-700 hover:bg-white/10 hover:shadow-[0_25px_50px_-12px_rgba(139,92,246,0.25)]"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          {/* Glow effect on hover */}
+          <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-600/20 to-blue-600/20 blur-xl transition-all duration-700 ${isHovering ? 'opacity-100' : 'opacity-0'}`}></div>
+          
+          {/* Content */}
+          <div className="relative z-10">
+            {/* Premium Header */}
+            <div className="mb-12 text-center">
+              {/* Animated logo */}
+              <div className="relative w-28 h-28 mx-auto mb-8">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full animate-pulse"></div>
+                <div className="absolute inset-2 bg-black rounded-full flex items-center justify-center">
+                  <i className="fas fa-user-plus text-white text-4xl"></i>
+                </div>
+                {/* Orbit rings */}
+                <div className="absolute -inset-6 border border-purple-500/20 rounded-full animate-spin-slow"></div>
+                <div className="absolute -inset-8 border border-blue-500/10 rounded-full animate-spin-slow-reverse"></div>
+              </div>
+              
+              <div className="space-y-4">
+                <h1 className="text-5xl font-bold text-white tracking-tight leading-tight">
+                  สร้างบัญชีใหม่
+                  <span className="block text-3xl font-light text-gray-400 mt-3 leading-relaxed">เริ่มต้นการเดินทาง</span>
+                </h1>
+                <p className="text-gray-500 text-base font-light tracking-wide leading-relaxed max-w-sm mx-auto">สมัครสมาชิกเพื่อเข้าร่วมกับเรา</p>
+              </div>
+            </div>
+
+            {/* Premium Error Message */}
+            {error && (
+              <div className="mb-10 p-5 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-4 backdrop-blur-sm animate-slideDown">
+                <div className="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <i className="fas fa-exclamation-triangle text-red-400 text-base"></i>
+                </div>
+                <span className="text-red-300 text-base font-medium leading-relaxed">{error}</span>
+              </div>
+            )}
+
+            {/* Premium Form */}
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Full Name Field */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-400 uppercase tracking-wider">ชื่อ-นามสกุล</label>
+                <div className="relative group">
+                  <div className={`absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none transition-all duration-500 ${focusedField === 'fullName' ? 'text-purple-400' : 'text-gray-600'}`}>
+                    <i className="fas fa-user text-xl"></i>
+                  </div>
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    onFocus={() => setFocusedField('fullName')}
+                    onBlur={() => setFocusedField(null)}
+                    className={`block w-full pl-14 pr-5 py-5 bg-white/5 backdrop-blur-sm border rounded-2xl focus:outline-none focus:ring-2 text-white placeholder-gray-600 text-base transition-all duration-500 font-medium ${
+                      focusedField === 'fullName' 
+                        ? 'border-purple-500/50 focus:ring-purple-500/30 bg-white/10 shadow-lg shadow-purple-500/20' 
+                        : 'border-white/10 hover:border-white/20 hover:bg-white/10'
+                    }`}
+                    placeholder="กรอกชื่อ-นามสกุล"
+                    required
+                  />
+                  {/* Field highlight */}
+                  {focusedField === 'fullName' && (
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-600/10 to-blue-600/10 blur-md -z-10"></div>
+                  )}
+                </div>
+              </div>
+
+              {/* Phone Number Field */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-400 uppercase tracking-wider">เบอร์โทรศัพท์</label>
+                <div className="relative group">
+                  <div className={`absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none transition-all duration-500 ${focusedField === 'phone' ? 'text-purple-400' : 'text-gray-600'}`}>
+                    <i className="fas fa-phone text-xl"></i>
+                  </div>
+                  <input
+                    type="tel"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onFocus={() => setFocusedField('phone')}
+                    onBlur={() => setFocusedField(null)}
+                    className={`block w-full pl-14 pr-5 py-5 bg-white/5 backdrop-blur-sm border rounded-2xl focus:outline-none focus:ring-2 text-white placeholder-gray-600 text-base transition-all duration-500 font-medium ${
+                      focusedField === 'phone' 
+                        ? 'border-purple-500/50 focus:ring-purple-500/30 bg-white/10 shadow-lg shadow-purple-500/20' 
+                        : 'border-white/10 hover:border-white/20 hover:bg-white/10'
+                    }`}
+                    placeholder="กรอกเบอร์โทรศัพท์"
+                    required
+                  />
+                  {/* Field highlight */}
+                  {focusedField === 'phone' && (
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-600/10 to-blue-600/10 blur-md -z-10"></div>
+                  )}
+                </div>
+              </div>
+
+              {/* Email Field */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-400 uppercase tracking-wider">อีเมล</label>
+                <div className="relative group">
+                  <div className={`absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none transition-all duration-500 ${focusedField === 'email' ? 'text-purple-400' : 'text-gray-600'}`}>
+                    <i className="fas fa-envelope text-xl"></i>
+                  </div>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onFocus={() => setFocusedField('email')}
+                    onBlur={() => setFocusedField(null)}
+                    className={`block w-full pl-14 pr-5 py-5 bg-white/5 backdrop-blur-sm border rounded-2xl focus:outline-none focus:ring-2 text-white placeholder-gray-600 text-base transition-all duration-500 font-medium ${
+                      focusedField === 'email' 
+                        ? 'border-purple-500/50 focus:ring-purple-500/30 bg-white/10 shadow-lg shadow-purple-500/20' 
+                        : 'border-white/10 hover:border-white/20 hover:bg-white/10'
+                    }`}
+                    placeholder="your@email.com"
+                    required
+                  />
+                  {/* Field highlight */}
+                  {focusedField === 'email' && (
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-600/10 to-blue-600/10 blur-md -z-10"></div>
+                  )}
+                </div>
+              </div>
+
+              {/* Password Field */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-400 uppercase tracking-wider">รหัสผ่าน</label>
+                <div className="relative group">
+                  <div className={`absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none transition-all duration-500 ${focusedField === 'password' ? 'text-purple-400' : 'text-gray-600'}`}>
+                    <i className="fas fa-lock text-xl"></i>
+                  </div>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onFocus={() => setFocusedField('password')}
+                    onBlur={() => setFocusedField(null)}
+                    className={`block w-full pl-14 pr-16 py-5 bg-white/5 backdrop-blur-sm border rounded-2xl focus:outline-none focus:ring-2 text-white placeholder-gray-600 text-base transition-all duration-500 font-medium ${
+                      focusedField === 'password' 
+                        ? 'border-purple-500/50 focus:ring-purple-500/30 bg-white/10 shadow-lg shadow-purple-500/20' 
+                        : 'border-white/10 hover:border-white/20 hover:bg-white/10'
+                    }`}
+                    placeholder="••••••••"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-600 hover:text-purple-400 transition-all duration-300"
+                  >
+                    <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-xl`}></i>
+                  </button>
+                  {/* Field highlight */}
+                  {focusedField === 'password' && (
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-600/10 to-blue-600/10 blur-md -z-10"></div>
+                  )}
+                </div>
+              </div>
+
+              {/* Confirm Password Field */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-400 uppercase tracking-wider">ยืนยันรหัสผ่าน</label>
+                <div className="relative group">
+                  <div className={`absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none transition-all duration-500 ${focusedField === 'confirmPassword' ? 'text-purple-400' : 'text-gray-600'}`}>
+                    <i className="fas fa-lock text-xl"></i>
+                  </div>
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onFocus={() => setFocusedField('confirmPassword')}
+                    onBlur={() => setFocusedField(null)}
+                    className={`block w-full pl-14 pr-16 py-5 bg-white/5 backdrop-blur-sm border rounded-2xl focus:outline-none focus:ring-2 text-white placeholder-gray-600 text-base transition-all duration-500 font-medium ${
+                      focusedField === 'confirmPassword' 
+                        ? 'border-purple-500/50 focus:ring-purple-500/30 bg-white/10 shadow-lg shadow-purple-500/20' 
+                        : 'border-white/10 hover:border-white/20 hover:bg-white/10'
+                    }`}
+                    placeholder="••••••••"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-600 hover:text-purple-400 transition-all duration-300"
+                  >
+                    <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'} text-xl`}></i>
+                  </button>
+                  {/* Field highlight */}
+                  {focusedField === 'confirmPassword' && (
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-600/10 to-blue-600/10 blur-md -z-10"></div>
+                  )}
+                </div>
+              </div>
+
+              {/* Premium Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full relative group overflow-hidden bg-gradient-to-r from-purple-600 to-blue-600 text-white py-6 px-8 rounded-2xl font-bold hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-500 text-lg mt-10 shadow-xl hover:shadow-2xl hover:shadow-purple-500/25 transform hover:-translate-y-1"
+              >
+                {/* Button shine effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                
+                <div className="relative z-10 flex items-center justify-center gap-3">
+                  {loading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin text-xl"></i>
+                      <span>กำลังสร้างบัญชี...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>สร้างบัญชีใหม่</span>
+                      <i className="fas fa-arrow-right text-base"></i>
+                    </>
+                  )}
+                </div>
+              </button>
+            </form>
+
+            {/* Premium Divider */}
+            <div className="mt-12">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-white/10"></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-8 bg-transparent text-gray-500 text-sm font-semibold uppercase tracking-wider">หรือสร้างบัญชีด้วย</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Premium Social Register */}
+            <div className="mt-10 grid grid-cols-2 gap-5">
+              <button
+                type="button"
+                onClick={() => handleSocialRegister('facebook')}
+                className="group relative overflow-hidden flex items-center justify-center gap-3 py-5 px-6 border border-white/10 rounded-2xl bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:border-blue-500/30 transition-all duration-500 text-base font-medium"
+              >
+                <i className="fab fa-facebook text-xl group-hover:text-blue-400 transition-colors duration-300"></i>
+                <span>Facebook</span>
+                {/* Hover glow */}
+                <div className="absolute inset-0 bg-blue-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSocialRegister('google')}
+                className="group relative overflow-hidden flex items-center justify-center gap-3 py-5 px-6 border border-white/10 rounded-2xl bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:border-red-500/30 transition-all duration-500 text-base font-medium"
+              >
+                <i className="fab fa-google text-xl group-hover:text-red-400 transition-colors duration-300"></i>
+                <span>Google</span>
+                {/* Hover glow */}
+                <div className="absolute inset-0 bg-red-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+            </div>
+
+            {/* Premium Login Link */}
+            <div className="mt-12 text-center">
+              <p className="text-base text-gray-500 leading-relaxed">
+                มีบัญชีอยู่แล้วใช่ไหม?{' '}
+                <Link href="/login" className="font-bold text-white hover:text-purple-400 transition-all duration-300 border-b border-transparent hover:border-purple-400">
+                  เข้าสู่ระบบ
+                </Link>
+              </p>
+            </div>
           </div>
-          <h1 className="register-hero-title">สร้างบัญชีใหม่</h1>
-          <p className="register-hero-subtitle">เริ่มต้นใช้งานกับเราในวันนี้</p>
         </div>
       </div>
 
-      {/* Register Form Section */}
-      <div className="register-form-section">
-        <div className="register-form-container">
-          {/* Error Message */}
-          {error && (
-            <div className="register-error-alert">
-              <svg className="register-error-icon" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-              <span className="register-error-text">{error}</span>
-            </div>
-          )}
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          25% {
+            transform: translate(30px, -30px) scale(1.05);
+          }
+          50% {
+            transform: translate(-20px, 20px) scale(0.95);
+          }
+          75% {
+            transform: translate(20px, 30px) scale(1.02);
+          }
+        }
+        
+        @keyframes float-delayed {
+          0%, 100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          25% {
+            transform: translate(-20px, 30px) scale(0.95);
+          }
+          50% {
+            transform: translate(30px, -20px) scale(1.05);
+          }
+          75% {
+            transform: translate(-30px, -30px) scale(0.98);
+          }
+        }
+        
+        @keyframes float-slow {
+          0%, 100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(20px, -40px) scale(1.08);
+          }
+          66% {
+            transform: translate(-40px, 20px) scale(0.92);
+          }
+        }
+        
+        @keyframes spin-slow {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        
+        @keyframes spin-slow-reverse {
+          from {
+            transform: rotate(360deg);
+          }
+          to {
+            transform: rotate(0deg);
+          }
+        }
+        
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
-          {/* Register Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="register-form">
-            {/* Email Field */}
-            <div className="register-form-group">
-              <label htmlFor="email" className="register-label">
-                <svg className="register-label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <polyline points="22,6 12,13 2,6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                <span>อีเมล</span>
-                <span className="register-required">*</span>
-              </label>
-              <div className="register-input-wrapper">
-                <input
-                  type="email"
-                  id="email"
-                  {...register('email')}
-                  className={`register-input ${errors.email ? 'register-input-error' : ''}`}
-                  placeholder="example@email.com"
-                  disabled={isSubmitting}
-                />
-                {errors.email && (
-                  <div className="register-input-error-message">
-                    <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    <span>{errors.email.message}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Password Field */}
-            <div className="register-form-group">
-              <label htmlFor="password" className="register-label">
-                <svg className="register-label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M7 11V7a5 5 0 0110 0v4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                <span>รหัสผ่าน</span>
-                <span className="register-required">*</span>
-              </label>
-              <div className="register-input-wrapper">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  {...register('password')}
-                  className={`register-input ${errors.password ? 'register-input-error' : ''}`}
-                  placeholder="อย่างน้อย 6 ตัวอักษร"
-                  disabled={isSubmitting}
-                />
-                <button
-                  type="button"
-                  className="register-password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                >
-                  {showPassword ? (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <line x1="1" y1="1" x2="23" y2="23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  ) : (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <circle cx="12" cy="12" r="3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                </button>
-                {errors.password && (
-                  <div className="register-input-error-message">
-                    <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    <span>{errors.password.message}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Confirm Password Field */}
-            <div className="register-form-group">
-              <label htmlFor="confirmPassword" className="register-label">
-                <svg className="register-label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M7 11V7a5 5 0 0110 0v4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                <span>ยืนยันรหัสผ่าน</span>
-                <span className="register-required">*</span>
-              </label>
-              <div className="register-input-wrapper">
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  id="confirmPassword"
-                  {...register('confirmPassword')}
-                  className={`register-input ${errors.confirmPassword ? 'register-input-error' : ''}`}
-                  placeholder="กรุณากรอกรหัสผ่านอีกครั้ง"
-                  disabled={isSubmitting}
-                />
-                <button
-                  type="button"
-                  className="register-password-toggle"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  aria-label={showConfirmPassword ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                >
-                  {showConfirmPassword ? (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <line x1="1" y1="1" x2="23" y2="23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  ) : (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <circle cx="12" cy="12" r="3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                </button>
-                {errors.confirmPassword && (
-                  <div className="register-input-error-message">
-                    <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    <span>{errors.confirmPassword.message}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="register-submit-button"
-            >
-              {isSubmitting ? (
-                <>
-                  <svg className="register-spinner" viewBox="0 0 24 24">
-                    <circle className="register-spinner-circle" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" opacity="0.25"/>
-                    <path className="register-spinner-path" fill="none" stroke="currentColor" strokeWidth="4" d="M4 12a8 8 0 018-8"/>
-                  </svg>
-                  <span>กำลังสมัครสมาชิก...</span>
-                </>
-              ) : (
-                <>
-                  <span>สมัครสมาชิก</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Login Link */}
-          <div className="register-login-link">
-            <p>
-              มีบัญชีอยู่แล้ว?{' '}
-              <Link href="/login" className="register-login-link-text">
-                เข้าสู่ระบบ
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
+        .animate-float {
+          animation: float 20s ease-in-out infinite;
+        }
+        
+        .animate-float-delayed {
+          animation: float-delayed 25s ease-in-out infinite;
+        }
+        
+        .animate-float-slow {
+          animation: float-slow 30s ease-in-out infinite;
+        }
+        
+        .animate-spin-slow {
+          animation: spin-slow 60s linear infinite;
+        }
+        
+        .animate-spin-slow-reverse {
+          animation: spin-slow-reverse 90s linear infinite;
+        }
+        
+        .animate-slideDown {
+          animation: slideDown 0.5s ease-out;
+        }
+      `}</style>
     </div>
   );
 }

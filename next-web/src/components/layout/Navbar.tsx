@@ -2,12 +2,20 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { useCartStore } from '@/features/cart';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  
+  const { user, userAccount, logout, loading } = useAuth();
+  const { items } = useCartStore();
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(prev => !prev);
@@ -69,6 +77,22 @@ export default function Navbar() {
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
   }, [mobileMenuOpen]);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    if (!userMenuOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [userMenuOpen]);
 
   return (
     <>
@@ -167,11 +191,53 @@ export default function Navbar() {
             <li><a href="/about">เกี่ยวกับเรา</a></li>
             <li><a href="/contact">ติดต่อเรา</a></li>
             <li className="nav-menu-login">
-              <Link href="/login"><i className="fa-solid fa-user"></i> Login / Register</Link>
+              {loading ? (
+                <span><i className="fa-solid fa-spinner fa-spin"></i> Loading...</span>
+              ) : user ? (
+                <div className="relative" ref={userMenuRef}>
+                  <button 
+                    className="user-menu-button"
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  >
+                    <i className="fa-solid fa-user"></i> 
+                    <span className="user-name">
+                      {userAccount?.name || user.email?.split('@')[0] || 'User'}
+                    </span>
+                    <i className="fa-solid fa-caret-down"></i>
+                  </button>
+                  
+                  {userMenuOpen && (
+                    <div className="user-menu-dropdown">
+                      <Link href="/account" className="user-menu-item">
+                        <i className="fa-solid fa-user-circle"></i> บัญชีของฉัน
+                      </Link>
+                      <Link href="/account/orders" className="user-menu-item">
+                        <i className="fa-solid fa-box"></i> ประวัติการสั่งซื้อ
+                      </Link>
+                      <button 
+                        className="user-menu-item logout-btn"
+                        onClick={() => {
+                          logout();
+                          setUserMenuOpen(false);
+                        }}
+                      >
+                        <i className="fa-solid fa-sign-out-alt"></i> ออกจากระบบ
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link href="/login"><i className="fa-solid fa-user"></i> Login / Register</Link>
+              )}
             </li>
           </ul>
           <div className="nav-icons desktop-nav-icons">
-            {/* Cart removed - cart icon is in main header contact-info */}
+            <Link href="/cart" className="cart-icon">
+              <i className="fa-solid fa-shopping-cart"></i>
+              {totalItems > 0 && (
+                <span className="cart-count">{totalItems}</span>
+              )}
+            </Link>
           </div>
         </div>
         </nav>

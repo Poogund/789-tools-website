@@ -205,16 +205,29 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
             )}
 
-            {/* Status */}
+            {/* Status & Stock */}
             <div className="product-status">
               <span className="status-label">สถานะ:</span>
               <span className="status-value">
                 {product.is_active ? (
                   <>
-                    <i className="fa-solid fa-check-circle"></i> มีสินค้า (พร้อมจัดส่ง)
+                    <i className="fa-solid fa-check-circle"></i> มีสินค้า
+                    {product.stock_quantity !== undefined && product.stock_quantity !== null && (
+                      <span className="stock-info">
+                        {product.stock_quantity > 10 ? (
+                          <span className="text-green-600"> (มีสินค้ามากกว่า 10 ชิ้น)</span>
+                        ) : product.stock_quantity > 0 ? (
+                          <span className="text-yellow-600"> (เหลือ {product.stock_quantity} ชิ้น)</span>
+                        ) : (
+                          <span className="text-red-600"> (สินค้าหมด)</span>
+                        )}
+                      </span>
+                    )}
                   </>
                 ) : (
-                  'สินค้าหมด'
+                  <>
+                    <i className="fa-solid fa-times-circle"></i> สินค้าหมด
+                  </>
                 )}
               </span>
             </div>
@@ -238,6 +251,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 productName={product.name}
                 price={product.price}
                 salePrice={product.sale_price}
+                imageUrl={product.image_url || ''}
               />
             </div>
 

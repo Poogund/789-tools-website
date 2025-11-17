@@ -40,6 +40,9 @@ function generateOrderNumber(): string {
 
 export async function POST(request: Request) {
   try {
+    // Initialize Supabase client
+    const supabase = await createServerSupabaseClient();
+    
     // Parse request body
     const body: CreateOrderRequest = await request.json();
     const { customerInfo, cartItems } = body;
@@ -64,9 +67,6 @@ export async function POST(request: Request) {
     const subtotal = calculateTotalAmount(cartItems);
     const shippingCost = 0; // Default shipping cost (can be calculated later)
     const totalAmount = subtotal + shippingCost;
-
-    // Connect to Supabase
-    const supabase = createServerSupabaseClient();
 
     // Generate order number
     const orderNumber = generateOrderNumber();

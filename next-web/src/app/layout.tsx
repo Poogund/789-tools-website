@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { AuthProvider } from "@/contexts/AuthContext";
+import CartSyncProvider from "@/components/CartSyncProvider";
+import { ToastProvider } from "@/components/ui/ToastContainer";
 import "./globals.css";
 import "./force-navbar.css";
+import "../styles/navbar-auth.css";
 import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -23,8 +27,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-main antialiased">
-        <GoogleAnalytics />
-        {children}
+        <AuthProvider>
+          <CartSyncProvider>
+            <ToastProvider>
+              <GoogleAnalytics />
+              {children}
+            </ToastProvider>
+          </CartSyncProvider>
+        </AuthProvider>
       </body>
     </html>
   );

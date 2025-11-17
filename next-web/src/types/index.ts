@@ -15,6 +15,7 @@ export interface Product {
   is_featured: boolean;
   is_promotion: boolean;
   is_active: boolean;
+  stock_quantity?: number;
   image_url?: string;
   specs?: Record<string, any>;
   features?: string[];

@@ -1,17 +1,25 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { siteConfig } from '@/config/site';
+import { useCartStore } from '@/features/cart';
+import { useToast } from '@/components/ui/ToastContainer';
 
 interface ProductActionsProps {
   productId: string;
   productName: string;
   price: number;
   salePrice?: number;
+  imageUrl?: string;
 }
 
-export default function ProductActions({ productId, productName, price, salePrice }: ProductActionsProps) {
+export default function ProductActions({ productId, productName, price, salePrice, imageUrl }: ProductActionsProps) {
   const [quantity, setQuantity] = useState(1);
+  const [isAdding, setIsAdding] = useState(false);
+  const router = useRouter();
+  const { addItem } = useCartStore();
+  const toast = useToast();
 
   const handleQuantityChange = (change: number) => {
     const newQuantity = quantity + change;
@@ -21,9 +29,31 @@ export default function ProductActions({ productId, productName, price, salePric
   };
 
   const handleAddToCart = () => {
-    // TODO: Implement add to cart functionality with cart context/store
-    const finalPrice = salePrice || price;
-    alert(`เพิ่ม ${productName} จำนวน ${quantity} ชิ้น ราคารวม ฿${(finalPrice * quantity).toLocaleString('th-TH')} ลงรถเข็น`);
+    try {
+      setIsAdding(true);
+      
+      // Add item to cart
+      addItem({
+        productId,
+        name: productName,
+        price,
+        salePrice,
+        quantity,
+        imageUrl: imageUrl || '',
+      });
+
+      // Show success message
+      const finalPrice = salePrice || price;
+      toast.success(`เพิ่ม ${productName} (${quantity} ชิ้น) ลงรถเข็นเรียบร้อย - ฿${(finalPrice * quantity).toLocaleString('th-TH')}`);
+      
+      // Reset quantity
+      setQuantity(1);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      toast.error('เกิดข้อผิดพลาดในการเพิ่มสินค้า กรุณาลองใหม่อีกครั้ง');
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -84,10 +114,11 @@ export default function ProductActions({ productId, productName, price, salePric
         <button 
           className="btn btn-primary btn-add-to-cart"
           onClick={handleAddToCart}
+          disabled={isAdding}
           type="button"
         >
-          <i className="fa-solid fa-cart-shopping"></i>
-          เพิ่มลงรถเข็น
+          <i className={`fa-solid ${isAdding ? 'fa-spinner fa-spin' : 'fa-cart-shopping'}`}></i>
+          {isAdding ? 'กำลังเพิ่ม...' : 'เพิ่มลงรถเข็น'}
         </button>
       </div>
     </>

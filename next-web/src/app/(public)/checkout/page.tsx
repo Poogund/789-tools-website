@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCartStore } from '@/features/cart';
+import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 
 // Zod Schema for checkout form
@@ -23,15 +24,30 @@ type CheckoutFormData = z.infer<typeof checkoutSchema>;
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, total, clear } = useCartStore();
+  const { user, userAccount } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGuestCheckout, setIsGuestCheckout] = useState(!user);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
+    defaultValues: {
+      name: userAccount?.name || '',
+      email: userAccount?.email || user?.email || '',
+    },
   });
+
+  // Update form values when user logs in
+  useEffect(() => {
+    if (userAccount && !isGuestCheckout) {
+      setValue('name', userAccount.name);
+      setValue('email', userAccount.email);
+    }
+  }, [userAccount, isGuestCheckout, setValue]);
 
   // Guard Clause: Redirect to cart if empty
   useEffect(() => {
@@ -122,6 +138,55 @@ export default function CheckoutPage() {
               <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-dark-color mb-6 thai-text">ข้อมูลการจัดส่ง</h2>
 
+                {/* Checkout Type Selection */}
+                <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm font-medium text-dark-color mb-3 thai-text">ประเภทการสั่งซื้อ:</p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    {user ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => setIsGuestCheckout(false)}
+                          className={`flex-1 px-4 py-2 rounded-lg border-2 transition-colors ${
+                            !isGuestCheckout
+                              ? 'border-primary-color bg-primary-color text-white'
+                              : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                          }`}
+                        >
+                          <i className="fa-solid fa-user-check mr-2"></i>
+                          <span className="thai-text">สมาชิก ({userAccount?.name || user.email})</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setIsGuestCheckout(true)}
+                          className={`flex-1 px-4 py-2 rounded-lg border-2 transition-colors ${
+                            isGuestCheckout
+                              ? 'border-primary-color bg-primary-color text-white'
+                              : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                          }`}
+                        >
+                          <i className="fa-solid fa-user mr-2"></i>
+                          <span className="thai-text">บุคคลทั่วไป</span>
+                        </button>
+                      </>
+                    ) : (
+                      <div className="flex items-center justify-between w-full">
+                        <span className="text-gray-600 thai-text">
+                          <i className="fa-solid fa-info-circle mr-2"></i>
+                          สั่งซื้อแบบบุคคลทั่วไป
+                        </span>
+                        <Link
+                          href="/login?redirect=/checkout"
+                          className="text-primary-color hover:text-yellow-600 font-medium thai-text"
+                        >
+                          <i className="fa-solid fa-sign-in-alt mr-1"></i>
+                          เข้าสู่ระบบเพื่อสั่งซื้อ
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   {/* Name */}
                   <div>
@@ -132,9 +197,10 @@ export default function CheckoutPage() {
                       type="text"
                       id="name"
                       {...register('name')}
+                      disabled={!!user && !isGuestCheckout}
                       className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color ${
                         errors.name ? 'border-danger-color' : 'border-gray-300'
-                      } thai-text`}
+                      } ${!!user && !isGuestCheckout ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'} thai-text`}
                       placeholder="กรุณากรอกชื่อ-นามสกุล"
                     />
                     {errors.name && (
@@ -170,9 +236,10 @@ export default function CheckoutPage() {
                       type="email"
                       id="email"
                       {...register('email')}
+                      disabled={!!user && !isGuestCheckout}
                       className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color ${
                         errors.email ? 'border-danger-color' : 'border-gray-300'
-                      } thai-text`}
+                      } ${!!user && !isGuestCheckout ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'} thai-text`}
                       placeholder="กรุณากรอกอีเมล"
                     />
                     {errors.email && (

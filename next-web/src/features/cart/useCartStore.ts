@@ -1,14 +1,19 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { CartItem } from '@/types';
+import { saveCartToDatabase, loadCartFromDatabase, clearCartFromDatabase } from '@/lib/cart-repository';
 
 interface CartStore {
   items: CartItem[];
   total: number;
+  userId: string | null;
   addItem: (item: CartItem) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clear: () => void;
+  syncWithDatabase: (userId: string) => Promise<void>;
+  loadFromDatabase: (userId: string) => Promise<void>;
+  setUserId: (userId: string | null) => void;
 }
 
 // Helper function to calculate total
@@ -21,9 +26,10 @@ const calculateTotal = (items: CartItem[]): number => {
 
 export const useCartStore = create<CartStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       items: [],
       total: 0,
+      userId: null as string | null,
 
       addItem: (item: CartItem) => {
         set((state) => {
@@ -49,6 +55,11 @@ export const useCartStore = create<CartStore>()(
             newItems = [...state.items, item];
           }
 
+          // Sync with database if user is logged in
+          if (state.userId) {
+            saveCartToDatabase(state.userId, newItems).catch(console.error);
+          }
+
           return {
             items: newItems,
             total: calculateTotal(newItems),
@@ -61,6 +72,12 @@ export const useCartStore = create<CartStore>()(
           const newItems = state.items.filter(
             (item) => item.productId !== productId
           );
+          
+          // Sync with database if user is logged in
+          if (state.userId) {
+            saveCartToDatabase(state.userId, newItems).catch(console.error);
+          }
+          
           return {
             items: newItems,
             total: calculateTotal(newItems),
@@ -75,6 +92,12 @@ export const useCartStore = create<CartStore>()(
             const newItems = state.items.filter(
               (item) => item.productId !== productId
             );
+            
+            // Sync with database if user is logged in
+            if (state.userId) {
+              saveCartToDatabase(state.userId, newItems).catch(console.error);
+            }
+            
             return {
               items: newItems,
               total: calculateTotal(newItems),
@@ -89,6 +112,11 @@ export const useCartStore = create<CartStore>()(
             return item;
           });
 
+          // Sync with database if user is logged in
+          if (state.userId) {
+            saveCartToDatabase(state.userId, newItems).catch(console.error);
+          }
+
           return {
             items: newItems,
             total: calculateTotal(newItems),
@@ -97,10 +125,44 @@ export const useCartStore = create<CartStore>()(
       },
 
       clear: () => {
+        const state = get();
         set({
           items: [],
           total: 0,
         });
+        
+        // Clear from database if user is logged in
+        if (state.userId) {
+          clearCartFromDatabase(state.userId).catch(console.error);
+        }
+      },
+
+      syncWithDatabase: async (userId: string) => {
+        const { items } = get();
+        try {
+          await saveCartToDatabase(userId, items);
+          set({ userId });
+        } catch (error) {
+          console.error('Error syncing cart with database:', error);
+        }
+      },
+
+      loadFromDatabase: async (userId: string) => {
+        try {
+          const dbItems = await loadCartFromDatabase(userId);
+          set({
+            items: dbItems,
+            total: calculateTotal(dbItems),
+            userId,
+          });
+        } catch (error) {
+          console.error('Error loading cart from database:', error);
+          set({ userId });
+        }
+      },
+
+      setUserId: (userId: string | null) => {
+        set({ userId });
       },
     }),
     {
