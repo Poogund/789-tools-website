@@ -16,7 +16,7 @@ import type { User } from '@supabase/supabase-js';
 export async function syncUserToCustomerTable(user: User) {
   try {
     // Use admin client to bypass RLS - we already have authenticated user from client
-    const supabase = createServerSupabaseAdminClient();
+    const supabase = await createServerSupabaseAdminClient();
     
     // Extract user data
     const authId = user.id;
@@ -143,4 +143,3 @@ export async function syncUserToCustomerTable(user: User) {
     throw error;
   }
 }
-

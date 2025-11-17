@@ -6,7 +6,6 @@ import {
   createServerSupabaseClient,
   createServerSupabaseAdminClient,
 } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 import type { Order, OrderItem } from "@/types";
 
 // ขยาย Type เพื่อรองรับการ Join ข้อมูล Product
@@ -27,8 +26,7 @@ type OrderDetails = Order & {
  * @returns {Promise<{name: string, email: string} | null>}
  */
 export async function getCurrentUserAccount() {
-  const cookieStore = cookies();
-  const supabase = createServerSupabaseClient(cookieStore);
+  const supabase = await createServerSupabaseClient();
 
   const {
     data: { session },
@@ -40,7 +38,7 @@ export async function getCurrentUserAccount() {
 
   // ใช้ Admin Client (ที่ใช้ SERVICE_ROLE_KEY) เพื่อดึงข้อมูลจากตาราง 'customers'
   // เพราะ RLS อาจจะยังไม่ได้ตั้งค่าให้ user อ่านตารางนี้ได้
-  const supabaseAdmin = createServerSupabaseAdminClient();
+  const supabaseAdmin = await createServerSupabaseAdminClient();
   const { data: customer, error } = await supabaseAdmin
     .from("customers")
     .select("name, email")
@@ -68,8 +66,7 @@ export async function getCurrentUserAccount() {
  */
 export async function getOrdersForCurrentUser(): Promise<Order[]> {
   try {
-    const cookieStore = cookies();
-    const supabase = createServerSupabaseClient(cookieStore);
+    const supabase = await createServerSupabaseClient();
 
     // 1. Get authenticated user
     const {
@@ -83,7 +80,7 @@ export async function getOrdersForCurrentUser(): Promise<Order[]> {
     }
 
     // 2. Find customer_id (ใช้ Admin Client เพื่อเลี่ยง RLS)
-    const supabaseAdmin = createServerSupabaseAdminClient();
+    const supabaseAdmin = await createServerSupabaseAdminClient();
     const { data: customer, error: customerError } = await supabaseAdmin
       .from("customers")
       .select("id")
@@ -149,8 +146,7 @@ export async function getOrderDetailsForCurrentUser(
   orderId: string
 ): Promise<OrderDetails | null> {
   try {
-    const cookieStore = cookies();
-    const supabase = createServerSupabaseClient(cookieStore);
+    const supabase = await createServerSupabaseClient();
 
     const {
       data: { session },
@@ -160,7 +156,7 @@ export async function getOrderDetailsForCurrentUser(
       return null;
     }
 
-    const supabaseAdmin = createServerSupabaseAdminClient();
+    const supabaseAdmin = await createServerSupabaseAdminClient();
 
     // 1. Find customer_id
     const { data: customer } = await supabaseAdmin

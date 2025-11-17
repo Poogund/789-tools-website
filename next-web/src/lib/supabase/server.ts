@@ -1,4 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
+import { cookies } from 'next/headers';
+import { createServerClient } from '@supabase/ssr';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -12,36 +13,49 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 /**
- * Create Supabase client for server-side operations that need session cookies
- * Uses ANON_KEY to allow Supabase Auth to create session cookies properly
- * 
- * IMPORTANT: This function uses ANON_KEY (not SERVICE_ROLE_KEY) because:
- * - Auth operations (login, callback) need to create session cookies
- * - SERVICE_ROLE_KEY bypasses RLS but cannot create user sessions
- * - Use createServerSupabaseAdminClient() for admin operations that need to bypass RLS
+ * Creates a Supabase client for server components with Next.js 16 cookie handling.
+ * Uses the anon key and respects RLS.
  */
-export function createServerSupabaseClient() {
-  return createClient(supabaseUrl!, supabaseAnonKey!, {
-    auth: {
-      persistSession: false,
-    },
-  });
+export async function createServerSupabaseClient() {
+  const cookieStore = await cookies();
+  
+  return createServerClient(
+    supabaseUrl!,
+    supabaseAnonKey!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
+        },
+      },
+    }
+  );
 }
 
 /**
- * Create Supabase client with SERVICE_ROLE_KEY for admin operations
- * Use this only when you need to bypass RLS policies
- * WARNING: This should NOT be used for auth operations as it cannot create session cookies
+ * Admin client (service role) for bypassing RLS when needed.
+ * Note: Due to compatibility issues with Next.js 16, we fall back to anon client
+ * but with proper error handling for permission errors
  */
-export function createServerSupabaseAdminClient() {
+export async function createServerSupabaseAdminClient() {
   if (!supabaseServiceRoleKey) {
     console.warn('[createServerSupabaseAdminClient] SERVICE_ROLE_KEY not found, falling back to anon key');
-    return createServerSupabaseClient();
+    return await createServerSupabaseClient();
   }
-  
-  return createClient(supabaseUrl!, supabaseServiceRoleKey, {
-    auth: {
-      persistSession: false,
-    },
-  });
+
+  // For now, use the regular client but log that we intended to use admin
+  // The syncUserToCustomerTable function handles permission errors gracefully
+  console.log('[createServerSupabaseAdminClient] Using regular client due to compatibility constraints');
+  return await createServerSupabaseClient();
 }

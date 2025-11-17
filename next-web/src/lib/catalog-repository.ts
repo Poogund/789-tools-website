@@ -1,4 +1,3 @@
-import { createServerSupabaseClient } from './supabase/server';
 import { Product, ProductImage, Category, HeroSlide, FAQItem, BlogPost, Review } from '@/types';
 
 // Helper function to create a public Supabase client (uses anon key, respects RLS)
@@ -18,13 +17,7 @@ function createPublicSupabaseClient() {
   }
   
   if (!supabaseAnonKey) {
-    // Try to use service role as fallback, but log warning
-    console.warn('[createPublicSupabaseClient] Anon key not found, trying service role as fallback');
-    try {
-      return createServerSupabaseClient();
-    } catch (error) {
-      throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY is required. Please add it to .env.local');
-    }
+    throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY is required. Please add it to .env.local');
   }
   
   const client = createClient(supabaseUrl, supabaseAnonKey, {
@@ -162,7 +155,7 @@ export async function getProductImages(productId: string): Promise<ProductImage[
 
 // Get products with images (for catalog pages)
 export async function getProductsWithImages(): Promise<(Product & { images: ProductImage[] })[]> {
-  const supabase = createServerSupabaseClient();
+  const supabase = createPublicSupabaseClient();
   const { data, error } = await supabase
     .from('products')
     .select(`
@@ -217,7 +210,7 @@ export async function getProductsByCategory(categorySlug: string): Promise<Produ
 
 // Get featured products
 export async function getFeaturedProducts(): Promise<Product[]> {
-  const supabase = createServerSupabaseClient();
+  const supabase = createPublicSupabaseClient();
   const { data, error } = await supabase
     .from('products')
     .select('*')
@@ -306,7 +299,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
 
 // Get promotion products
 export async function getPromotionProducts(): Promise<Product[]> {
-  const supabase = createServerSupabaseClient();
+  const supabase = createPublicSupabaseClient();
   const { data, error } = await supabase
     .from('products')
     .select('*')
