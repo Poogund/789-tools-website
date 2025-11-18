@@ -63,237 +63,242 @@ export default function RegisterPage() {
   };
 
   return (
-    <MainLayout className="bg-gradient-to-br from-primary-color via-industrial-dark-gray to-black">
-      <Container size="sm" className="flex items-center justify-center min-h-screen py-12">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10"></div>
+    <MainLayout>
+      <div className="min-h-screen bg-gradient-to-br from-primary-color via-secondary-color to-dark-color relative overflow-hidden">
+        {/* Industrial Grid Pattern */}
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
         
-        <Card className="w-full max-w-[400px] relative z-10 border-0 bg-white shadow-2xl">
-        <CardHeader className="space-y-3 text-center pb-8">
-          {/* Logo/Icon */}
-          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary-color to-accent-color rounded-2xl flex items-center justify-center shadow-lg">
-            <i className="fas fa-user-plus text-white text-2xl"></i>
-          </div>
-          
-          <CardTitle className="text-3xl font-bold text-gray-900">
-            สร้างบัญชีใหม่
-          </CardTitle>
-          <CardDescription className="text-base text-gray-600">
-            เริ่มต้นใช้งาน 789 TOOLS วันนี้
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="space-y-6">
-          {/* Error Message */}
-          {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-              <i className="fas fa-exclamation-circle text-red-500 text-lg mt-0.5"></i>
-              <p className="text-sm text-red-800 font-medium">{error}</p>
+        <Container size="sm" className="relative flex items-center justify-center min-h-screen py-12">
+        
+        <Card className="relative w-full max-w-md shadow-2xl border-4 border-secondary-color bg-white">
+          <CardHeader className="space-y-3 text-center pb-8 bg-gradient-to-b from-light-gray-bg to-white border-b-4 border-primary-color">
+            {/* Logo/Icon - Industrial Style */}
+            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-primary-color to-accent-color rounded-2xl flex items-center justify-center mb-4 shadow-2xl transform hover:scale-105 transition-transform">
+              <i className="fas fa-user-plus text-white text-3xl"></i>
             </div>
-          )}
+            
+            <CardTitle className="text-4xl font-black text-gray-900 tracking-tight">
+              สร้างบัญชีใหม่
+            </CardTitle>
+            <CardDescription className="text-gray-700 text-lg font-semibold">
+              789 TOOLS - เครื่องมือช่างมืออาชีพ
+            </CardDescription>
+          </CardHeader>
 
-          {/* Register Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Two Column Layout for Name and Phone */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Full Name Field */}
-              <div className="space-y-2">
-                <Label htmlFor="fullName" className="text-sm font-semibold text-gray-700">
-                  ชื่อ-นามสกุล <span className="text-red-500">*</span>
-                </Label>
-                <div className="relative">
-                  <i className="fas fa-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                  <Input
-                    id="fullName"
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="pl-10 h-12 border-gray-300 focus:border-primary-color focus:ring-primary-color text-gray-900"
-                    placeholder="นายสมชาย ใจดี"
-                    required
-                  />
+          <CardContent className="space-y-6 p-8">
+            {/* Error Message - Industrial Style */}
+            {error && (
+              <div className="bg-red-50 border-4 border-red-500 p-5 rounded-xl shadow-lg animate-shake">
+                <div className="flex items-center">
+                  <i className="fas fa-exclamation-triangle text-red-600 mr-3 text-xl"></i>
+                  <p className="text-base text-red-800 font-bold">{error}</p>
                 </div>
               </div>
+            )}
+
+            {/* Register Form */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Two Column Layout for Name and Phone - Industrial Style */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Full Name Field */}
+                <div className="space-y-3">
+                  <Label htmlFor="fullName" className="text-text-color font-bold text-base flex items-center">
+                    <i className="fas fa-user mr-2 text-primary-color"></i>
+                    ชื่อ-นามสกุล <span className="text-danger-color">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="fullName"
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      className="h-14 border-3 border-secondary-color focus:border-primary-color focus:ring-4 focus:ring-primary-color/30 transition-all text-lg font-semibold pl-4 rounded-xl shadow-md"
+                      placeholder="นายสมชาย ใจดี"
+                      required
+                    />
+                  </div>
+                </div>
 
               {/* Phone Number Field */}
-              <div className="space-y-2">
-                <Label htmlFor="phoneNumber" className="text-sm font-semibold text-gray-700">
-                  เบอร์โทรศัพท์ <span className="text-red-500">*</span>
+                <div className="space-y-3">
+                  <Label htmlFor="phoneNumber" className="text-text-color font-bold text-base flex items-center">
+                    <i className="fas fa-phone mr-2 text-primary-color"></i>
+                    เบอร์โทรศัพท์ <span className="text-danger-color">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="phoneNumber"
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      className="h-14 border-3 border-secondary-color focus:border-primary-color focus:ring-4 focus:ring-primary-color/30 transition-all text-lg font-semibold pl-4 rounded-xl shadow-md"
+                      placeholder="0812345678"
+                      required
+                    />
+                  </div>
+                </div>
+            </div>
+
+              {/* Email Field - Industrial Style */}
+              <div className="space-y-3">
+                <Label htmlFor="email" className="text-text-color font-bold text-base flex items-center">
+                  <i className="fas fa-envelope mr-2 text-primary-color"></i>
+                  อีเมล <span className="text-danger-color">*</span>
                 </Label>
                 <div className="relative">
-                  <i className="fas fa-phone absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                   <Input
-                    id="phoneNumber"
-                    type="tel"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="pl-10 h-12 border-gray-300 focus:border-primary-color focus:ring-primary-color text-gray-900"
-                    placeholder="0812345678"
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-14 border-3 border-secondary-color focus:border-primary-color focus:ring-4 focus:ring-primary-color/30 transition-all text-lg font-semibold pl-4 rounded-xl shadow-md"
+                    placeholder="your@email.com"
                     required
                   />
-                </div>
               </div>
             </div>
 
-            {/* Email Field */}
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
-                อีเมล <span className="text-red-500">*</span>
-              </Label>
-              <div className="relative">
-                <i className="fas fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 border-gray-300 focus:border-primary-color focus:ring-primary-color text-gray-900"
-                  placeholder="your@email.com"
+              {/* Two Column Layout for Passwords - Industrial Style */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Password Field */}
+                <div className="space-y-3">
+                  <Label htmlFor="password" className="text-text-color font-bold text-base flex items-center">
+                    <i className="fas fa-lock mr-2 text-primary-color"></i>
+                    รหัสผ่าน <span className="text-danger-color">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="h-14 border-3 border-secondary-color focus:border-primary-color focus:ring-4 focus:ring-primary-color/30 transition-all text-lg font-semibold pl-4 pr-14 rounded-xl shadow-md"
+                      placeholder="••••••••"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary-color transition-colors w-10 h-10 flex items-center justify-center"
+                    >
+                      <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-xl`}></i>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Confirm Password Field */}
+                <div className="space-y-3">
+                  <Label htmlFor="confirmPassword" className="text-text-color font-bold text-base flex items-center">
+                    <i className="fas fa-lock mr-2 text-primary-color"></i>
+                    ยืนยันรหัสผ่าน <span className="text-danger-color">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="confirmPassword"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="h-14 border-3 border-secondary-color focus:border-primary-color focus:ring-4 focus:ring-primary-color/30 transition-all text-lg font-semibold pl-4 pr-14 rounded-xl shadow-md"
+                      placeholder="••••••••"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary-color transition-colors w-10 h-10 flex items-center justify-center"
+                    >
+                      <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'} text-xl`}></i>
+                    </button>
+                  </div>
+                </div>
+            </div>
+
+              {/* Terms & Conditions - Industrial Style */}
+              <div className="flex items-start gap-4 p-6 bg-light-gray-bg rounded-xl border-2 border-secondary-color">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  className="w-5 h-5 mt-1 rounded-md border-3 border-secondary-color text-primary-color focus:ring-4 focus:ring-primary-color"
                   required
                 />
-              </div>
-            </div>
-
-            {/* Two Column Layout for Passwords */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Password Field */}
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-semibold text-gray-700">
-                  รหัสผ่าน <span className="text-red-500">*</span>
-                </Label>
-                <div className="relative">
-                  <i className="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-12 h-12 border-gray-300 focus:border-primary-color focus:ring-primary-color text-gray-900"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-color transition-colors"
-                  >
-                    <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                  </button>
-                </div>
+                <label htmlFor="terms" className="text-base text-text-color cursor-pointer font-semibold">
+                  ฉันยอมรับ{' '}
+                  <Link href="/terms" className="text-primary-color hover:text-accent-color font-black transition-colors underline decoration-2 underline-offset-2">
+                    ข้อกำหนดและเงื่อนไข
+                  </Link>{' '}
+                  และ{' '}
+                  <Link href="/privacy" className="text-primary-color hover:text-accent-color font-black transition-colors underline decoration-2 underline-offset-2">
+                    นโยบายความเป็นส่วนตัว
+                  </Link>
+                </label>
               </div>
 
-              {/* Confirm Password Field */}
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700">
-                  ยืนยันรหัสผ่าน <span className="text-red-500">*</span>
-                </Label>
-                <div className="relative">
-                  <i className="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                  <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-10 pr-12 h-12 border-gray-300 focus:border-primary-color focus:ring-primary-color text-gray-900"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-color transition-colors"
-                  >
-                    <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Terms & Conditions */}
-            <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-              <input
-                type="checkbox"
-                id="terms"
-                className="w-4 h-4 mt-1 rounded border-gray-300 text-primary-color focus:ring-primary-color"
-                required
-              />
-              <label htmlFor="terms" className="text-sm text-gray-700 cursor-pointer">
-                ฉันยอมรับ{' '}
-                <Link href="/terms" className="text-primary-color hover:text-accent-color font-semibold">
-                  ข้อกำหนดและเงื่อนไข
-                </Link>{' '}
-                และ{' '}
-                <Link href="/privacy" className="text-primary-color hover:text-accent-color font-semibold">
-                  นโยบายความเป็นส่วนตัว
-                </Link>
-              </label>
-            </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full h-12 bg-gradient-to-r from-primary-color to-accent-color hover:from-primary-color/90 hover:to-accent-color/90 text-white font-semibold text-base shadow-lg hover:shadow-xl transition-all"
-            >
-              {loading ? (
-                <>
-                  <i className="fas fa-spinner fa-spin mr-2"></i>
-                  กำลังสมัครสมาชิก...
-                </>
-              ) : (
-                <>
-                  สร้างบัญชี
-                  <i className="fas fa-arrow-right ml-2"></i>
-                </>
-              )}
-            </Button>
+              {/* Submit Button - Industrial Strength */}
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full h-16 bg-gradient-to-r from-primary-color via-accent-color to-accent-color hover:from-primary-color/90 hover:via-accent-color/90 hover:to-accent-color/90 text-white font-black text-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] active:scale-[0.98] border-2 border-accent-color rounded-xl"
+              >
+                {loading ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin mr-3 text-2xl"></i>
+                    <span className="tracking-wide">กำลังสมัครสมาชิก...</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="tracking-wide">สร้างบัญชี</span>
+                    <i className="fas fa-arrow-right ml-3 text-2xl"></i>
+                  </>
+                )}
+              </Button>
           </form>
 
-          {/* Divider */}
-          <div className="relative">
-            <Separator className="bg-gray-200" />
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-sm text-gray-500 font-medium">
-              หรือสมัครด้วย
-            </span>
-          </div>
+            {/* Divider - Industrial Style */}
+            <div className="relative my-8">
+              <Separator className="bg-gray-300 h-0.5" />
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-6 text-base text-text-color font-bold">
+                หรือสมัครด้วย
+              </span>
+            </div>
 
-          {/* Social Register */}
-          <div className="space-y-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handleSocialRegister('facebook')}
-              className="w-full h-12 border-gray-300 hover:bg-facebook hover:text-white hover:border-facebook transition-all"
-            >
-              <i className="fab fa-facebook text-lg mr-3"></i>
-              สมัครด้วย Facebook
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handleSocialRegister('google')}
-              className="w-full h-12 border-gray-300 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all"
-            >
-              <i className="fab fa-google text-lg mr-3"></i>
-              สมัครด้วย Google
-            </Button>
-          </div>
-        </CardContent>
+            {/* Social Register - Industrial Strength */}
+            <div className="space-y-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleSocialRegister('facebook')}
+                className="w-full h-14 border-3 border-facebook-color text-facebook-color hover:bg-facebook-color hover:text-white font-bold text-base shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] rounded-xl"
+              >
+                <i className="fab fa-facebook text-2xl mr-3"></i>
+                สมัครด้วย Facebook
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleSocialRegister('google')}
+                className="w-full h-14 border-3 border-danger-color text-danger-color hover:bg-danger-color hover:text-white font-bold text-base shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] rounded-xl"
+              >
+                <i className="fab fa-google text-2xl mr-3"></i>
+                สมัครด้วย Google
+              </Button>
+            </div>
+          </CardContent>
 
-        <CardFooter className="flex-col space-y-4 pt-6">
-          <Separator className="bg-gray-200" />
-          <p className="text-sm text-gray-600 text-center">
-            มีบัญชีอยู่แล้ว?{' '}
-            <Link 
-              href="/login" 
-              className="text-primary-color hover:text-accent-color font-semibold transition-colors"
-            >
-              เข้าสู่ระบบ
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
-      </Container>
+          <CardFooter className="flex-col space-y-4 pt-8 bg-light-gray-bg border-t-4 border-secondary-color">
+            <p className="text-base text-text-color text-center font-semibold">
+              มีบัญชีอยู่แล้ว?{' '}
+              <Link 
+                href="/login" 
+                className="text-primary-color hover:text-accent-color font-black transition-colors text-lg underline decoration-2 underline-offset-4"
+              >
+                เข้าสู่ระบบ
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
+        </Container>
+      </div>
     </MainLayout>
   );
 }

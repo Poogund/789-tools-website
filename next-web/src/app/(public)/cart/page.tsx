@@ -65,30 +65,30 @@ export default function CartPage() {
 
   return (
     <MainLayout>
-      {/* Breadcrumbs */}
-      <Section className="bg-white border-b border-gray-200 py-4">
+      {/* Breadcrumbs - Industrial Style */}
+      <Section className="bg-white border-b-4 border-secondary-color py-6">
         <Container>
-          <nav className="flex items-center space-x-2 text-sm">
-            <Link href="/" className="text-primary-color hover:text-accent-color transition-colors font-medium">
-              <i className="fas fa-home mr-1"></i>
+          <nav className="flex items-center space-x-3 text-base">
+            <Link href="/" className="text-primary-color hover:text-accent-color transition-colors font-bold flex items-center">
+              <i className="fas fa-home mr-2 text-lg"></i>
               หน้าแรก
             </Link>
-            <i className="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
-            <span className="text-gray-900 font-semibold">ตะกร้าสินค้า</span>
+            <i className="fa-solid fa-chevron-right text-secondary-color text-sm"></i>
+            <span className="text-text-color font-black text-lg">ตะกร้าสินค้า</span>
           </nav>
         </Container>
       </Section>
 
-      {/* Cart Content */}
-      <Section className="py-8 md:py-12">
+      {/* Cart Content - Industrial Style */}
+      <Section className="py-12 md:py-16">
         <Container>
           {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              <i className="fas fa-shopping-cart text-primary-color mr-3"></i>
+          <div className="mb-10">
+            <h1 className="text-4xl md:text-5xl font-black text-text-color mb-4 flex items-center">
+              <i className="fas fa-shopping-cart text-primary-color mr-4 text-3xl md:text-4xl"></i>
               ตะกร้าสินค้า
             </h1>
-            <p className="text-gray-600">
+            <p className="text-lg text-secondary-color font-semibold">
               {items.length > 0 ? `คุณมีสินค้า ${items.length} รายการในตะกร้า` : 'ตะกร้าของคุณว่างเปล่า'}
             </p>
           </div>
@@ -102,13 +102,13 @@ export default function CartPage() {
                   const itemTotal = itemPrice * item.quantity;
 
                   return (
-                    <Card key={item.productId} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <CardContent className="p-4 md:p-6">
-                        <div className="flex flex-col md:flex-row gap-4">
-                          {/* Product Image */}
+                    <Card key={item.productId} className="overflow-hidden hover:shadow-2xl transition-all border-3 border-secondary-color">
+                      <CardContent className="p-6 md:p-8">
+                        <div className="flex flex-col md:flex-row gap-6">
+                          {/* Product Image - Industrial Style */}
                           {item.imageUrl && (
                             <div className="flex-shrink-0">
-                              <div className="w-full md:w-32 h-32 bg-gray-100 rounded-lg overflow-hidden">
+                              <div className="w-full md:w-36 h-36 bg-light-gray-bg rounded-xl overflow-hidden border-2 border-secondary-color">
                                 <img
                                   src={item.imageUrl}
                                   alt={item.name}
@@ -122,29 +122,29 @@ export default function CartPage() {
                             </div>
                           )}
 
-                          {/* Product Details */}
+                          {/* Product Details - Industrial Style */}
                           <div className="flex-1 min-w-0">
-                            <div className="flex justify-between items-start mb-3">
+                            <div className="flex justify-between items-start mb-4">
                               <div className="flex-1 pr-4">
-                                <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-2">
+                                <h3 className="font-black text-xl text-text-color mb-2 line-clamp-2">
                                   {item.name}
                                 </h3>
                                 {item.salePrice && (
-                                  <div className="flex items-center gap-2 text-sm">
-                                    <span className="text-gray-500 line-through">
+                                  <div className="flex items-center gap-3 text-base">
+                                    <span className="text-secondary-color line-through font-semibold">
                                       ฿{formatPrice(item.price)}
                                     </span>
-                                    <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-semibold">
+                                    <span className="bg-danger-color text-white px-3 py-1 rounded-full text-sm font-black border-2 border-danger-color">
                                       ลด {Math.round(((item.price - item.salePrice) / item.price) * 100)}%
                                     </span>
                                   </div>
                                 )}
                               </div>
                               
-                              {/* Remove Button */}
+                              {/* Remove Button - Industrial Style */}
                               <button
                                 onClick={() => removeItem(item.productId)}
-                                className="flex-shrink-0 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                                className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-secondary-color hover:text-danger-color hover:bg-danger-color/10 rounded-xl transition-all border-2 border-secondary-color hover:border-danger-color"
                                 aria-label="ลบสินค้า"
                               >
                                 <i className="fas fa-trash"></i>
@@ -153,24 +153,24 @@ export default function CartPage() {
 
                             {/* Price and Quantity Row */}
                             <div className="flex flex-wrap items-center justify-between gap-4">
-                              {/* Price */}
+                              {/* Price - Industrial Style */}
                               <div>
-                                <div className="text-2xl font-bold text-primary-color">
+                                <div className="text-2xl font-black text-primary-color">
                                   ฿{formatPrice(itemPrice)}
                                 </div>
-                                <div className="text-sm text-gray-500">ราคาต่อชิ้น</div>
+                                <div className="text-sm text-secondary-color font-semibold">ราคาต่อชิ้น</div>
                               </div>
 
-                              {/* Quantity Selector */}
-                              <div className="flex items-center gap-3">
-                                <span className="text-sm text-gray-600 font-medium">จำนวน:</span>
-                                <div className="inline-flex items-center border-2 border-gray-300 rounded-lg overflow-hidden">
+                              {/* Quantity Selector - Industrial Style */}
+                              <div className="flex items-center gap-4">
+                                <span className="text-base text-text-color font-bold">จำนวน:</span>
+                                <div className="inline-flex items-center border-3 border-secondary-color rounded-xl overflow-hidden shadow-md">
                                   <button
                                     onClick={() => handleQuantityChange(item.productId, item.quantity - 1)}
-                                    className="w-10 h-10 flex items-center justify-center bg-white hover:bg-gray-100 transition-colors text-gray-700 font-bold"
+                                    className="w-12 h-12 flex items-center justify-center bg-white hover:bg-primary-color hover:text-white transition-all text-text-color font-bold text-lg"
                                     aria-label="ลดจำนวน"
                                   >
-                                    <i className="fas fa-minus text-sm"></i>
+                                    <i className="fas fa-minus"></i>
                                   </button>
                                   <input
                                     type="number"
@@ -180,24 +180,24 @@ export default function CartPage() {
                                       const newQuantity = parseInt(e.target.value) || 1;
                                       handleQuantityChange(item.productId, newQuantity);
                                     }}
-                                    className="w-16 h-10 text-center border-0 border-x-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-color font-bold text-gray-900"
+                                    className="w-20 h-12 text-center border-0 border-x-3 border-secondary-color focus:outline-none focus:ring-4 focus:ring-primary-color font-black text-text-color text-lg"
                                   />
                                   <button
                                     onClick={() => handleQuantityChange(item.productId, item.quantity + 1)}
-                                    className="w-10 h-10 flex items-center justify-center bg-white hover:bg-gray-100 transition-colors text-gray-700 font-bold"
+                                    className="w-12 h-12 flex items-center justify-center bg-white hover:bg-primary-color hover:text-white transition-all text-text-color font-bold text-lg"
                                     aria-label="เพิ่มจำนวน"
                                   >
-                                    <i className="fas fa-plus text-sm"></i>
+                                    <i className="fas fa-plus"></i>
                                   </button>
                                 </div>
                               </div>
 
-                              {/* Item Total */}
+                              {/* Item Total - Industrial Style */}
                               <div className="text-right">
-                                <div className="text-2xl font-bold text-accent-color">
+                                <div className="text-2xl font-black text-accent-color">
                                   ฿{formatPrice(itemTotal)}
                                 </div>
-                                <div className="text-sm text-gray-500">รวม</div>
+                                <div className="text-sm text-secondary-color font-semibold">รวม</div>
                               </div>
                             </div>
                           </div>
@@ -207,56 +207,56 @@ export default function CartPage() {
                   );
                 })}
 
-                {/* Continue Shopping Button (Mobile) */}
+                {/* Continue Shopping Button (Mobile) - Industrial Style */}
                 <div className="lg:hidden">
                   <Link href="/products">
-                    <Button variant="outline" className="w-full h-12 border-2">
-                      <i className="fas fa-arrow-left mr-2"></i>
+                    <Button variant="outline" className="w-full h-14 border-3 border-secondary-color text-text-color font-bold text-base hover:bg-secondary-color hover:text-white transition-all rounded-xl">
+                      <i className="fas fa-arrow-left mr-3 text-lg"></i>
                       เลือกซื้อสินค้าเพิ่มเติม
                     </Button>
                   </Link>
                 </div>
               </div>
 
-              {/* Right Column: Order Summary (Sticky) */}
+              {/* Right Column: Order Summary (Sticky) - Industrial Style */}
               <div className="lg:col-span-1">
                 <div className="sticky top-4">
-                  <Card className="shadow-xl border-2">
-                    <CardHeader className="bg-gradient-to-r from-primary-color to-accent-color text-white">
-                      <CardTitle className="text-2xl flex items-center">
-                        <i className="fas fa-receipt mr-3"></i>
+                  <Card className="shadow-2xl border-4 border-secondary-color">
+                    <CardHeader className="bg-gradient-to-r from-primary-color via-accent-color to-accent-color text-white border-b-4 border-secondary-color">
+                      <CardTitle className="text-3xl font-black flex items-center">
+                        <i className="fas fa-receipt mr-4 text-2xl"></i>
                         สรุปยอด
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="p-6 space-y-6">
-                      {/* Savings Badge */}
+                      {/* Savings Badge - Industrial Style */}
                       {calculateSavings() > 0 && (
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                        <div className="bg-green-50 border-3 border-green-500 rounded-xl p-4">
                           <div className="flex items-center justify-between">
-                            <span className="text-green-700 font-medium flex items-center">
-                              <i className="fas fa-tag mr-2"></i>
+                            <span className="text-green-700 font-black text-base flex items-center">
+                              <i className="fas fa-tag mr-3 text-lg"></i>
                               ประหยัดทั้งหมด
                             </span>
-                            <span className="text-green-700 font-bold text-lg">
+                            <span className="text-green-700 font-black text-xl">
                               -฿{formatPrice(calculateSavings())}
                             </span>
                           </div>
                         </div>
                       )}
 
-                      {/* Summary Details */}
-                      <div className="space-y-3">
-                        <div className="flex justify-between items-center text-gray-700">
-                          <span className="font-medium">ยอดรวมสินค้า</span>
-                          <span className="font-semibold">฿{formatPrice(calculateSubtotal())}</span>
+                      {/* Summary Details - Industrial Style */}
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center text-text-color">
+                          <span className="font-bold text-base">ยอดรวมสินค้า</span>
+                          <span className="font-black text-base">฿{formatPrice(calculateSubtotal())}</span>
                         </div>
-                        <div className="flex justify-between items-center text-sm text-gray-600">
-                          <span>ส่วนลด</span>
-                          <span className="text-green-600 font-medium">
+                        <div className="flex justify-between items-center text-base text-secondary-color">
+                          <span className="font-semibold">ส่วนลด</span>
+                          <span className="text-green-600 font-black">
                             -฿{formatPrice(calculateSavings())}
                           </span>
                         </div>
-                        <div className="flex justify-between items-center text-sm text-gray-600">
+                        <div className="flex justify-between items-center text-base text-secondary-color">
                           <span>ภาษีมูลค่าเพิ่ม (VAT 7%)</span>
                           <span className="font-medium">
                             ฿{formatPrice(calculateVAT(calculateSubtotal() - calculateSavings()))}
