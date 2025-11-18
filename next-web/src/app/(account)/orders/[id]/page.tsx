@@ -208,7 +208,6 @@ export default function OrderDetailPage({
       </h1>
 
       <Suspense fallback={<OrderDetailsLoading />}>
-        {/* @ts-ignore: Next.js/React สามารถ handle Promise นี้ได้ แต่ TS ใน Layout ไม่เข้าใจ */}
         <OrderDetails orderId={orderId} />
       </Suspense>
     </div>

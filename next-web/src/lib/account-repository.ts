@@ -20,6 +20,37 @@ type OrderDetails = Order & {
   order_items: OrderItemWithProduct[];
 };
 
+// Database order type (snake_case fields from Supabase)
+type DatabaseOrder = {
+  id: string;
+  customer_id: string;
+  customer_name: string;
+  customer_phone: string | null;
+  customer_email: string;
+  shipping_address: string | null;
+  payment_method: string;
+  payment_status: string;
+  order_status: string;
+  total: string;
+  transfer_slip_url: string | null;
+  omise_charge_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+// Database order item type (with joined product)
+type DatabaseOrderItem = {
+  id: string;
+  order_id: string;
+  product_id: string;
+  quantity: number;
+  price: string;
+  products: {
+    name: string;
+    image_url: string | null;
+  } | null;
+};
+
 /**
  * (ฟังก์ชันใหม่สำหรับ TASK-042)
  * ดึงข้อมูล (ชื่อ/อีเมล) ของผู้ใช้ที่กำลัง Login อยู่
@@ -112,16 +143,16 @@ export async function getOrdersForCurrentUser(): Promise<Order[]> {
 
     // 4. Map DB fields (snake_case) to Type fields (camelCase)
     //    [cite: poogund/789-tools-website/789-tools-website-d5d72f5d8691dffc8854eb9c242989f5b67a2519/next-web/src/types/index.ts]
-    const mappedOrders: Order[] = (orders || []).map((order: any) => ({
+    const mappedOrders: Order[] = (orders || []).map((order: DatabaseOrder) => ({
       id: order.id,
       customer_id: order.customer_id,
       customer_name: order.customer_name,
       customer_phone: order.customer_phone || "",
       customer_email: order.customer_email,
       customer_address: order.shipping_address || "",
-      payment_method: order.payment_method,
-      payment_status: order.payment_status, // แมปตรงๆ (unpaid, paid, failed)
-      status: order.order_status, // แมปตรงๆ (pending, confirmed, etc.)
+      payment_method: (order.payment_method === 'card' ? 'card' : 'transfer') as 'transfer' | 'card',
+      payment_status: order.payment_status as 'unpaid' | 'paid' | 'failed', // แมปตรงๆ (unpaid, paid, failed)
+      status: order.order_status as 'pending' | 'confirmed' | 'processing' | 'shipped' | 'completed' | 'cancelled', // แมปตรงๆ (pending, confirmed, etc.)
       total_amount: parseFloat(order.total) || 0, // DB คือ 'total', Type คือ 'total_amount'
       transfer_slip_url: order.transfer_slip_url || undefined,
       omise_charge_id: order.omise_charge_id || undefined,
@@ -201,9 +232,10 @@ export async function getOrderDetailsForCurrentUser(
       ...order,
       customer_address: order.shipping_address || "",
       total_amount: parseFloat(order.total) || 0,
-      payment_status: order.payment_status,
-      status: order.order_status,
-      order_items: (order.order_items || []).map((item: any) => ({
+      payment_method: (order.payment_method === 'card' ? 'card' : 'transfer') as 'transfer' | 'card',
+      payment_status: order.payment_status as 'unpaid' | 'paid' | 'failed',
+      status: order.order_status as 'pending' | 'confirmed' | 'processing' | 'shipped' | 'completed' | 'cancelled',
+      order_items: (order.order_items || []).map((item: DatabaseOrderItem) => ({
         ...item,
         products: item.products
           ? {

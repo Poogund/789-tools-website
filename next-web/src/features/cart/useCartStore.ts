@@ -157,6 +157,12 @@ export const useCartStore = create<CartStore>()(
           });
         } catch (error) {
           console.error('Error loading cart from database:', error);
+          console.error('Error details:', {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : 'No stack trace',
+            userId: userId ? 'present' : 'missing',
+            errorType: typeof error
+          });
           set({ userId });
         }
       },
