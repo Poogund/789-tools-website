@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { siteConfig } from '@/config/site';
 import { useCartStore } from '@/features/cart';
-import { useToast } from '@/components/ui/ToastContainer';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProductActionsProps {
   productId: string;
@@ -19,7 +19,7 @@ export default function ProductActions({ productId, productName, price, salePric
   const [isAdding, setIsAdding] = useState(false);
   const router = useRouter();
   const { addItem } = useCartStore();
-  const toast = useToast();
+  const { toast } = useToast();
 
   const handleQuantityChange = (change: number) => {
     const newQuantity = quantity + change;
@@ -44,13 +44,21 @@ export default function ProductActions({ productId, productName, price, salePric
 
       // Show success message
       const finalPrice = salePrice || price;
-      toast.success(`เพิ่ม ${productName} (${quantity} ชิ้น) ลงรถเข็นเรียบร้อย - ฿${(finalPrice * quantity).toLocaleString('th-TH')}`);
+      toast({
+        title: "เพิ่มสินค้าลงรถเข็น",
+        description: `${productName} (${quantity} ชิ้น) - ฿${(finalPrice * quantity).toLocaleString('th-TH')}`,
+        variant: "success",
+      });
       
       // Reset quantity
       setQuantity(1);
     } catch (error) {
       console.error('Error adding to cart:', error);
-      toast.error('เกิดข้อผิดพลาดในการเพิ่มสินค้า กรุณาลองใหม่อีกครั้ง');
+      toast({
+        title: "เกิดข้อผิดพลาด",
+        description: "ไม่สามารถเพิ่มสินค้าลงรถเข็นได้ กรุณาลองใหม่อีกครั้ง",
+        variant: "destructive",
+      });
     } finally {
       setIsAdding(false);
     }

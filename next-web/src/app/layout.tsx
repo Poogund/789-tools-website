@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { AuthProvider } from "@/contexts/AuthContext";
 import CartSyncProvider from "@/components/CartSyncProvider";
-import { ToastProvider } from "@/components/ui/ToastContainer";
+import { Toaster } from "@/components/ui/toaster";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import "./globals.css";
 import "./force-navbar.css";
 import "../styles/navbar-auth.css";
@@ -29,10 +30,11 @@ export default function RootLayout({
       <body className="font-main antialiased">
         <AuthProvider>
           <CartSyncProvider>
-            <ToastProvider>
+            <ErrorBoundary>
               <GoogleAnalytics />
               {children}
-            </ToastProvider>
+              <Toaster />
+            </ErrorBoundary>
           </CartSyncProvider>
         </AuthProvider>
       </body>

@@ -104,9 +104,15 @@ export default function Navbar() {
           </p>
           <div className="top-bar-links">
             <a href="#">ไทย / อังกฤษ</a>
-            <Link href="/login" className="top-bar-login">
-              <i className="fa-solid fa-user"></i> Login / Register
-            </Link>
+            {!loading && user ? (
+              <Link href="/account" className="top-bar-login">
+                <i className="fa-solid fa-user-circle"></i> บัญชีของฉัน
+              </Link>
+            ) : (
+              <Link href="/login" className="top-bar-login">
+                <i className="fa-solid fa-user"></i> Login / Register
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -398,16 +404,52 @@ export default function Navbar() {
             </ul>
           </nav>
 
-          {/* Footer with Login */}
+          {/* Footer with Login/User Account */}
           <div className="mobile-menu-footer">
-            <Link 
-              href="/login" 
-              onClick={closeMobileMenu}
-              className="mobile-menu-login"
-            >
-              <i className="fa-solid fa-user"></i>
-              <span>Login / Register</span>
-            </Link>
+            {loading ? (
+              <div className="mobile-menu-login loading">
+                <i className="fa-solid fa-spinner fa-spin"></i>
+                <span>Loading...</span>
+              </div>
+            ) : user ? (
+              <>
+                <Link 
+                  href="/account" 
+                  onClick={closeMobileMenu}
+                  className="mobile-menu-login"
+                >
+                  <i className="fa-solid fa-user-circle"></i>
+                  <span>บัญชีของฉัน</span>
+                </Link>
+                <Link 
+                  href="/account/orders" 
+                  onClick={closeMobileMenu}
+                  className="mobile-menu-login"
+                >
+                  <i className="fa-solid fa-box"></i>
+                  <span>ประวัติการสั่งซื้อ</span>
+                </Link>
+                <button 
+                  className="mobile-menu-login logout-btn"
+                  onClick={() => {
+                    logout();
+                    closeMobileMenu();
+                  }}
+                >
+                  <i className="fa-solid fa-sign-out-alt"></i>
+                  <span>ออกจากระบบ</span>
+                </button>
+              </>
+            ) : (
+              <Link 
+                href="/login" 
+                onClick={closeMobileMenu}
+                className="mobile-menu-login"
+              >
+                <i className="fa-solid fa-user"></i>
+                <span>Login / Register</span>
+              </Link>
+            )}
           </div>
         </div>
       </div>

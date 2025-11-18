@@ -1,0 +1,48 @@
+# 789 Tools Website - robots.txt
+# Block admin areas and API endpoints from search engine crawling
+
+User-agent: *
+Allow: /
+
+# Block admin areas
+Disallow: /admin/
+Disallow: /(admin)/
+Disallow: /api/
+
+# Block authentication pages
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+
+# Block account pages (contain personal information)
+Disallow: /account/
+Disallow: /(account)/
+
+# Block checkout process pages
+Disallow: /checkout
+Disallow: /order-success
+
+# Block search and filter pages with query parameters
+Disallow: /*?search=*
+Disallow: /*?filter=*
+Disallow: /*?page=*
+
+# Block temporary or development paths
+Disallow: /_next/
+Disallow: /favicon.ico
+
+# Allow important public areas
+Allow: /products
+Allow: /categories
+Allow: /blog
+Allow: /services
+Allow: /reviews
+Allow: /faq
+Allow: /about
+Allow: /contact
+
+# Sitemap location
+Sitemap: https://789-tools.com/sitemap.xml
+
+# Crawl delay (optional - be respectful to server resources)
+Crawl-delay: 1
