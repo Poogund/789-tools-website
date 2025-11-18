@@ -131,11 +131,12 @@ export async function syncUserToCustomerTable(user: User) {
     }
 
     return data?.id || null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[syncUserToCustomerTable] Failed to sync user:', error);
     
     // Don't throw permission errors - let login continue
-    if (error?.code === '42501' || error?.message?.includes('permission') || error?.message?.includes('policy')) {
+    const err = error as { code?: string; message?: string };
+    if (err?.code === '42501' || err?.message?.includes('permission') || err?.message?.includes('policy')) {
       console.warn('[syncUserToCustomerTable] Permission denied - this may be due to RLS policies');
       return null;
     }
