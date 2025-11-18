@@ -2,6 +2,7 @@
 
 import { Product } from '@/types';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface ProductsClientProps {
   products: Product[];
@@ -10,6 +11,13 @@ interface ProductsClientProps {
 export default function ProductsClient({ products }: ProductsClientProps) {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('th-TH').format(price);
+  };
+
+  // Generate consistent items-sold based on product ID to avoid hydration mismatch
+  const getItemsSold = (productId: string) => {
+    // Use product ID to generate consistent random-like number
+    const hash = productId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return (hash % 45) + 10; // Range 10-55
   };
 
   if (products.length === 0) {
@@ -37,9 +45,12 @@ export default function ProductsClient({ products }: ProductsClientProps) {
           <div key={product.id} className="shopee-product-card">
             <Link href={`/products/${productSlug}`}>
               <div className="card-image-container">
-                <img 
+                <Image 
                   src={product.image_url || '/placeholder-product.jpg'} 
                   alt={product.name}
+                  width={300}
+                  height={300}
+                  className="object-cover w-full h-full"
                 />
                 {product.is_promotion && (
                   <span className="card-sale-badge">SALE</span>
@@ -73,7 +84,7 @@ export default function ProductsClient({ products }: ProductsClientProps) {
                     <i className="fa-solid fa-star"></i>
                     <i className="fa-solid fa-star-half-stroke"></i>
                   </div>
-                  <span className="items-sold">ขายแล้ว {Math.floor(Math.random() * 50) + 5} ชิ้น</span>
+                  <span className="items-sold">ขายแล้ว {getItemsSold(product.id)} ชิ้น</span>
                 </div>
               </div>
             </Link>

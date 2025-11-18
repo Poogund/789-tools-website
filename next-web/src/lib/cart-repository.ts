@@ -9,7 +9,7 @@ export async function saveCartToDatabase(userId: string, items: CartItem[]): Pro
       .from('carts')
       .select('id')
       .eq('customer_id', userId)
-      .single();
+      .maybeSingle();
 
     let cartId: string;
     
@@ -70,7 +70,7 @@ export async function loadCartFromDatabase(userId: string): Promise<CartItem[]> 
       .from('carts')
       .select('id')
       .eq('customer_id', userId)
-      .single();
+      .maybeSingle();
 
     if (cartError || !cart) {
       console.log('No cart found for user:', cartError?.message || 'No cart');
@@ -133,7 +133,7 @@ export async function clearCartFromDatabase(userId: string): Promise<void> {
       .from('carts')
       .select('id')
       .eq('customer_id', userId)
-      .single();
+      .maybeSingle();
 
     if (cartError || !cart) {
       console.log('No cart found to clear for user');

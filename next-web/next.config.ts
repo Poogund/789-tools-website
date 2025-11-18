@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   turbopack: {},
   // ปิด source maps ใน production เพื่อแก้ปัญหา source map errors
   productionBrowserSourceMaps: false,
+  // อนุญาตให้โหลดรูปจาก Supabase storage
+  images: {
+    domains: ['ycbjjrmxconqkhtmpxls.supabase.co'],
+  },
 };
 
 export default nextConfig;
