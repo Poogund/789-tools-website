@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { AuthProvider } from "@/contexts/AuthContext";
 import CartSyncProvider from "@/components/CartSyncProvider";
+import CartTest from "@/components/CartTest";
 import { Toaster } from "@/components/ui/toaster";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import "./globals.css";
@@ -33,6 +34,7 @@ export default function RootLayout({
             <ErrorBoundary>
               <GoogleAnalytics />
               {children}
+              <CartTest />
               <Toaster />
             </ErrorBoundary>
           </CartSyncProvider>

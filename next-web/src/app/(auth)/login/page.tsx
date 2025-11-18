@@ -5,21 +5,18 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { MainLayout, Container } from '@/components/layout/MainLayout';
+import { MainLayout } from '@/components/layout/MainLayout'; // ใช้ Layout เดิมเพื่อให้มี Navbar
 
 function LoginContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login } = useAuth();
+  const { login } = useAuth(); // สมมติว่าใน AuthContext มีฟังก์ชัน socialLogin ด้วย ถ้าไม่มีต้องไปเพิ่มทีหลัง
 
   const redirectTo = searchParams?.get('redirectTo') || '/';
 
@@ -27,7 +24,6 @@ function LoginContent() {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     const result = await login(email, password);
     if (result.error) {
       setError(result.error);
@@ -37,166 +33,150 @@ function LoginContent() {
     setLoading(false);
   };
 
-  const handleSocialLogin = (provider: 'facebook' | 'google') => {
-    // TODO: Implement social login
-    console.log(`Login with ${provider}`);
+  // ฟังก์ชัน Mock สำหรับ Social Login (ต้องไปเชื่อม Supabase จริงใน AuthContext)
+  const handleSocialLogin = async (provider: 'google' | 'facebook') => {
+    console.log(`Logging in with ${provider}...`);
+    // TODO: เรียก supabase.auth.signInWithOAuth({ provider }) ที่นี่
   };
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-primary-color via-secondary-color to-dark-color relative overflow-hidden">
-        {/* Industrial Grid Pattern */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+      {/* Wrapper หลัก - ใช้ bg-slate-900 (สีเทาเข้มก่อสร้าง) แทนสีม่วงเดิม */}
+      <div className="min-h-screen flex items-center justify-center bg-slate-900 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         
-        <Container size="sm" className="relative flex items-center justify-center min-h-screen py-12">
-        
-        <Card className="relative w-full max-w-md shadow-2xl border-4 border-secondary-color bg-white">
-          <CardHeader className="space-y-3 text-center pb-8 bg-gradient-to-b from-light-gray-bg to-white border-b-4 border-primary-color">
-            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-primary-color to-accent-color rounded-2xl flex items-center justify-center mb-4 shadow-2xl transform hover:scale-105 transition-transform">
+        {/* Background Decoration (ลายตะแกรงเหล็กจางๆ) */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        </div>
+
+        {/* Card Login */}
+        <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl border-t-8 border-yellow-500 relative z-10">
+          
+          {/* Header */}
+          <div className="text-center">
+            <div className="mx-auto h-20 w-20 bg-blue-900 rounded-full flex items-center justify-center shadow-lg mb-6">
               <i className="fas fa-tools text-white text-3xl"></i>
             </div>
-            <CardTitle className="text-4xl font-black text-gray-900 tracking-tight">
-              เข้าสู่ระบบ
-            </CardTitle>
-            <CardDescription className="text-gray-700 text-lg font-semibold">
-              789 TOOLS - เครื่องมือช่างมืออาชีพ
-            </CardDescription>
-          </CardHeader>
+            <h2 className="text-3xl font-extrabold text-gray-900 font-thai">
+              ยินดีต้อนรับกลับมา
+            </h2>
+            <p className="mt-2 text-sm text-gray-600 font-thai">
+              เข้าสู่ระบบเพื่อจัดการคำสั่งซื้อและดูสถานะสินค้า
+            </p>
+          </div>
 
-          <CardContent className="space-y-6 p-8">
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-50 border-4 border-red-500 p-5 rounded-xl shadow-lg animate-shake">
-                <div className="flex items-center">
-                  <i className="fas fa-exclamation-triangle text-red-600 mr-3 text-xl"></i>
-                  <p className="text-base text-red-800 font-bold">{error}</p>
+          {/* Error Alert */}
+          {error && (
+            <div className="bg-red-50 border-l-4 border-red-600 p-4 rounded-r-md flex items-start gap-3">
+              <i className="fas fa-exclamation-circle text-red-600 mt-0.5"></i>
+              <p className="text-red-700 text-sm font-medium">{error}</p>
+            </div>
+          )}
+
+          {/* Form */}
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <div className="rounded-md shadow-sm space-y-4">
+              <div>
+                <Label htmlFor="email" className="text-gray-700 font-bold mb-1 block">อีเมล</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="appearance-none rounded-lg relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 sm:text-sm bg-gray-50"
+                  placeholder="name@example.com"
+                />
+              </div>
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <Label htmlFor="password" className="text-gray-700 font-bold block">รหัสผ่าน</Label>
+                  <Link href="/forgot-password" className="text-sm font-medium text-blue-900 hover:text-blue-700 underline">
+                    ลืมรหัสผ่าน?
+                  </Link>
                 </div>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="appearance-none rounded-lg relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 sm:text-sm bg-gray-50"
+                  placeholder="••••••••"
+                />
               </div>
-            )}
+            </div>
 
-            {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field - Industrial Style */}
-              <div className="space-y-3">
-                <Label htmlFor="email" className="text-text-color font-bold text-base flex items-center">
-                  <i className="fas fa-envelope mr-2 text-primary-color"></i>
-                  อีเมล
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-14 border-3 border-secondary-color focus:border-primary-color focus:ring-4 focus:ring-primary-color/30 transition-all text-lg font-semibold pl-4 rounded-xl shadow-md"
-                    placeholder="your@email.com"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Password Field - Industrial Style */}
-              <div className="space-y-3">
-                <Label htmlFor="password" className="text-text-color font-bold text-base flex items-center">
-                  <i className="fas fa-lock mr-2 text-primary-color"></i>
-                  รหัสผ่าน
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="h-14 border-3 border-secondary-color focus:border-primary-color focus:ring-4 focus:ring-primary-color/30 transition-all text-lg font-semibold pl-4 pr-14 rounded-xl shadow-md"
-                    placeholder="••••••••"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary-color transition-colors w-10 h-10 flex items-center justify-center"
-                  >
-                    <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-xl`}></i>
-                  </button>
-                </div>
-              </div>
-
-              {/* Remember Me & Forgot Password */}
-              <div className="flex items-center justify-between">
-                <label className="flex items-center cursor-pointer group">
-                  <input type="checkbox" className="w-5 h-5 text-var(--primary-color) border-3 border-gray-400 rounded-md focus:ring-3 focus:ring-var(--primary-color)" />
-                  <span className="ml-3 text-text-color font-semibold group-hover:text-text-color transition-colors">จดจำฉันไว้</span>
-                </label>
-                <Link href="/forgot-password" className="text-var(--primary-color) hover:text-var(--accent-color) font-bold transition-colors text-base">
-                  ลืมรหัสผ่าน?
-                </Link>
-              </div>
-
-              {/* Login Button - Industrial Strength */}
+            {/* Login Button */}
+            <div>
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-16 bg-gradient-to-r from-primary-color via-accent-color to-accent-color hover:from-primary-color/90 hover:via-accent-color/90 hover:to-accent-color/90 text-white font-black text-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] active:scale-[0.98] border-2 border-accent-color rounded-xl"
+                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-base font-bold rounded-lg text-white bg-blue-900 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900 shadow-lg transition-all duration-200 transform hover:-translate-y-1"
               >
                 {loading ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin mr-3 text-2xl"></i>
-                    <span className="tracking-wide">กำลังเข้าสู่ระบบ...</span>
-                  </>
+                  <span className="flex items-center gap-2">
+                    <i className="fas fa-circle-notch fa-spin"></i> กำลังเข้าสู่ระบบ...
+                  </span>
                 ) : (
-                  <>
-                    <i className="fas fa-sign-in-alt mr-3 text-2xl"></i>
-                    <span className="tracking-wide">เข้าสู่ระบบ</span>
-                  </>
+                  'เข้าสู่ระบบ'
                 )}
               </Button>
-            </form>
+            </div>
+          </form>
 
-            {/* Divider - Industrial Style */}
-            <div className="relative my-8">
-              <Separator className="bg-gray-300 h-0.5" />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-6 text-base text-text-color font-bold">
-                หรือเข้าสู่ระบบด้วย
-              </span>
+          {/* Social Login Divider */}
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500 font-medium">หรือ เข้าสู่ระบบด้วย</span>
+              </div>
             </div>
 
-            {/* Social Login - Industrial Strength */}
-            <div className="space-y-4">
-              <Button
+            {/* Social Buttons Grid */}
+            <div className="mt-6 grid grid-cols-2 gap-4">
+              <button
                 type="button"
-                variant="outline"
                 onClick={() => handleSocialLogin('facebook')}
-                className="w-full h-14 border-3 border-facebook-color text-facebook-color hover:bg-facebook-color hover:text-white font-bold text-base shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] rounded-xl"
+                className="w-full inline-flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
               >
-                <i className="fab fa-facebook text-2xl mr-3"></i>
-                เข้าสู่ระบบด้วย Facebook
-              </Button>
-              <Button
+                <i className="fab fa-facebook text-[#1877F2] text-xl mr-2"></i>
+                Facebook
+              </button>
+              
+              <button
                 type="button"
-                variant="outline"
                 onClick={() => handleSocialLogin('google')}
-                className="w-full h-14 border-3 border-danger-color text-danger-color hover:bg-danger-color hover:text-white font-bold text-base shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] rounded-xl"
+                className="w-full inline-flex justify-center items-center py-2.5 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
               >
-                <i className="fab fa-google text-2xl mr-3"></i>
-                เข้าสู่ระบบด้วย Google
-              </Button>
+                <img 
+                  src="https://www.svgrepo.com/show/475656/google-color.svg" 
+                  alt="Google" 
+                  className="h-5 w-5 mr-2"
+                />
+                Google
+              </button>
             </div>
-          </CardContent>
+          </div>
 
-          <CardFooter className="flex-col space-y-4 pt-8 bg-light-gray-bg border-t-4 border-secondary-color">
-            <p className="text-base text-text-color text-center font-semibold">
-              ยังไม่มีบัญชีใช่ไหม?{' '}
-              <Link 
-                href="/register" 
-                className="text-primary-color hover:text-accent-color font-black transition-colors text-lg underline decoration-2 underline-offset-4"
-              >
-                สร้างบัญชีใหม่
+          {/* Register Link */}
+          <div className="text-center mt-6">
+            <p className="text-sm text-gray-600">
+              ยังไม่มีบัญชีสมาชิก?{' '}
+              <Link href="/register" className="font-bold text-yellow-600 hover:text-yellow-700 underline decoration-2 underline-offset-2">
+                สมัครสมาชิกใหม่
               </Link>
             </p>
-          </CardFooter>
-        </Card>
-        </Container>
+          </div>
+
+        </div>
       </div>
     </MainLayout>
   );
@@ -205,10 +185,8 @@ function LoginContent() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-industrial-blue via-industrial-dark-gray to-black flex items-center justify-center">
-        <div className="text-white">
-          <i className="fas fa-spinner fa-spin text-4xl"></i>
-        </div>
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500"></div>
       </div>
     }>
       <LoginContent />

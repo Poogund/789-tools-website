@@ -7,6 +7,7 @@ interface CartStore {
   items: CartItem[];
   total: number;
   userId: string | null;
+  hasHydrated: boolean;
   addItem: (item: CartItem) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
@@ -14,6 +15,7 @@ interface CartStore {
   syncWithDatabase: (userId: string) => Promise<void>;
   loadFromDatabase: (userId: string) => Promise<void>;
   setUserId: (userId: string | null) => void;
+  setHasHydrated: (hydrated: boolean) => void;
 }
 
 // Helper function to calculate total
@@ -30,6 +32,7 @@ export const useCartStore = create<CartStore>()(
       items: [],
       total: 0,
       userId: null as string | null,
+      hasHydrated: false,
 
       addItem: (item: CartItem) => {
         set((state) => {
@@ -170,9 +173,17 @@ export const useCartStore = create<CartStore>()(
       setUserId: (userId: string | null) => {
         set({ userId });
       },
+
+      setHasHydrated: (hydrated: boolean) => {
+        set({ hasHydrated: hydrated });
+      },
     }),
     {
       name: '789tools-cart', // localStorage key
+      skipHydration: false,
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );
