@@ -4,143 +4,95 @@ import { createServerSupabaseAdminClient } from '@/lib/supabase/server';
 import type { User } from '@supabase/supabase-js';
 
 /**
- * Sync Supabase Auth user to customers table
- * Creates or updates customer record when user logs in
- * 
- * @param user - Supabase Auth User object
- * @returns Customer ID or null if error
- * 
- * NOTE: Uses admin client to bypass RLS since this is called from server action
- * and we already have the authenticated user object from client-side auth
+ * Syncs a Supabase Auth user to the public 'customers' table.
+ * This function uses an admin client to perform an "upsert" operation,
+ * creating or updating a customer record. It's designed to handle
+ * common scenarios like new user sign-ups, returning user logins, and
+ * account merging when a user signs in with a new auth provider but
+ * uses an existing email.
+ *
+ * @param user - The Supabase Auth User object.
+ * @returns The customer ID from the 'customers' table, or null if a
+ * non-fatal permission error occurs (allowing login to proceed).
+ * @throws Throws an error for unexpected database issues.
  */
-export async function syncUserToCustomerTable(user: User) {
+export async function syncUserToCustomerTable(user: User): Promise<string | null> {
   try {
-    // Use admin client to bypass RLS - we already have authenticated user from client
     const supabase = await createServerSupabaseAdminClient();
-    
-    // Extract user data
-    const authId = user.id;
-    const email = user.email;
-    const name = user.email || user.user_metadata?.full_name || user.user_metadata?.name || 'User';
-    
-    // Check if customer already exists by auth_id
-    const { data: existingCustomer } = await supabase
-      .from('customers')
-      .select('id, email, auth_id')
-      .eq('auth_id', authId)
-      .maybeSingle();
+    const { id: authId, email, user_metadata } = user;
 
-    // If customer exists with this auth_id, update it
-    if (existingCustomer) {
-      const { data, error } = await supabase
-        .from('customers')
-        .update({
-          email: email || '',
-          name: name,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('auth_id', authId)
-        .select()
-        .single();
+    // Determine the best name, falling back to a generic one.
+    const name = user_metadata?.full_name || user_metadata?.name || email?.split('@')[0] || 'Anonymous';
 
-      if (error) {
-        console.error('[syncUserToCustomerTable] Update error:', error);
-        throw error;
-      }
+    // Prepare the data for upsert.
+    // We prioritize auth_id as the primary link.
+    const customerData = {
+      auth_id: authId,
+      email: email || '',
+      name,
+      updated_at: new Date().toISOString(),
+    };
 
-      return data?.id || null;
-    }
-
-    // If customer exists with this email but different auth_id, update it
-    if (email) {
-      const { data: existingByEmail } = await supabase
-        .from('customers')
-        .select('id, email, auth_id')
-        .eq('email', email)
-        .maybeSingle();
-
-      if (existingByEmail) {
-        const { data, error } = await supabase
-          .from('customers')
-          .update({
-            auth_id: authId,
-            name: name,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('email', email)
-          .select()
-          .single();
-
-        if (error) {
-          console.error('[syncUserToCustomerTable] Update by email error:', error);
-          throw error;
-        }
-
-        return data?.id || null;
-      }
-    }
-
-    // Insert new customer
+    // Upsert on 'auth_id': handles new users and returning users efficiently.
     const { data, error } = await supabase
       .from('customers')
-      .insert({
-        auth_id: authId,
-        email: email || '',
-        name: name,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .select()
+      .upsert(customerData, { onConflict: 'auth_id' })
+      .select('id')
       .single();
 
-    if (error) {
-      console.error('[syncUserToCustomerTable] Insert error:', error);
-      
-      // If it's a unique constraint error, try to update instead
-      if (error.code === '23505' || error.message?.includes('unique') || error.message?.includes('duplicate')) {
-        // Try to get existing customer and update
-        if (email) {
-          const { data: existing } = await supabase
-            .from('customers')
-            .select('id')
-            .eq('email', email)
-            .maybeSingle();
-          
-          if (existing) {
-            const { data: updated, error: updateError } = await supabase
-              .from('customers')
-              .update({
-                auth_id: authId,
-                name: name,
-                updated_at: new Date().toISOString(),
-              })
-              .eq('email', email)
-              .select()
-              .single();
-            
-            if (updateError) {
-              throw updateError;
-            }
-            
-            return updated?.id || null;
-          }
-        }
-      }
-      
-      throw error;
+    // If the upsert was successful, we're done.
+    if (!error) {
+      return data.id;
     }
 
-    return data?.id || null;
+    // If the upsert failed, it might be because the email is already in use
+    // by a different auth_id (violating a UNIQUE constraint on email).
+    // This is a common scenario when a user signs up with email/password
+    // and later uses a social login with the same email.
+    if (error.code === '23505' && email) { // '23505' is unique_violation
+      console.warn(
+        `[syncUser] Upsert on auth_id failed, likely due to email conflict.
+        Attempting to merge by updating the record with the matching email.`
+      );
+
+      // In this case, we find the existing customer by their email and
+      // update their auth_id to link them to the new login method.
+      const { data: updatedData, error: updateError } = await supabase
+        .from('customers')
+        .update({
+          auth_id: authId,
+          name, // Also update name in case it's more complete now
+          updated_at: new Date().toISOString(),
+        })
+        .eq('email', email)
+        .select('id')
+        .single();
+
+      if (updateError) {
+        console.error('[syncUser] Failed to merge account by email after conflict:', updateError);
+        throw updateError; // The merge attempt failed, something is wrong.
+      }
+
+      console.log('[syncUser] Successfully merged account by email.');
+      return updatedData.id;
+    }
+
+    // For any other errors, re-throw them.
+    throw error;
+
   } catch (error: unknown) {
-    console.error('[syncUserToCustomerTable] Failed to sync user:', error);
-    
-    // Don't throw permission errors - let login continue
+    console.error('[syncUser] General failure to sync user:', error);
+
+    // Gracefully handle permission errors. This can happen if RLS is configured
+    // to prevent even the admin from performing certain actions, or if the
+    // admin client setup is incorrect. We don't want to block login for this.
     const err = error as { code?: string; message?: string };
     if (err?.code === '42501' || err?.message?.includes('permission') || err?.message?.includes('policy')) {
-      console.warn('[syncUserToCustomerTable] Permission denied - this may be due to RLS policies');
+      console.warn('[syncUser] Permission denied. This is treated as non-fatal.');
       return null;
     }
-    
+
+    // Re-throw other errors to be handled by the caller.
     throw error;
   }
 }

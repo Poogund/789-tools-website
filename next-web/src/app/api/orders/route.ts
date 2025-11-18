@@ -40,9 +40,10 @@ function generateOrderNumber(): string {
 
 export async function POST(request: Request) {
   try {
-    // Initialize Supabase client
+    // Initialize Supabase client and get user session
     const supabase = await createServerSupabaseClient();
-    
+    const { data: { user } } = await supabase.auth.getUser();
+
     // Parse request body
     const body: CreateOrderRequest = await request.json();
     const { customerInfo, cartItems } = body;
@@ -63,20 +64,52 @@ export async function POST(request: Request) {
       );
     }
 
-    // Calculate total amount
-    const subtotal = calculateTotalAmount(cartItems);
-    const shippingCost = 0; // Default shipping cost (can be calculated later)
-    const totalAmount = subtotal + shippingCost;
+    // --- SECURITY FIX: Fetch authoritative product prices from DB ---
+    const productIds = cartItems.map(item => item.productId);
+    const { data: productsData, error: productsError } = await supabase
+      .from('products')
+      .select('id, name, price, sale_price')
+      .in('id', productIds);
 
-    // Generate order number
+    if (productsError) {
+      console.error('Error fetching products:', productsError);
+      return NextResponse.json({ error: 'Could not verify products in cart' }, { status: 500 });
+    }
+
+    const productPriceMap = new Map(productsData.map(p => [p.id, p]));
+
+    // --- SERVER-SIDE CALCULATION ---
+    let subtotal = 0;
+    const secureOrderItems = cartItems.map(item => {
+      const product = productPriceMap.get(item.productId);
+      if (!product) {
+        throw new Error(`Product with ID ${item.productId} not found`);
+      }
+      const unitPrice = product.sale_price ?? product.price;
+      const totalPrice = unitPrice * item.quantity;
+      subtotal += totalPrice;
+
+      return {
+        order_id: '', // Will be set after order is created
+        product_id: item.productId,
+        product_name: product.name, // Use authoritative name
+        quantity: item.quantity,
+        unit_price: unitPrice,
+        total_price: totalPrice,
+      };
+    });
+    
+    const shippingCost = 0; // Default shipping cost
+    const totalAmount = subtotal + shippingCost;
     const orderNumber = generateOrderNumber();
 
+    // --- BUG FIX: Link order to logged-in user ---
     // Step 1: Insert order
     const { data: newOrder, error: orderError } = await supabase
       .from('orders')
       .insert({
         order_number: orderNumber,
-        customer_id: null, // Will be set if customer is logged in (future enhancement)
+        customer_id: user ? user.id : null, // Link to user if logged in
         customer_name: customerInfo.name,
         customer_email: customerInfo.email,
         customer_phone: customerInfo.phone,
@@ -86,7 +119,7 @@ export async function POST(request: Request) {
         subtotal: subtotal,
         shipping_cost: shippingCost,
         total: totalAmount,
-        payment_method: 'transfer', // Default to transfer for MVP
+        payment_method: 'transfer',
         payment_status: 'pending',
         order_status: 'pending',
       })
@@ -108,28 +141,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // Step 2: Insert order items
-    const orderItems = cartItems.map((item) => {
-      const unitPrice = item.salePrice ?? item.price;
-      const totalPrice = unitPrice * item.quantity;
-
-      return {
-        order_id: newOrder.id,
-        product_id: item.productId,
-        product_name: item.name,
-        quantity: item.quantity,
-        unit_price: unitPrice,
-        total_price: totalPrice,
-      };
-    });
+    // Step 2: Insert order items with the new order_id
+    const finalOrderItems = secureOrderItems.map(item => ({
+      ...item,
+      order_id: newOrder.id,
+    }));
 
     const { error: orderItemsError } = await supabase
       .from('order_items')
-      .insert(orderItems);
+      .insert(finalOrderItems);
 
     if (orderItemsError) {
       console.error('Error creating order items:', orderItemsError);
-      // Try to delete the order if items insertion fails
+      // Attempt to roll back the order creation
       await supabase.from('orders').delete().eq('id', newOrder.id);
       
       return NextResponse.json(
@@ -138,7 +162,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Return order ID
+    // Return order ID and number
     return NextResponse.json(
       { 
         orderId: newOrder.id,
@@ -148,8 +172,9 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     console.error('Unexpected error in POST /api/orders:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Internal server error', details: errorMessage },
       { status: 500 }
     );
   }
