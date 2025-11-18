@@ -257,24 +257,24 @@ export default function CartPage() {
                           </span>
                         </div>
                         <div className="flex justify-between items-center text-base text-secondary-color">
-                          <span>ภาษีมูลค่าเพิ่ม (VAT 7%)</span>
-                          <span className="font-medium">
+                          <span className="font-semibold">ภาษีมูลค่าเพิ่ม (VAT 7%)</span>
+                          <span className="font-black">
                             ฿{formatPrice(calculateVAT(calculateSubtotal() - calculateSavings()))}
                           </span>
                         </div>
-                        <div className="flex justify-between items-center text-sm text-gray-600">
-                          <span>ค่าจัดส่ง</span>
-                          <span className="text-green-600 font-semibold">ฟรี</span>
+                        <div className="flex justify-between items-center text-base text-secondary-color">
+                          <span className="font-semibold">ค่าจัดส่ง</span>
+                          <span className="text-green-600 font-black">ฟรี</span>
                         </div>
                       </div>
 
                       <Separator className="bg-gray-200" />
 
-                      {/* Grand Total */}
-                      <div className="bg-gray-50 rounded-lg p-4">
+                      {/* Grand Total - Industrial Style */}
+                      <div className="pt-6 border-t-4 border-secondary-color">
                         <div className="flex justify-between items-center">
-                          <span className="text-lg font-bold text-gray-900">ยอดรวมทั้งหมด</span>
-                          <span className="text-3xl font-bold text-accent-color">
+                          <span className="text-2xl font-black text-text-color">ยอดรวมทั้งหมด</span>
+                          <span className="text-3xl font-black text-accent-color">
                             ฿{formatPrice(
                               Math.round(
                                 (calculateSubtotal() - calculateSavings()) + 
@@ -283,45 +283,40 @@ export default function CartPage() {
                             )}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-500 text-center mt-1">
-                          รวมภาษีมูลค่าเพิ่ม 7%
-                        </p>
                       </div>
 
-                      {/* Checkout Button */}
+                      {/* Checkout Button - Industrial Strength */}
                       <Button
                         onClick={handleCheckout}
-                        className="w-full h-14 bg-gradient-to-r from-primary-color to-accent-color hover:from-primary-color/90 hover:to-accent-color/90 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+                        className="w-full h-16 bg-gradient-to-r from-primary-color via-accent-color to-accent-color hover:from-primary-color/90 hover:via-accent-color/90 hover:to-accent-color/90 text-white font-black text-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] active:scale-[0.98] border-2 border-accent-color rounded-xl"
                       >
-                        <i className="fas fa-credit-card mr-2"></i>
+                        <i className="fas fa-credit-card mr-3 text-2xl"></i>
                         ดำเนินการชำระเงิน
                       </Button>
 
-                      {/* Continue Shopping (Desktop) */}
+                      {/* Continue Shopping (Desktop) - Industrial Style */}
                       <div className="hidden lg:block">
                         <Link href="/products">
-                          <Button variant="outline" className="w-full h-12 border-2">
-                            <i className="fas fa-arrow-left mr-2"></i>
+                          <Button variant="outline" className="w-full h-14 border-3 border-secondary-color text-text-color font-bold text-base hover:bg-secondary-color hover:text-white transition-all rounded-xl">
+                            <i className="fas fa-arrow-left mr-3 text-lg"></i>
                             เลือกซื้อสินค้าเพิ่มเติม
                           </Button>
                         </Link>
                       </div>
 
-                      {/* Trust Badges */}
-                      <div className="pt-4 border-t border-gray-200">
-                        <div className="grid grid-cols-3 gap-2 text-center text-xs text-gray-600">
-                          <div>
-                            <i className="fas fa-shield-alt text-green-600 text-lg mb-1"></i>
-                            <div>ชำระเงินปลอดภัย</div>
-                          </div>
-                          <div>
-                            <i className="fas fa-truck text-blue-600 text-lg mb-1"></i>
-                            <div>จัดส่งฟรี</div>
-                          </div>
-                          <div>
-                            <i className="fas fa-undo text-orange-600 text-lg mb-1"></i>
-                            <div>คืนสินค้าได้</div>
-                          </div>
+                      {/* Trust Badges - Industrial Style */}
+                      <div className="flex items-center justify-center space-x-8 text-sm text-secondary-color">
+                        <div className="flex items-center font-semibold">
+                          <i className="fas fa-shield-alt mr-2 text-green-600 text-lg"></i>
+                          <span>ปลอดภัย</span>
+                        </div>
+                        <div className="flex items-center font-semibold">
+                          <i className="fas fa-truck mr-2 text-primary-color text-lg"></i>
+                          <span>จัดส่งฟรี</span>
+                        </div>
+                        <div className="flex items-center font-semibold">
+                          <i className="fas fa-undo mr-2 text-accent-color text-lg"></i>
+                          <span>คืนสินค้า</span>
                         </div>
                       </div>
                     </CardContent>
@@ -330,17 +325,17 @@ export default function CartPage() {
               </div>
             </div>
           ) : (
-            /* Empty State */
-            <Card className="max-w-2xl mx-auto">
-              <CardContent className="p-12 text-center">
-                <div className="inline-flex items-center justify-center w-32 h-32 bg-gray-100 rounded-full mb-6">
-                  <i className="fas fa-shopping-cart text-gray-400 text-5xl"></i>
+            /* Empty State - Industrial Style */
+            <Card className="max-w-2xl mx-auto border-4 border-secondary-color shadow-2xl">
+              <CardContent className="p-16 text-center">
+                <div className="inline-flex items-center justify-center w-40 h-40 bg-light-gray-bg rounded-full mb-8 border-4 border-secondary-color">
+                  <i className="fas fa-shopping-cart text-secondary-color text-6xl"></i>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">ตะกร้าของคุณว่างเปล่า</h2>
-                <p className="text-gray-600 mb-8 text-lg">เริ่มเลือกซื้อสินค้าคุณภาพจาก 789 TOOLS กันเลย</p>
+                <h2 className="text-4xl font-black text-text-color mb-6">ตะกร้าของคุณว่างเปล่า</h2>
+                <p className="text-lg text-secondary-color font-semibold mb-10">เริ่มเลือกซื้อสินค้าคุณภาพจาก 789 TOOLS กันเลย</p>
                 <Link href="/products">
-                  <Button className="h-14 px-8 bg-gradient-to-r from-primary-color to-accent-color hover:from-primary-color/90 hover:to-accent-color/90 text-white font-bold text-lg">
-                    <i className="fas fa-store mr-2"></i>
+                  <Button className="h-16 px-10 bg-gradient-to-r from-primary-color via-accent-color to-accent-color hover:from-primary-color/90 hover:via-accent-color/90 hover:to-accent-color/90 text-white font-black text-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-[1.02] active:scale-[0.98] border-2 border-accent-color rounded-xl">
+                    <i className="fas fa-store mr-3 text-2xl"></i>
                     เลือกซื้อสินค้า
                   </Button>
                 </Link>
